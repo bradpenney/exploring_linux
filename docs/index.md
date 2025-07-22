@@ -1,20 +1,29 @@
-<img src="images/exploring_software_development_tools.png" alt="Exploring Software Development Tools" class="img-responsive-right" width="300">
+<img src="images/exploring_linux.png" alt="Exploring Linux"  class="img-responsive-right" width="300">
 
-# Welcome to Exploring Software Development Tools
+# Welcome to Exploring Linux
 
-A subsection of [BradPenney.io](https://bradpenney.io), this is a friendly guide through the world of command-line magic and automation awesomeness! 🧰🚀
+A subsection of [BradPenney.io](https://bradpenney.io), Exploring Linux is
+your go-to companion in the world of open‑source adventure and command‑line
+wizardry! 🐧🔍
 
-This site is dedicated to documenting the best practices, quirks, and superpowers of tools like `git`, `jq`, `yq`, `make`, `gh` and other must-haves for developers who want to do more with less typing (and fewer headaches).
+This space is dedicated to showcasing the power, quirks, and elegant simplicity
+of essential Linux tools — think `bash`, `systemd`, `tmux`, `grep`, `awk`,
+plus distro‑hopping tips and shell‑fu shortcuts — for anyone who wants to do
+more with fewer keystrokes (and fewer facepalms).
 
-Whether you’re just getting started or you’ve been piping output into `/dev/null` for years, I hope you’ll find something here that’s helpful, insightful, or at least good for a smirk. 😄
+Whether you're dipping your toes in Linux for the first time or you've been
+tinkering with kernels and bootloaders since floppy‑disk days, I hope you’ll
+discover something that sparkles, surprises, or gives you a good chuckle
+(penguin‑style) 😄
 
-## Topics to Explore 🔍
+## Topics to Explore 🐧
 
-- Version control with `git` and helpful branching workflows 🌳
-- Slicing and dicing JSON and YAML with `jq` and `yq` 🪓
-- Automating builds and scripts with `make` ⚙️
-- Tips, tricks, and tiny CLI power moves ⚡
-- Real-world examples and shell-fu 🧠
+- Diving into the command line: shells, prompt tricks, scripting, and more
+- Mastering process control and service management with systemd
+- Multiplexing like a pro with tmux & session workflows
+- Text‑magic with `grep`, `awk`, and `sed` for powerful data wrangling
+- File system mastery: partitions, permissions, links, and troubleshooting
+- Distro deep‑dives, installation tips, and customizing your penguin playground
 
-Stick around — I’ll keep adding more tools, tutorials, and tangents.
-Thanks for visiting, and happy hacking! 👋
+Stick around — more tutorials, shell‑fu examples, and spontaneous penguin
+tangents are on the way. Thanks for stopping by, and happy exploring! 👋
