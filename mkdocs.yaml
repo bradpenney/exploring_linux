@@ -50,7 +50,14 @@ markdown_extensions:
 
 nav:
   - Home: index.md
+  - Getting Around:
+    - Using the Command Line: getting_around/using_the_command_line.md
+    - Finding Help: getting_around/finding_help.md
+    - Generating the Manual: getting_around/generating_the_manual.md
   - Basic Toolset:
-    - Finding Help: basic_toolset/finding_help.md
+    - Shells: basic_toolset/shells.md
+    - Shell History: basic_toolset/shell_history.md
     - File Pagers: basic_toolset/file_pagers.md
+  - Starting Concepts:
+    - Linux File System: starting_concepts/linux_filesystem_hierarchy.md
 
