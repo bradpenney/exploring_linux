@@ -1,25 +1,36 @@
----
-title: "Enterprise Command Line Shells"
-date: 2023-03-11T07:11:36-04:00
-draft: false 
----
+# Enterprise Command Line Shells
 
-In UNIX and Linux, a shell is the basic program that is used in the command line.  Some believe the name is a metaphor for a snail - the shell wraps around the kernel.  Like most things in the Linux world, there are many different variations and versions, often building off each other and fixing some weakness of a previous shell.  Examples include [ZSH](https://ohmyz.sh/), [FISH](https://fishshell.com/), and many others.  
+In UNIX and Linux, a shell is the basic program you use at the command
+line. Some folks say the name is a metaphor for a snail — the shell wraps
+around the kernel. Like most things in Linux, there are lots of different
+shells, often building on each other and fixing the quirks of earlier
+versions. Examples include [ZSH](https://ohmyz.sh/),
+[FISH](https://fishshell.com/), and plenty more.
 
-> ** Note: Technically, shells can exist in graphical form too - `GNOME` and `KDE` being popular examples.  These are rarely (if ever) used on servers.
+??? note
 
-In Enterprise Linux, only a few command-line shells are in widespread use:
+    Technically, shells can be graphical too — `GNOME` and `KDE`
+    are popular examples. These are rarely (if ever) used on servers.
 
-1. **BASH (Borne-Again Shell)**
-   - This is far-and-away the most commonly used shell in Enterprise Linux.  All Linux distributions have BASH available, even if it is not the default.  Not all UNIX distributions include BASH.
-   - Standard file location: `/bin/bash` or (`/usr/bin/bash`)
-   - `#!/bin/bash` is usually included at the beginning of each shell script so the kernel knows which interpreter to use
+In Enterprise Linux, only a few command-line shells are widely used:
 
-2. **KSH (Korn Shell)**
-   - Popular among the remaining UNIX distributions such as AIX. 
-   - Lacks many features that are standard in BASH, most notably tab-completion and "up-arrow" history
-   
-3. **SH (Shell)**
-   - The original shell interface that was used in UNIX
-   - Still exists in modern Linux distrubutions
-   - Standard file location: `/bin/sh` (or `/usr/bin/sh`)
+## BASH (Bourne-Again Shell)
+
+- By far the most common shell in Enterprise Linux. All Linux distributions
+  have BASH available, even if it's not the default. Not all UNIX systems
+  include BASH.
+- Standard file location: `/bin/bash` or `/usr/bin/bash`
+- `#!/bin/bash` is usually at the top of shell scripts so the kernel
+  knows which interpreter to use.
+
+## KSH (Korn Shell)
+
+- Still popular on some UNIX systems like AIX.
+- Lacks some features standard in BASH, like tab-completion and
+  "up-arrow" history.
+
+## SH (Shell)**
+
+- The original shell interface used in UNIX.
+- Still exists in modern Linux distributions.
+- Standard file location: `/bin/sh` or `/usr/bin/sh`

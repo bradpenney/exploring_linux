@@ -1,28 +1,38 @@
----
-title: "Automating Linux"
-date: 2023-03-14T20:37:02-03:00
-draft: false 
----
+# Automating Linux
 
-Shell scripting has often been referred to as "the glue that holds the Internet together".  While simple, it is incredibly powerful and is used for a huge array of tasks in Enterprise Linux - everything from archiving to health-checking to starting and stopping essential applications and services.
+Shell scripting is often called "the glue that holds the Internet
+together." It's simple, but incredibly powerful — and used for everything
+from archiving files to health checks to starting and stopping essential
+apps and services in Enterprise Linux.
 
 ## Automating Environment Configuration
-### Ansible
-Ansible is a powerful open-source automation tool commonly used by system administrators and DevOps professionals to simplify and streamline various IT tasks. Its primary purpose is to automate repetitive tasks like software provisioning, configuration management, application deployment, and system orchestration.
 
-[Ansible Key Concepts]({{< ref "ansibleKeyConcepts.md" >}})
+### Ansible
+
+Ansible is a popular open-source automation tool. System administrators
+and DevOps folks use it to simplify and streamline all sorts of IT tasks.
+Its main job? Automate repetitive chores like software installs,
+configuration management, app deployment, and system orchestration.
+
+- [Ansible Key Concepts](ansibleKeyConcepts.md)
 
 ## Shell Scripting
+
 ### The Basics
-The concepts and skills used in shell scripting are similar to many other languages - particularly Python (often used as a replacement for shell scripting) or PowerShell (often seen as Microsoft's version of shell scripting!).
 
-[Scripting "Hello World"]({{< ref "scriptingHelloWorld.md" >}})
+Shell scripting skills are a lot like those in other languages — especially
+Python (which sometimes replaces shell scripts) or PowerShell (Microsoft's
+take on shell scripting!).
 
-[Make Decisions with `if/else` Statements]({{< ref "ifElseStatements.md" >}})
+- [Scripting "Hello World"](scriptingHelloWorld.md)
 
-[Make Decisions with `case` Statements]({{< ref "caseStatements.md" >}})
+- [Make Decisions with `if/else` Statements](ifElseStatements.md)
 
-### Increasing Robustness 
-Once you have mastered the basics, its time to kick it up a notch and make your scripts a bit more robust.
+- [Make Decisions with `case` Statements](caseStatements.md)
 
-[Testing the Number of Parameters Passed to a Shell Script]({{< ref "testingNumberOfParameters.md" >}})
+### Increasing Robustness
+
+Once you've got the basics down, it's time to kick things up a notch and
+make your scripts more robust.
+
+- [Testing the Number of Parameters Passed to a Shell Script](testingNumberOfParameters.md)
