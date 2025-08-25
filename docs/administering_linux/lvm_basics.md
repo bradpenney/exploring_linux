@@ -52,7 +52,7 @@ Or inspect details for one:
 
 ![Explore Details About a Physical Volume](../images/pvdisplay.png)
 
-## Create a Volume Group (VG))
+## Create a Volume Group (VG)
 Now, we pool those PVs into a volume group. This becomes our central storage bucket.
 
 ``` bash title="Create Volume Group"
