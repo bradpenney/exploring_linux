@@ -7,7 +7,7 @@ shells, often building on each other and fixing the quirks of earlier
 versions. Examples include [ZSH](https://ohmyz.sh/),
 [FISH](https://fishshell.com/), and plenty more.
 
-??? note
+??? tip "Graphical vs Command-Line Shells"
 
     Technically, shells can be graphical too — `GNOME` and `KDE`
     are popular examples. These are rarely (if ever) used on servers.

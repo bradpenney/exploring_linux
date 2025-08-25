@@ -56,8 +56,14 @@ nav:
     - Generating the Manual: getting_around/generating_the_manual.md
   - Basic Toolset:
     - Shells: basic_toolset/shells.md
-    - Shell History: basic_toolset/shell_history.md
+    - Text Editors: basic_toolset/text_editors.md
     - File Pagers: basic_toolset/file_pagers.md
-  - Starting Concepts:
-    - Linux File System: starting_concepts/linux_filesystem_hierarchy.md
+    - Shell History: basic_toolset/shell_history.md
+    - BASH Shortcuts: basic_toolset/BASH_shortcuts.md
+  - Essential Concepts:
+    - File System Hierarchy: essential_concepts/filesystem_hierarchy.md
+    - File Permissions: essential_concepts/file_permissions.md
+  - Administering Linux:
+    - Adding Storage: administering_linux/adding_storage.md
+    - Logical Volume Management Basics: administering_linux/lvm_basics.md
 
