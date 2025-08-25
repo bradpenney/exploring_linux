@@ -1,4 +1,4 @@
-site_name: "Exploring Linux"
+site_name: "Exploring Enterprise Linux"
 extra_css:
   - stylesheets/extra.css
 theme:
@@ -66,4 +66,6 @@ nav:
   - Administering Linux:
     - Adding Storage: administering_linux/adding_storage.md
     - Logical Volume Management Basics: administering_linux/lvm_basics.md
+    - Network File Share Server: administering_linux/network_file_share_server.md
+    - Accessing Network Storage: administering_linux/accessing_network_storage.md
 
