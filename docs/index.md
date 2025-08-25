@@ -1,10 +1,10 @@
 <img src="images/exploring_linux.png" alt="Exploring Linux"  class="img-responsive-right" width="300">
 
-# Welcome to Exploring Linux
+# Welcome to Exploring Enterprise Linux
 
-A subsection of [BradPenney.io](https://bradpenney.io), Exploring Linux is
-your go-to companion in the world of open‑source adventure and command‑line
-wizardry! 🐧🔍
+A subsection of [BradPenney.io](https://bradpenney.io), Exploring Enterprise
+Linux is your go-to companion in the world of open‑source adventure and
+command‑line wizardry! 🐧🔍
 
 This space is dedicated to showcasing the power, quirks, and elegant simplicity
 of essential Linux tools — think `bash`, `systemd`, `tmux`, `grep`, `awk`,
@@ -16,7 +16,7 @@ tinkering with kernels and bootloaders since floppy‑disk days, I hope you’ll
 discover something that sparkles, surprises, or gives you a good chuckle
 (penguin‑style) 😄
 
-## Topics to Explore 🐧
+## Upcoming Topics to Explore 🐧
 
 - Diving into the command line: shells, prompt tricks, scripting, and more
 - Mastering process control and service management with systemd
