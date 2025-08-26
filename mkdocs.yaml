@@ -52,6 +52,7 @@ nav:
   - Home: index.md
   - Getting Around:
     - Using the Command Line: getting_around/using_the_command_line.md
+    - Finding Files: getting_around/finding_files.md
     - Finding Help: getting_around/finding_help.md
     - Generating the Manual: getting_around/generating_the_manual.md
   - Basic Toolset:
