@@ -69,4 +69,6 @@ nav:
     - Logical Volume Management Basics: administering_linux/lvm_basics.md
     - Network File Share Server: administering_linux/network_file_share_server.md
     - Accessing Network Storage: administering_linux/accessing_network_storage.md
+  - Scripting:
+    - Hello World: scripting/hello_world.md
 
