@@ -66,7 +66,10 @@ choose-your-own-adventure book:
 If you're just starting out, sections 1 and 8 are your best friends.
 Sections 5 and 7 are great for file formats and conventions.
 
-## 2. Fuzzy Searching (When You Don't Know the Name)
+But what if you don’t even know the command’s name yet? That’s where
+searching comes in.
+
+## 2. Fuzzy Searching For Commands
 
 Can't remember the exact command? No problem — Linux lets you search by
 keyword:
@@ -96,9 +99,48 @@ man -k network | grep <subkeyword>
 It's like asking Linux, "Hey, what do you know about this?" — and getting
 a list of everything it can find.
 
+Once you’ve found the right command, though, you don’t always need the
+full manual. Sometimes you just want a quick hint — enter `--help`.
+
+## 3. Quick Hints with the `--help` Option
+
+Almost every Linux command has a built-in help option you can summon with
+`--help`. Think of it as the command whispering, “Here’s what I can do” —
+without dragging you through the whole manual.
+
+Try this with `ls`:
+
+```bash
+ls --help
+```
+
+You’ll get a concise list of options, their meanings, and sometimes even a
+few examples. It’s perfect when you just need a quick refresher.
+
+A couple of tips:
+
+- **Single vs double dash:** Some older commands use `-h` instead of
+`--help`. If `--help` doesn’t work, try `-h`.
+
+- **Too much text?** Pipe it into `less` to make it scrollable:
+
+    ```bash
+    ls --help | less
+    ```
+
+- **Not universal:** A few grumpy old commands (looking at you, `vi`)
+  don’t play by these rules — in those cases, man is still your friend.
+
+This is usually the fastest way to jog your memory on a command’s
+options. For deeper dives or background details, head back to the `man`
+pages.
+
 ---
 
-With these tricks, you'll never be stuck for long. The Linux help system
-is deep, but friendly once you know where to look. Keep exploring, keep
-asking questions, and remember: even the pros check the manual (sometimes
-twice).
+With these tricks — **man pages** for the deep dives, **fuzzy searching**
+when you can’t quite remember the name, and the handy `--help` flag for a
+quick refresher — you’ll never be stuck for long.
+
+The Linux help system is deep, but friendly once you know where to look.
+Keep exploring, keep asking questions, and remember: even the pros check
+the manual (sometimes twice).
