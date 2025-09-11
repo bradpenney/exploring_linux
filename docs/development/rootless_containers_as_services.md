@@ -31,7 +31,7 @@ systemctl --user daemon-reload # make the systemd service aware of the files
 ```
 Starting and stopping the container should now be done with `systemctl --user start <containerName>.serivice`, `systemctl --user stop <containerName>.service`, or simply check the status with `systemctl --user status <containerName>.servicei`.  For example, running `systemctl --user status container-nextcloud.service` results in:
 
-![NextCloud Rootless Container as a Service]({{< siteurl >}}/images/nextcloud_service.png) 
+![NextCloud Rootless Container as a Service]({{< siteurl >}}/images/nextcloud_service.png)
 
 ## Enable the Systemd Service to Run at System Startup
 
@@ -40,10 +40,10 @@ Now that the container is controlled by a `systemd` service, it can be enabled i
 ``` bash
 # systemctl --user enable <container-ContainerName.service>
 systemctl --user enable container-nextcloud.service
-``` 
+```
 > Find the name of the container serve in `~/.config/systemd/user/` directory if necessary.
 
-Rebooting the server should now result in the container starting automatically.  This can be validated with a simple `ps -ef | grep nextcloud` or `podman ps | grep nextcloud`.  
+Rebooting the server should now result in the container starting automatically.  This can be validated with a simple `ps -ef | grep nextcloud` or `podman ps | grep nextcloud`.
 
 > Depending on the application setup, it may be necessary to repeat this process and even edit the `systemd` service files to ensure the containers start in the correct order to resolve their dependencies on each other (outside the scope of this article).  For example, the container setup in [Introducing Podman]({{< siteurl "introducingPodman.md" >}}) requires that the MariaDB container be started before the NextCloud container.
 

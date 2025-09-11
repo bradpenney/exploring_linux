@@ -14,7 +14,7 @@ history
 
 These commands are stored in your `~/.bash_history` file.
 
-![Bash History](images/bashHistory.png)
+![Bash History](images/bash_history.png)
 
 The size of your history is controlled by two environment variables:
 `HISTSIZE` and `HISTFILESIZE`. Where these are set depends on your Linux

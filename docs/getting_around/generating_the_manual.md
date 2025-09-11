@@ -23,7 +23,7 @@ Manual yourself in a flash. Just run:
 mandb
 ```
 
-![Generate the Manual](../images/endOfManDBCommand.png)
+![Generate the Manual](../images/end_of_man_db_command.png)
 
 Once that's done, your Manual will be fully stocked and ready for
 exploration. Happy learning!

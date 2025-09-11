@@ -31,7 +31,7 @@ Linux system.
     echo "Hello World!"
     ```
 
-    ![Write `HelloWorld.sh` in `vim`](../images/vimHelloWorld.png)
+    ![Write `HelloWorld.sh` in `vim`](../images/vim_hello_world.png)
 
     - The first line (`#!/bin/bash`) is called a shebang. It tells Linux which
       interpreter should run the script. In this case, it's the Bash shell.
@@ -61,7 +61,7 @@ Linux system.
     ./HelloWorld.sh
     ```
 
-    ![Run `HelloWorld.sh`](../images/HelloWorld.png)
+    ![Run `HelloWorld.sh`](../images/hello_world.png)
 
 ## Troubleshooting
 

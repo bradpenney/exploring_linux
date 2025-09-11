@@ -4,13 +4,13 @@ date: 2023-03-28T08:37:52-03:00
 draft: false
 ---
 
-Shell scripting comes fully equipped with `if/else` statement capabilities.  This is commonly used to evaluate conditions such as input from parameters, ensure files exist, ensure that processes are running, and there are several other use cases.  The syntax is a little different than some other languages, but for the most part BASH `if/else` statements are easy, even for those who haven't used other programming languages.  
+Shell scripting comes fully equipped with `if/else` statement capabilities.  This is commonly used to evaluate conditions such as input from parameters, ensure files exist, ensure that processes are running, and there are several other use cases.  The syntax is a little different than some other languages, but for the most part BASH `if/else` statements are easy, even for those who haven't used other programming languages.
 
 In this demo, we'll write a simple script to check if a file exists on the system.  The finished product will work like this:
 
-![Testing If `myFile.txt` Exists]({{< siteurl >}}/images/testMyFileDemo.png)
+![Testing If `myFile.txt` Exists]({{< siteurl >}}/images/test_my_file_demo.png)
 
-## Step 1: Determine the Condition 
+## Step 1: Determine the Condition
 One of the really fantastic things about shell scripting is that it will run most anything that will run in the standard CLI.  This can make testing conditionals very simple - check the output of any command with the server is running in the desired state, then use that same command in a script.  For example, if checking to see if the SSH service is running, issue this command:
 
 ``` shell
@@ -20,7 +20,7 @@ ps aux | grep ssh | grep -v grep | wc -l
 
 Which results in:
 
-![Checking SSH is Running]({{< siteurl >}}/images/grepSSHwc.png)
+![Checking SSH is Running]({{< siteurl >}}/images/grep_ssh_wc.png)
 
 So, as there is one line returned, there is one SSH process running.  This command could be embedded in any shell script as `echo $(ps aux | grep ssh | grep -v grep | wc -l)`.  Or, as we'll see below, it could be used as a conditional in an `if/else` statement.
 
@@ -38,14 +38,14 @@ Creating the file is as simple as `vim testMyFile.sh`.  This is the file in whic
 #!/bin/bash
 ```
 
-This tells the kernel that the contents of the file should be interpreted using the BASH program.  If the "shebang" is missing, the file won't run correctly.  
+This tells the kernel that the contents of the file should be interpreted using the BASH program.  If the "shebang" is missing, the file won't run correctly.
 
 > Note - this also works for other programming languages.  For example, when writing a Python script, the "shebang" might be `#!/bin/python3`, and the kernel will interpret the program using Python
 
 ## Step 3: Write the If/Else Statement
 Now on to the fun part - writing the `if/else` statement.  The finished product looks like this:
 
-![BASH If/Else Demo]({{< siteurl >}}/images/ifElseFileExists.png)
+![BASH If/Else Demo]({{< siteurl >}}/images/if_else_file_exists.png)
 
 Before just copy/pasting this, lets break it down and explain it a little.
 
@@ -65,7 +65,7 @@ Notice the `fi` at the end of the statement - this is how an `if` statement is c
 
 > Note that single square brackets may not work on UNIX operating systems such as AIX and Solaris.  For these systems, use double square-brackets.  Also, the checks for equality are a little unique - for example `-gt` (greater than) or `-le` (less than or equal) - rather than more standard `>=` used by most programming languages.
 
-### Add the Catch-All "Else" 
+### Add the Catch-All "Else"
 
 An `if` statement is plenty useful just by itself.  Adding an `else` to perform a different action if the condition IS NOT met increases the versatility exponentially.  In our example, if a file exists, we tell the user, "The file exists!".  But if the file doesn't exist, we tell them "Not there!":
 

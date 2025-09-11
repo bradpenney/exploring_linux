@@ -19,26 +19,26 @@ The process is similar if you’re on VMware, VirtualBox, or Hyper-V.
 
 Open the VM details, hit Add Hardware, and create a new disk:
 
-![Add Hard Disk to VM in Virtual Machine Manager](../images/addHardDisk.png)
+![Add Hard Disk to VM in Virtual Machine Manager](../images/add_hard_disk.png)
 
 We’ll add a couple of 10GiB virtual disks:
 
-![Add 10GiB Disk](../images/add10GiBDisk.png)
+![Add 10GiB Disk](../images/add_10_gib_disk.png)
 
 They’ll then show up as hardware for the VM:
 
-![Disks Successfully Added](../images/disksAdded.png)
+![Disks Successfully Added](../images/disks_added.png)
 
 ## Find the Added Disks with `lsblk`
 
 Boot the VM, log in, become `root`, and run `lsblk`. You’ll see your new
 disks — the names depend on the hypervisor (`sdb`, `vdb`, etc.):
 
-![New Disks within Linux](../images/newDisks_lsblk.png)
+![New Disks within Linux](../images/new_disks_lsblk.png)
 
 Here they’re `vdb` and `vdc`, which live in `/dev/`:
 
-![New Disks in the File System](../images/disksInFileSystem.png)
+![New Disks in the File System](../images/disks_in_file_system.png)
 
 > ⚠️ Heads-up: storage management is root-level work. Don’t try this as a normal user.
 
@@ -50,7 +50,7 @@ Fresh disks are blank slates — no partition table, no use.
 
 Run fdisk on the new disk:
 
-![Create a Partition Table](../images/createPartitionTable.png)
+![Create a Partition Table](../images/create_partition_table.png)
 
 Inside fdisk:
 - `g` → create a GPT partition table
@@ -70,7 +70,7 @@ Reopen fdisk on /dev/vdb and create a partition:
 
 Here’s an example making a 1GiB partition:
 
-![Create a GPT Partition](../images/createGPTPartition.png)
+![Create a GPT Partition](../images/create_gpt_partition.png)
 
 ??? note
 
@@ -81,13 +81,13 @@ Still in `fdisk`:
 - `p` → print the partition table (double-check your work)
 - `w` → write to disk
 
-![Verify and Write to Disk](../images/printPartitionTable.png)
+![Verify and Write to Disk](../images/print_partition_table.png)
 
 Repeat these steps to create another partition on the disk that was created.
 Once both partitions are created, a simple `lsblk` should show both disks
 with partitions, ready for the next steps:
 
-![Validate Creation with `lsblk`](../images/lsblk_newPartitions.png)
+![Validate Creation with `lsblk`](../images/lsblk_new_partitions.png)
 
 ## Make a File System On the Created Partitions
 
@@ -114,7 +114,7 @@ sudo mkdir /app /db
 ```
 As below (using `root`, therefore no `sudo`):
 
-![Make Mount Points](../images/makeMountPoints.png)
+![Make Mount Points](../images/make_mount_points.png)
 
 ## Make a Backup of `/etc/fstab`
 The `/etc/fstab` file controls which filesystems get mounted at boot. It’s
@@ -122,7 +122,7 @@ powerful but unforgiving: one bad entry can prevent the system from starting.
 
 Make a backup first:
 
-![Backup `/etc/fstab`](../images/backupFstab.png)
+![Backup `/etc/fstab`](../images/backup_fstab.png)
 
 ## Make the Mounts Automatic and Permanent
 
@@ -138,7 +138,7 @@ Append it to `/etc/fstab`:
 blkid | grep vdb1 | awk ' { print $2 } ' >> /etc/fstab
 ```
 
-![Add UUID to `/etc/fstab` Without Copy/Paste](../images/addVdb1ToFstab.png)
+![Add UUID to `/etc/fstab` Without Copy/Paste](../images/add_vdb1_to_fstab.png)
 
 ??? note "Append, Don't Overwrite!"
 
@@ -152,11 +152,11 @@ UUID="<yourUUID>"     /app    xfs     defaults        0 0
 
 In our example, `/etc/fstab` now looks like this:
 
-![First Disk Added to `/etc/fstab`](../images/appToFstab.png)
+![First Disk Added to `/etc/fstab`](../images/app_to_fstab.png)
 
 Repeat for the other disk.  The final `/etc/fstab` should look like this:
 
-![Both New Disks Added to `/etc/fstab`](../images/bothToFstab.png)
+![Both New Disks Added to `/etc/fstab`](../images/both_to_fstab.png)
 
 ## Mount & Validate the New Storage
 Apply the changes with:
@@ -174,11 +174,11 @@ findmnt --verify
 
 For example:
 
-![Validate Mount Points](../images/validateMounts.png)
+![Validate Mount Points](../images/validate_mounts.png)
 
 A couple other checks could be:
 
-![Mounts are Useable](../images/mountsAreUseable.png)
+![Mounts are Useable](../images/mounts_are_useable.png)
 
 Test them by creating files, then reboot to make sure mounts survive.
 

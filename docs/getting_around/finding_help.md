@@ -23,7 +23,7 @@ man lvcreate
 ```
 
 Results in:
-![man lvcreate](../images/manLVCreate.png)
+![man lvcreate](../images/man_lvcreate.png)
 
 You'll get a full rundown: what the command does, all its options, and
 some usage notes. It's like having a wise old wizard explain things (with

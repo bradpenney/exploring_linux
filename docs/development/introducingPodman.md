@@ -5,14 +5,14 @@ draft: false
 ---
 
 Podman, short for *Pod Manager* is an enterprise-grade containerization tool.  Although it is largely associated with the RHEL family of distributions, it is a stand-alone project that runs on all enterprise-grade Linux distributions. See [Podman.io](https://podman.io/) for tons of documentation.
- 
+
 ## Docker vs Podman
 Docker has been the containerization standard for several years in enterprise computing.  However, Podman is a strong competitor with several significant advantages.  These can be summarized as:
 
 |                                       | Docker                         | Podman                                   |
 |:-------------------------------------:|:------------------------------:|:----------------------------------------:|
 | **Separate Daemon?**                  | Uses Docker daemon             | Daemonless architecture                  |
-| **Requires Root Access?**             | Runs containers as `roo`t only | Runs containers as `root` and non-`root` | 
+| **Requires Root Access?**             | Runs containers as `roo`t only | Runs containers as `root` and non-`root` |
 | **How are Images Built?**             | YAML-Based DockerFile          | YAML-Based Image File, Buildah tool      |
 | **Monolithic Architecture?**          | Yes                            | No                                       |
 | **Container Orchestration?**          | Yes                            | Yes                                      |
@@ -33,9 +33,9 @@ For developers who have used Docker in the past, it comes as a huge relief to kn
 Podman containers are created in the exact same way as other containers.  The standard demo for this is to simply run `podman run -d -p 8080:80 nginx` which spins up an `nginx` webserver at `localhost:8000`.  While this does show a container running, a more complicated demo might be closer to something found in enterprise.
 
 #### The Business Requirement: Private Cloud for a Small Business
-Imagine a small business needs a private document storage solution for all its employee documents but doesn't want to use a public system such as Google Drive or Dropbox due to privacy and/or regulatory concerns.  Using Podman, it is relatively simple to host a containerized private storage cloud such as [NextCloud](https://nextcloud.com/) on a local server (either physical or virtual). 
+Imagine a small business needs a private document storage solution for all its employee documents but doesn't want to use a public system such as Google Drive or Dropbox due to privacy and/or regulatory concerns.  Using Podman, it is relatively simple to host a containerized private storage cloud such as [NextCloud](https://nextcloud.com/) on a local server (either physical or virtual).
 
-> This would also work as a private instance on a public cloud service such as AWS or Azure but these are outside the scope of this article (and may or may not meet privacy/regulatory requirements). 
+> This would also work as a private instance on a public cloud service such as AWS or Azure but these are outside the scope of this article (and may or may not meet privacy/regulatory requirements).
 
 #### The Solution: Containerized NextCloud
 
@@ -64,13 +64,13 @@ podman run --detach --env MYSQL_HOST=nextcloud-db.dns.podman \
 --volume nextcloud-data:/var/www/html/data --network nextcloud-net \
 --name nextcloud --publish 8889:80 docker.io/library/nextcloud:20
 
-# Credit: https://fedoramagazine.org/nextcloud-20-on-fedora-linux-with-podman/ 
+# Credit: https://fedoramagazine.org/nextcloud-20-on-fedora-linux-with-podman/
 ```
 
 Simple as that, an instance of NextCloud is available for use at `localhost:8889` which of course can also be accessed via IP, via `hostfile` or via an internal DNS server if the company is so equipped:
 
-![NextCloud]({{< siteurl >}}/images/nextcloud.png) 
+![NextCloud]({{< siteurl >}}/images/nextcloud.png)
 
 Best of all, the data stored in this container is permanent - residing in the Podman volume `nextcloud-data` - which can be backed-up and exported in the same way as any other directory on a Linux system.
 
-> To see how to make running this rootless container part of the boot procedure, see [Running Rootless Containers as Services]({{< siteurl >}}/development/rootless_containers_as_services).   
+> To see how to make running this rootless container part of the boot procedure, see [Running Rootless Containers as Services]({{< siteurl >}}/development/rootless_containers_as_services).

@@ -29,7 +29,7 @@ with.
 In this demo, we’ll use four 5GiB disks, combined with RAID5 for redundancy
 (RAID is its own big topic, but redundancy means “safer data” 👍).
 
-![LVM Disks Added](../images/lvmDisks.png)
+![LVM Disks Added](../images/lvm_disks.png)
 
 ## Create a New Physical Volumes (PVs)
 Our four new disks (`vdb`, `vdc`, `vdd`, `vde`) show up in `lsblk`. Before
@@ -40,7 +40,7 @@ LVM can use them, we convert them into **physical volumes**:
 pvcreate /dev/vdb /dev/vdc /dev/vdd /dev/vde
 ```
 
-![Physical Volumes Created](../images/pvsCreated.png)
+![Physical Volumes Created](../images/pvs_created.png)
 
 
 You could run `pvcreate` once per disk, but batching them is faster. Check
@@ -117,13 +117,13 @@ By default, they live under `/dev/<VG>/<LV>`. Format with `mkfs`:
 mkfs.xfs /dev/vg_demo/lv_demo
 ```
 
-![Make a File System for Logical Volume](../images/mkfsLVMDemo.png)
+![Make a File System for Logical Volume](../images/mkfs_lvm_demo.png)
 
 Then create a mount point - `mkdir /lvmDemo`.
 
 ## Permanently Mount the Logical Volume
 Check the UUID of the LV:
-![Logical Volume UUID](../images/blkidLVM.png)
+![Logical Volume UUID](../images/blkid_lvm.png)
 
 Append its UUID to `/etc/fstab` safely:
 
@@ -131,7 +131,7 @@ Append its UUID to `/etc/fstab` safely:
 #blkid -s UUID -o value <location of LVM under /dev/mapper>
 blkid -s UUID -o value /dev/mapper/vg_demo-lv_demo >> /etc/fstab
 ```
-![Send LVM UUID to /etc/fstab](../images/sendLVMUUIDToFstab.png)
+![Send LVM UUID to /etc/fstab](../images/send_lvm_uuid_to_fstab.png)
 
 ??? note "Append, Don't Overwrite!"
 
@@ -140,7 +140,7 @@ blkid -s UUID -o value /dev/mapper/vg_demo-lv_demo >> /etc/fstab
 
 The new line in /etc/fstab should look like:
 
-![Add LVM to /etc/fstab](../images/addLVMToFstab.png)
+![Add LVM to /etc/fstab](../images/add_lvm_to_fstab.png)
 
 ### Validate
 Run:
@@ -151,11 +151,11 @@ mount | grep lv_demo
 findmnt --verify
 ```
 
-![Verify Mounted LVM Doesn't Create Mount Errors](../images/verifyLVM.png)
+![Verify Mounted LVM Doesn't Create Mount Errors](../images/verify_lvm.png)
 
 Test it by creating files:
 
-![Create a File on /lvmDemo](../images/touchLVMDemo.png)
+![Create a File on /lvmDemo](../images/touch_lvm_demo.png)
 
 ???+ tip "Set Permissions"
 

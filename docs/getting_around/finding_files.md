@@ -1,4 +1,4 @@
-# Finding Files on Linux
+# Finding Files in Linux
 
 One of the first things you’ll bump into on Linux is the question: *“Where
 the heck did that file go?”* 🕵️ Whether you’re trying to track down a rogue
