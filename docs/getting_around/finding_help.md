@@ -122,7 +122,7 @@ A couple of tips:
 - **Single vs double dash:** Some older commands use `-h` instead of
 `--help`. If `--help` doesn’t work, try `-h`.
 
-- **Too much text?** Pipe it into `less` to make it scrollable:
+- **Too much text?** Pipe it into [`less`](../basic_toolset/file_pagers.md#less) to make it scrollable:
 
     ```bash
     ls --help | less
