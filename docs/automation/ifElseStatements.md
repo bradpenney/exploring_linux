@@ -43,7 +43,7 @@ This tells the kernel that the contents of the file should be interpreted using 
 > Note - this also works for other programming languages.  For example, when writing a Python script, the "shebang" might be `#!/bin/python3`, and the kernel will interpret the program using Python
 
 ## Step 3: Write the If/Else Statement
-Now on to the fun part - writing the `if/else` statement.  The finished product looks like this:
+Now on to the fun part - writing the `if/else` statement. ✨ The finished product looks like this:
 
 ![BASH If/Else Demo]({{< siteurl >}}/images/if_else_file_exists.png)
 

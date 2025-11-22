@@ -14,7 +14,7 @@ built around three building blocks:
    usable disks
 
 Think LEGO bricks: PVs are the raw bricks, VGs are the big bucket you dump
-them into, and LVs are the custom shapes you build from that bucket.
+them into, and LVs are the custom shapes you build from that bucket. Quality engineering, not fast-food assembly. 🧱
 
 ??? note "Demo OS: Rocky Linux"
 

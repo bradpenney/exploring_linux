@@ -17,9 +17,7 @@ cat myFile.txt | more
 
 ## `less`
 
-This is the pager most folks actually use day-to-day. It fixes a bunch of
-`more`’s limitations: you can scroll with the arrow keys or Space, and `/`
-search works here too. Once you try it, you’ll rarely go back.
+This is the pager most folks actually use day-to-day. (The name is a joke — "less is more." 😄) It fixes a bunch of `more`'s limitations: you can scroll with the arrow keys or Space, and `/` search works here too. Once you try it, you'll rarely go back.
 
 ``` bash
 less myFile.txt

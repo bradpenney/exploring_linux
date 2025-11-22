@@ -3,8 +3,7 @@
 Most [Command Line Shells](shells.md) have a built-in feature to record
 commands you've run. This is handy for two reasons: it keeps a record of
 what you've done, and it makes it super easy to repeat commands without
-retyping them. We'll focus on BASH here, since it's the most common shell
-in enterprise Linux.
+retyping them. (Your shell remembers that gnarly `find` command so you don't have to. 🧠) We'll focus on BASH here, since it's the most common shell in enterprise Linux.
 
 To see your command history, just type:
 

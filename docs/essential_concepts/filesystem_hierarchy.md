@@ -40,9 +40,9 @@ drwxrwxrwt.  18 root root  420 Mar 23 09:35 tmp
 ```
 
 Since Linux is a self-documenting operating system (see
-[Finding Help in Linux](finding_help.md), there's a
+[Finding Help in Linux](finding_help.md)), there's a
 Manual page that explains the file system hierarchy. Just run `man hier`
-on any distro, read, learn, and enjoy!
+on any distro, read, learn, and enjoy! 📚
 
 ## Ephemeral vs Persistent File Systems and Directories
 

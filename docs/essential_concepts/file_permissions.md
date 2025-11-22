@@ -1,7 +1,7 @@
 # File Permissions
 File permissions in Linux can feel like a maze at first — lots of letters,
-dashes, and gotchas. But don’t worry: once you break it down, it’s actually
-pretty logical.
+dashes, and gotchas. But don't worry: once you break it down, it's actually
+pretty logical. 🔐
 
 One big thing to keep in mind: in Linux, everything is a file. Yep, everything
 — text files, devices, directories, even your monitor connection. And all of

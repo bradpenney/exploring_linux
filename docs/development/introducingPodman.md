@@ -22,7 +22,7 @@ The biggest advantages that Podman enjoys is that it is *daemonless* - meaning t
 
 > Note that setting up Podman still requires `root` access - much the same as installing other software requires `root`.  However, once installed and configured, developers can run as many containers as they have resources to support without super-user powers.
 
-The biggest challenge related to using  Podman is that because Docker is so ubiquitous, it is easy to find playbooks that include Docker containers which developers have to "translate" into a Podman version.  Luckily, Podman and Docker are largely command-equivalent (at least in recent versions) and this is becoming less and less of a challenge.
+The biggest challenge related to using Podman is that because Docker is so ubiquitous, it is easy to find playbooks that include Docker containers which developers have to "translate" into a Podman version. Luckily, Podman and Docker are largely command-equivalent (at least in recent versions) and this is becoming less and less of a challenge. 🐳➡️🦭
 
 ## Command-Equivalent to Docker
 

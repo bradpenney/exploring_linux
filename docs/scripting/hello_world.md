@@ -1,8 +1,6 @@
 # Scripting `Hello World`
 
-Writing a Hello World program is a rite of passage in programming. Here’s how
-to do it in a shell script — straight from the command line on an enterprise
-Linux system.
+Writing a Hello World program is a rite of passage in programming — like your first cup of really good coffee. ☕ Here's how to do it in a shell script — straight from the command line on an enterprise Linux system.
 
 ???+ warning "Prerequisites"
 

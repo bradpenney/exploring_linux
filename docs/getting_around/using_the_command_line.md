@@ -2,7 +2,7 @@
 
 In Enterprise Linux, the command line is the tool of choice for most
 tasks. Getting comfortable with it is key — most developers and admins
-SSH into servers and use the command line for their daily work.
+SSH into servers and use the command line for their daily work. ⌨️
 
 ## CLI Command Syntax
 
