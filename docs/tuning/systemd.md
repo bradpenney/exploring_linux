@@ -1,6 +1,6 @@
----
-title: "systemd"
-date: 2023-03-14T20:10:37-03:00
-draft: true
----
+# This page has been moved.
+
+The content of this page has been expanded and moved to the new **Level 4** section.
+
+Please see the new article: [Managing Services: `systemd` and `systemctl`](../level_4/service_management.md).
 

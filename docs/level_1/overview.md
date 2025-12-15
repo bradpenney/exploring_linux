@@ -37,12 +37,12 @@ You should have access to a Linux environment - either a server you can SSH into
 
 Work through these in order for the best learning experience:
 
-1. **[Moving Around](moving_around.md)** - ls, cd, pwd - navigating directories
-2. **[File Management](file_management.md)** - cp, mv, rm, mkdir - creating and organizing
-3. **[Viewing Files](../basic_toolset/file_pagers.md)** - cat, less, head, tail - peeking inside
-4. **[Getting Help](../getting_around/finding_help.md)** - man pages, --help, finding answers
-5. **[Command Line Basics](../getting_around/using_the_command_line.md)** - Understanding the shell
-6. **[BASH Shortcuts](../basic_toolset/BASH_shortcuts.md)** - Keyboard tricks for speed
+1. **[Command Line Basics](using_the_command_line.md)** - Understanding the shell's grammar.
+2. **[Moving Around](moving_around.md)** - `ls`, `cd`, `pwd` - Navigating directories.
+3. **[File Management](file_management.md)** - `cp`, `mv`, `rm`, `mkdir` - Creating and organizing.
+4. **[File Viewing Quick Reference](file_viewing.md)** - `cat`, `less`, `head`, `tail` - Peeking inside files.
+5. **[Getting Help](finding_help.md)** - `man`, `--help` - Finding answers when you're stuck.
+6. **[Directory Navigation Tips & Tricks](navigation_tips.md)** - Aliases, shortcuts, and other tricks for speed.
 
 ## What's Next?
 

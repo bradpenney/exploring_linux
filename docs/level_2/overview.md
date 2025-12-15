@@ -37,7 +37,7 @@ You should be comfortable with Level 1 basics - navigating directories, viewing 
 
 Work through these in order to build your search superpowers:
 
-1. **[Finding Files](../getting_around/finding_files.md)** - find, locate, which, xargs
+1. **[Finding Files](finding_files.md)** - find, locate, which, xargs
 2. **[Searching Inside Files](grep_basics.md)** - grep fundamentals
 3. **[Sorting and Counting](sort_uniq_wc.md)** - sort, uniq, wc
 4. **[Text Extraction](cut_awk.md)** - cut and awk basics

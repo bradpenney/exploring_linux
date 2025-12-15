@@ -50,25 +50,61 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - Getting Around:
-    - Using the Command Line: getting_around/using_the_command_line.md
-    - Finding Files: getting_around/finding_files.md
-    - Finding Help: getting_around/finding_help.md
-    - Generating the Manual: getting_around/generating_the_manual.md
-  - Basic Toolset:
-    - Shells: basic_toolset/shells.md
-    - Text Editors: basic_toolset/text_editors.md
-    - File Pagers: basic_toolset/file_pagers.md
-    - Shell History: basic_toolset/shell_history.md
-    - BASH Shortcuts: basic_toolset/BASH_shortcuts.md
-  - Essential Concepts:
-    - File System Hierarchy: essential_concepts/filesystem_hierarchy.md
-    - File Permissions: essential_concepts/file_permissions.md
-  - Administering Linux:
-    - Adding Storage: administering_linux/adding_storage.md
-    - Logical Volume Management Basics: administering_linux/lvm_basics.md
-    - Network File Share Server: administering_linux/network_file_share_server.md
-    - Accessing Network Storage: administering_linux/accessing_network_storage.md
-  - Scripting:
-    - Hello World: scripting/hello_world.md
+  - Day One - Logging Into Your Server:
+    - Overview: day_one_server/overview.md
+    - Connecting via SSH: day_one_server/ssh_connection.md
+    - First 60 Seconds: day_one_server/orientation.md
+    - Understanding Your Permissions: day_one_server/permissions.md
+    - Safe Exploration: day_one_server/safe_exploration.md
+    - Reading Logs Like a Pro: day_one_server/reading_logs.md
+    - Finding Documentation: day_one_server/finding_docs.md
+    - Common First Tasks: day_one_server/first_tasks.md
+    - The "Don't Do This" Guide: day_one_server/safety_guide.md
+  - Day One - Installing Linux Yourself:
+    - Overview: day_one_install/overview.md
+    - Choosing Your Path: day_one_install/choosing_path.md
+    - Virtual Machine Setup: day_one_install/virtualbox.md
+    - WSL2 on Windows: day_one_install/wsl2.md
+    - Raspberry Pi Setup: day_one_install/raspberry_pi.md
+    - Installing Ubuntu on Laptop: day_one_install/laptop_install.md
+    - Installing Ubuntu on Desktop: day_one_install/desktop_install.md
+    - Post-Install Essentials: day_one_install/post_install.md
+    - Cloud Options: day_one_install/cloud_options.md
+    - Troubleshooting Common Issues: day_one_install/troubleshooting.md
+    - Now What? Next Steps: day_one_install/next_steps.md
+  - Level 1 - Everyday Navigation:
+    - Overview: level_1/overview.md
+    - Command Line Basics: level_1/using_the_command_line.md
+    - Moving Around: level_1/moving_around.md
+    - File Management: level_1/file_management.md
+    - File Viewing Quick Reference: level_1/file_viewing.md
+    - Directory Navigation Tips & Tricks: level_1/navigation_tips.md
+    - Getting Help: level_1/finding_help.md
+  - Level 2 - Finding & Filtering:
+    - Overview: level_2/overview.md
+    - Finding Files: level_2/finding_files.md
+    - Searching Inside Files: level_2/grep_basics.md
+    - Sorting and Counting: level_2/sort_uniq_wc.md
+    - Text Extraction: level_2/cut_awk.md
+    - Text Transformation: level_2/sed_basics.md
+    - Pipes and Chaining: level_2/pipes.md
+  - Level 3 - Processes & Permissions:
+    - Overview: level_3/overview.md
+    - Filesystem Hierarchy: level_3/filesystem_hierarchy.md
+    - File Permissions: level_3/file_permissions.md
+    - Permission Troubleshooting: level_3/permission_troubleshooting.md
+    - umask Basics: level_3/umask.md
+    - Users and Groups: level_3/users_groups.md
+    - Viewing Processes: level_3/ps_top_htop.md
+    - Managing Processes: level_3/process_control.md
+  - Level 4 - System Management:
+    - Overview: level_4/overview.md
+    - Managing Services: level_4/service_management.md
+    - Reading Logs with journalctl: level_4/journalctl.md
+    - Network Basics: level_4/network_basics.md
+    - Network Diagnostics: level_4/network_diagnostics.md
+    - Disk Space Management: level_4/disk_space.md
+    - Working with Archives: level_4/archives.md
+    - Adding Storage: level_4/adding_storage.md
+    - Accessing Network Storage: level_4/network_storage.md
 

@@ -35,13 +35,13 @@ You should be comfortable finding files, searching content, and basic command-li
 
 Work through these to understand Linux's process and permission model:
 
-1. **[File Permissions](../essential_concepts/file_permissions.md)** - chmod, chown, understanding rwx
-2. **[Filesystem Hierarchy](../essential_concepts/filesystem_hierarchy.md)** - Where things live and why
-3. **[Viewing Processes](ps_top_htop.md)** - ps, top, htop - what's running?
-4. **[Managing Processes](process_control.md)** - kill, jobs, bg, fg, nice
-5. **[Understanding Users and Groups](users_groups.md)** - whoami, id, groups
-6. **[Permission Troubleshooting](permission_troubleshooting.md)** - Fixing access issues
-7. **[umask and Default Permissions](umask.md)** - How new files get their permissions
+1. **[Filesystem Hierarchy](filesystem_hierarchy.md)** - Where things live and why
+2. **[Users and Groups](users_groups.md)** - whoami, id, groups
+3. **[File Permissions](file_permissions.md)** - chmod, chown, understanding rwx
+4. **[umask and Default Permissions](umask.md)** - How new files get their permissions
+5. **[Permission Troubleshooting](permission_troubleshooting.md)** - Fixing access issues
+6. **[Viewing Processes](ps_top_htop.md)** - ps, top, htop - what's running?
+7. **[Managing Processes](process_control.md)** - kill, jobs, bg, fg, nice
 
 ## What's Next?
 
