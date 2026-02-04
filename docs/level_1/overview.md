@@ -31,7 +31,7 @@ These are the fundamentals - moving around the filesystem, managing files, viewi
 
 **Prerequisites:**
 
-You should have access to a Linux environment - either a server you can SSH into or a local installation. If you don't have that yet, head back to [Day One: Logging Into Your Server](../day_one_server/overview.md) or [Day One: Installing Linux Yourself](../day_one_install/overview.md).
+You should have access to a Linux environment - either a server you can SSH into or a local installation. If you don't have that yet, head back to [Day One: Getting Started](../day_one/overview.md).
 
 ## The Skills
 

@@ -1,29 +1,104 @@
-<img src="images/exploring_linux.png" alt="Exploring Linux"  class="img-responsive-right" width="300">
+---
+description: Exploring Enterprise Linux teaches practical Linux skills with production safety in mind—from first server login to system administration.
+---
+<img src="images/exploring_linux.png" alt="Exploring Linux" class="img-responsive-right" width="300">
 
-# Welcome to Exploring Enterprise Linux
+# Exploring Enterprise Linux
 
-A subsection of [BradPenney.io](https://bradpenney.io), Exploring Enterprise
-Linux is your go-to companion in the world of open‑source adventure and
-command‑line wizardry! 🐧🔍
+**From nervous SSH login to confident system administration.**
 
-This space is dedicated to showcasing the power, quirks, and elegant simplicity
-of essential Linux tools — think `bash`, `systemd`, `tmux`, `grep`, `awk`,
-plus distro‑hopping tips and shell‑fu shortcuts — for anyone who wants to do
-more with fewer keystrokes (and fewer facepalms).
+A subsection of [BradPenney.io](https://bradpenney.io), this site teaches practical Linux skills for developers and system administrators. It emphasizes real-world scenarios, production safety, and the "why" behind every command.
 
-Whether you're dipping your toes in Linux for the first time or you've been
-tinkering with kernels and bootloaders since floppy‑disk days, I hope you’ll
-discover something that sparkles, surprises, or gives you a good chuckle
-(penguin‑style) 😄
+---
 
-## Upcoming Topics to Explore 🐧
+## Learning Path
 
-- Diving into the command line: shells, prompt tricks, scripting, and more
-- Mastering process control and service management with systemd
-- Multiplexing like a pro with tmux & session workflows
-- Text‑magic with `grep`, `awk`, and `sed` for powerful data wrangling
-- File system mastery: partitions, permissions, links, and troubleshooting
-- Distro deep‑dives, installation tips, and customizing your penguin playground
+<div class="grid cards" markdown>
 
-Stick around — more tutorials, shell‑fu examples, and spontaneous penguin
-tangents are on the way. Thanks for stopping by, and happy exploring! 👋
+- :material-login-variant: **Day One - Getting Started** *(Coming Soon)*
+
+    ---
+
+    **Access** — SSH Connection, Local Setup (WSL2, VirtualBox, Cloud)
+
+    **Orientation** — First 60 Seconds, Understanding Permissions, Safe Exploration
+
+    **Essential Skills** — Reading Logs, Finding Documentation, Common First Tasks, Safety Guide
+
+- :material-console-line: **Level 1 - Everyday Navigation** *(Coming Soon)*
+
+    ---
+
+    **Moving Around** — `ls`, `cd`, `pwd`, directory navigation
+
+    **File Management** — `cp`, `mv`, `rm`, `mkdir`, creating and organizing
+
+    **Viewing Files** — `cat`, `less`, `head`, `tail`, reading file contents
+
+- :material-magnify: **Level 2 - Finding & Filtering** *(Coming Soon)*
+
+    ---
+
+    **Searching** — `find`, `locate`, searching the filesystem
+
+    **Text Processing** — `grep`, `awk`, `sed`, pattern matching
+
+    **Pipes & Redirection** — Combining commands, shaping output
+
+- :material-cog-outline: **Level 3 - Processes & Permissions** *(Coming Soon)*
+
+    ---
+
+    **Processes** — `ps`, `top`, `kill`, managing running programs
+
+    **Permissions** — `chmod`, `chown`, file and directory access control
+
+    **Users & Groups** — User management, sudo, access levels
+
+- :material-server: **Level 4 - System Management** *(Coming Soon)*
+
+    ---
+
+    **Services** — `systemd`, `systemctl`, `journalctl`, service management
+
+    **Networking** — IP configuration, DNS, SSH, firewall basics
+
+    **Storage** — Filesystems, mounting, LVM, disk management
+
+- :material-chip: **Level 5 - Under the Hood** *(Coming Soon)*
+
+    ---
+
+    **Boot Process** — GRUB, initramfs, systemd startup sequence
+
+    **Kernel & /proc** — Understanding `/proc`, `/sys`, kernel parameters
+
+    **Advanced Concepts** — Namespaces, cgroups, memory management
+
+- :material-tools: **Level 6 - Special Topics** *(Coming Soon)*
+
+    ---
+
+    **Shell Scripting** — Bash scripts, automation, best practices
+
+    **Containers** — Podman, Docker, rootless containers as services
+
+    **Advanced Tools** — `tmux`, text editors, dotfiles, cron jobs
+
+</div>
+
+## Philosophy
+
+This site teaches Linux with **production safety in mind**. Every article emphasizes:
+
+- **Real-world scenarios** you'll encounter on actual servers
+- **Safety-first approach** — when commands are dangerous and why
+- **Purpose-driven learning** — understanding the "why," not just memorizing syntax
+- **Progressive complexity** — from Day One orientation to system internals
+
+Whether you just received SSH credentials to your first production server or you're deepening your Linux expertise, this site meets you where you are.
+
+## Connect
+
+- Main site: [bradpenney.io](https://bradpenney.io)
+- Source code: [GitHub](https://github.com/bradpenney/exploring_linux)

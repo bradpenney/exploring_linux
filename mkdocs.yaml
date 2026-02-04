@@ -25,10 +25,25 @@ theme:
       quote: octicons/quote-16
   features:
     - content.code.annotate
+    - content.code.copy
     - content.tabs.link
     - content.code.highlight
     - content.tooltips
     - content.code.mermaid
+
+plugins:
+  - search
+  - social:
+      cards: true
+      cards_layout_options:
+        background_color: "#1a202c"  # Slate-900 (dark background)
+        color: "#cbd5e0"  # Light text for contrast
+  - htmlproofer:
+      enabled: false  # Disabled during editorial review - re-enable when publishing
+      validate_rendered_template: true
+      validate_external_urls: false
+      raise_error: true
+      raise_error_after_finish: true
 
 markdown_extensions:
   - admonition
@@ -44,31 +59,70 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
-  - pymdownx.tabbed
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.highlight
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - attr_list
+  - md_in_html
 
 nav:
   - Home: index.md
-  - Getting Around:
-    - Using the Command Line: getting_around/using_the_command_line.md
-    - Finding Files: getting_around/finding_files.md
-    - Finding Help: getting_around/finding_help.md
-    - Generating the Manual: getting_around/generating_the_manual.md
-  - Basic Toolset:
-    - Shells: basic_toolset/shells.md
-    - Text Editors: basic_toolset/text_editors.md
-    - File Pagers: basic_toolset/file_pagers.md
-    - Shell History: basic_toolset/shell_history.md
-    - BASH Shortcuts: basic_toolset/BASH_shortcuts.md
-  - Essential Concepts:
-    - File System Hierarchy: essential_concepts/filesystem_hierarchy.md
-    - File Permissions: essential_concepts/file_permissions.md
-  - Administering Linux:
-    - Adding Storage: administering_linux/adding_storage.md
-    - Logical Volume Management Basics: administering_linux/lvm_basics.md
-    - Network File Share Server: administering_linux/network_file_share_server.md
-    - Accessing Network Storage: administering_linux/accessing_network_storage.md
-  - Scripting:
-    - Hello World: scripting/hello_world.md
+  - Day One - Getting Started:
+      - Overview: day_one/overview.md
 
+  # EDITORIAL NOTE: Content below is commented out pending quality review
+  # Goal: Match cs.bradpenney.io standards before publishing
+  # Uncomment articles ONE AT A TIME after thorough editorial vetting
+  # See CLAUDE.md for quality standards and vetting checklist
+
+  #     - Getting Access: day_one/getting_access.md
+  #     - Orientation: day_one/orientation.md
+  #     - Permissions: day_one/permissions.md
+  #     - Safe Exploration: day_one/safe_exploration.md
+  #     - Reading Logs: day_one/reading_logs.md
+  #     - Finding Documentation: day_one/finding_docs.md
+  #     - First Tasks: day_one/first_tasks.md
+  #     - Safety Guide: day_one/safety_guide.md
+
+  # - Level 1 - Everyday Navigation:
+  #     - Overview: level_1/overview.md
+  #     - Using the Command Line: getting_around/using_the_command_line.md
+  #     - Finding Files: getting_around/finding_files.md
+  #     - Finding Help: getting_around/finding_help.md
+  #     - Generating the Manual: getting_around/generating_the_manual.md
+  # - Level 2 - Finding & Filtering:
+  #     - Overview: level_2/overview.md
+  #     - Pipes and Redirection: text_processing/pipes_and_redirection.md
+  #     - Grep: text_processing/grep.md
+  #     - Sed: text_processing/sed.md
+  # - Level 3 - Processes & Permissions:
+  #     - Overview: level_3/overview.md
+  #     - File Permissions: essential_concepts/file_permissions.md
+  # - Level 4 - System Management:
+  #     - Overview: level_4/overview.md
+  #     - File System Hierarchy: essential_concepts/filesystem_hierarchy.md
+  #     - Adding Storage: administering_linux/adding_storage.md
+  #     - Logical Volume Management Basics: administering_linux/lvm_basics.md
+  #     - Network File Share Server: administering_linux/network_file_share_server.md
+  #     - Accessing Network Storage: administering_linux/accessing_network_storage.md
+  # - Level 5 - Under the Hood:
+  #     - Overview: level_5/overview.md
+  #     - Systemd: tuning/systemd.md
+  #     - System Tuning: tuning/tuning.md
+  # - Level 6 - Special Topics:
+  #     - Overview: level_6/overview.md
+  #     - Shells: basic_toolset/shells.md
+  #     - Text Editors: basic_toolset/text_editors.md
+  #     - File Pagers: basic_toolset/file_pagers.md
+  #     - Shell History: basic_toolset/shell_history.md
+  #     - BASH Shortcuts: basic_toolset/BASH_shortcuts.md
+  #     - Hello World Script: scripting/hello_world.md
+  #     - If/Else Statements: automation/ifElseStatements.md
+  #     - Case Statements: automation/caseStatements.md
+  #     - Testing Parameters: automation/testingNumberOfParameters.md
+  #     - Development: development/development.md
+  #     - Introducing Podman: development/introducingPodman.md
+  #     - Containers as Services: development/rootless_containers_as_services.md
