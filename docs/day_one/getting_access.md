@@ -1,307 +1,336 @@
 # Getting Access to Linux
 
-Before you can explore Linux, you need access to a Linux environment. There are two main scenarios, and we'll cover both.
+!!! tip "Part of Day One"
+    This is the first practical article in the [Day One: Getting Started](overview.md) series. If you're new to Linux, start there for the full roadmap.
 
-**Pick your path:**
+Before you can explore Linux, you need access to a Linux environment. There are two main scenarios:
 
 - **Scenario A:** Someone gave you SSH credentials to an existing server
 - **Scenario B:** You need to set up your own Linux environment for learning
 
-Read the section that matches your situation, then meet us at the [validation checkpoint](#validation-checkpoint) at the end.
+Pick your scenario below, complete the setup, then meet us at the [validation checkpoint](#validation-checkpoint).
 
 ---
 
-## Scenario A: Connecting via SSH
+=== "Scenario A: SSH to Existing Server"
 
-Someone just handed you SSH credentials to a Linux server. Maybe it's an IP address scrawled on a sticky note, maybe it's in a Slack message, maybe it's buried in your onboarding docs. Let's get you connected.
+    ## Connecting via SSH
 
-SSH (Secure Shell) is how you connect to remote Linux servers. It's encrypted, it's standard, and once you've done it a few times, it becomes second nature.
+    Someone just handed you SSH credentials to a Linux server. Maybe it's an IP address scrawled on a sticky note, maybe it's in a Slack message, maybe it's buried in your onboarding docs. Let's get you connected.
 
-### What You'll Need
+    SSH (Secure Shell) is how you connect to remote Linux servers. It's encrypted, it's standard, and once you've done it a few times, it becomes second nature.
 
-Before you connect, make sure you have:
+    ### What You'll Need
 
-- **Hostname or IP address** - Where's the server? (`192.168.1.100` or `server.example.com`)
-- **Username** - Who are you logging in as? (often your company username)
-- **Credentials** - Either a password or an SSH key (we'll cover both)
+    Before you connect, make sure you have:
 
-### Connecting from Linux or Mac
+    - **Hostname or IP address** - Where's the server? (`192.168.1.100` or `server.example.com`)
+    - **Username** - Who are you logging in as? (often your company username)
+    - **Password** - Your login password
 
-Good news: SSH comes pre-installed on every Linux distribution and macOS. Open your terminal and you're ready to go.
+    ### Choose Your Platform
 
-``` bash title="SSH with Password"
-ssh username@hostname
-```
+    === "Linux / macOS"
 
-Real example:
+        Good news: SSH comes pre-installed on every Linux distribution and macOS. Open your terminal and you're ready to go.
 
-``` bash title="Connecting to a Server"
-ssh jsmith@192.168.1.100
-# or
-ssh jsmith@staging.example.com
-```
+        ``` bash title="SSH Connection Command"
+        ssh username@hostname
+        ```
 
-**What happens next:**
+        Real example:
 
-1. First time connecting? You'll see a fingerprint warning (this is normal - type `yes`)
-2. Enter your password when prompted
-3. You're in! You should see the server's command prompt
+        ``` bash title="Connecting to a Server"
+        ssh jsmith@192.168.1.100
+        # or
+        ssh jsmith@staging.example.com
+        ```
 
-### First Connection - The Fingerprint Warning
+        **What happens next:**
 
-The first time you connect to a server, you'll see something scary:
+        1. First time connecting? You'll see a fingerprint warning (this is normal - type `yes`)
+        2. Enter your password when prompted
+        3. You're in! You should see the server's command prompt
 
-```
-The authenticity of host '192.168.1.100 (192.168.1.100)' can't be established.
-ED25519 key fingerprint is SHA256:abc123def456...
-Are you sure you want to continue connecting (yes/no/[fingerprint])?
-```
+        !!! tip "Server Requires SSH Keys?"
+            If you're getting "Permission Denied (Publickey)" errors, see the Troubleshooting section below. SSH key setup will be covered in a future article.
 
-**Don't panic.** This is SSH asking "Is this really the server you meant to connect to?"
+    === "Windows"
 
-Type `yes` and press Enter. SSH will remember this server and won't ask again (unless the server's key changes, which could indicate a security issue).
+        Windows has a few options for SSH. Pick the one that matches your setup:
 
-### SSH with a Specific Port
+        === "Windows Terminal (Recommended)"
 
-Most SSH servers listen on port 22, but some use custom ports for security. If your server uses a different port:
+            Windows 10/11 includes OpenSSH by default. This is the easiest and most modern approach.
 
-``` bash title="SSH on Custom Port"
-ssh -p 2222 username@hostname
-```
+            Open Windows Terminal (or PowerShell) and use the same SSH commands:
 
-### Using SSH Keys Instead of Passwords
+            ``` bash title="SSH from Windows Terminal"
+            ssh username@hostname
+            ```
 
-SSH keys are more secure and convenient than passwords. If someone gave you a private key file (usually named `id_rsa` or `something.pem`):
+            Real example:
 
-``` bash title="SSH with Key File"
-ssh -i /path/to/private_key username@hostname
-```
+            ``` bash title="Connecting to a Server"
+            ssh jsmith@192.168.1.100
+            # or
+            ssh jsmith@staging.example.com
+            ```
 
-Example:
+            **What happens next:**
 
-``` bash title="Using a Downloaded Key"
-ssh -i ~/Downloads/my_server_key.pem ec2-user@server.example.com
-```
+            1. First time connecting? You'll see a fingerprint warning (type `yes`)
+            2. Enter your password when prompted
+            3. You're in! You should see the server's command prompt
 
-!!! warning "Key File Permissions"
-    SSH is picky about key file permissions. If you get a "permissions are too open" error:
+            That's it! Same syntax and behavior as Linux/Mac.
 
-    ``` bash title="Fix Key Permissions"
-    chmod 600 /path/to/private_key
+        === "PuTTY"
+
+            PuTTY has been the Windows SSH client for decades. It's GUI-based and still popular.
+
+            **Download:** [PuTTY official site](https://www.putty.org/)
+
+            **How to connect:**
+
+            1. Open PuTTY
+            2. Enter your hostname or IP address
+            3. Set port to 22 (or your custom port)
+            4. Set connection type to "SSH"
+            5. Click "Open"
+            6. Enter your username when prompted
+            7. Enter your password when prompted
+
+            !!! tip "Server Requires SSH Keys?"
+                If you're getting "Permission Denied (Publickey)" errors, see the Troubleshooting section below. SSH key setup for PuTTY will be covered in a future article.
+
+        === "WSL"
+
+            If you've installed Windows Subsystem for Linux, you've got full native SSH capabilities.
+
+            Just open your WSL terminal (Ubuntu, Debian, etc.) and follow the **Linux / macOS** tab instructions above.
+
+            This gives you the same experience as Linux users - SSH comes pre-installed and works identically.
+
+    ### First Connection - The Fingerprint Warning
+
+    The first time you connect to a server (regardless of platform), you'll see something scary:
+
+    ```
+    The authenticity of host '192.168.1.100 (192.168.1.100)' can't be established.
+    ED25519 key fingerprint is SHA256:abc123def456...
+    Are you sure you want to continue connecting (yes/no/[fingerprint])?
     ```
 
-### Connecting from Windows
+    **Don't panic.** This is SSH asking "Is this really the server you meant to connect to?"
 
-Windows has a few options for SSH. Let's cover them from easiest to most powerful.
+    Type `yes` and press Enter. SSH will remember this server and won't ask again (unless the server's key changes, which could indicate a security issue).
 
-**Option 1: Windows Terminal (Recommended)**
+    ### SSH with a Specific Port
 
-Windows 10/11 includes OpenSSH by default. Open Windows Terminal (or PowerShell) and use the same commands as Linux/Mac:
+    Most SSH servers listen on port 22, but some use custom ports for security. If your server uses a different port:
 
-``` bash title="SSH from Windows Terminal"
-ssh username@hostname
-```
+    ``` bash title="SSH on Custom Port"
+    ssh -p 2222 username@hostname
+    ```
 
-That's it! Same syntax, same behavior.
+    ### Troubleshooting Common SSH Issues
 
-**Option 2: PuTTY (Traditional Approach)**
+    Running into connection problems? Expand the issue you're seeing:
 
-PuTTY has been the Windows SSH client for decades. It's GUI-based and still popular.
+    ??? question "Connection Refused"
+        **What it means:** SSH can't reach the server at all.
 
-- **Download:** [PuTTY official site](https://www.putty.org/)
-- Enter hostname/IP, port (22), connection type (SSH), click "Open"
-- Enter username and password when prompted
+        **Possible causes:**
 
-**Note:** PuTTY uses `.ppk` format for keys. If you have a `.pem` file, you'll need to convert it using PuTTYgen (included with PuTTY).
+        - Server might be down or unreachable
+        - Firewall blocking port 22
+        - Wrong IP address or hostname
+        - Not connected to VPN (if required)
 
-**Option 3: WSL (Windows Subsystem for Linux)**
+        **What to try:**
 
-If you installed WSL, you've got full SSH capabilities. Just open your WSL terminal and use the Linux instructions above.
+        ``` bash title="Test Basic Connectivity"
+        ping hostname
+        # or
+        ping 192.168.1.100
+        ```
 
-### Troubleshooting Common SSH Issues
+        If ping fails, you have a network issue. Ask your team:
 
-**Connection Refused:**
-- Server might be down, firewall blocking port 22, or wrong IP/hostname
-- Try: `ping hostname` to test basic connectivity
-- Ask your team: Is the server running? Do I need VPN access?
+        - Is the server running?
+        - Do I need VPN access?
+        - Is this the correct hostname/IP?
 
-**Connection Timeout:**
-- Network issue - check if you need to be on VPN
-- Server might be on a private network you don't have access to
+    ??? question "Connection Timeout"
+        **What it means:** SSH is trying to connect but getting no response.
 
-**Permission Denied (Publickey):**
-- Server requires SSH key authentication
-- Make sure you're specifying your key with `-i` flag
-- Ask your team: Which key should I use? Has my public key been added?
+        **Possible causes:**
 
-**Host Key Verification Failed:**
-- Server's fingerprint changed (maybe it was rebuilt?)
-- Ask your team, then remove old fingerprint: `ssh-keygen -R hostname`
+        - Network issue - you might need to be on VPN
+        - Server is on a private network you don't have access to
+        - Firewall silently dropping packets
 
-### Pro Tips for SSH Users
+        **What to try:**
 
-**Save time with SSH config:**
+        - Check if you need to connect to VPN first
+        - Verify you're on the correct network
+        - Ask your team about network access requirements
 
-Create/edit `~/.ssh/config` to save common connections:
+    ??? question "Permission Denied (Publickey)"
+        **What it means:** Server requires SSH key authentication instead of password.
 
-``` bash title="Example SSH Config"
-Host staging
-    HostName staging.example.com
-    User jsmith
-    Port 22
-    IdentityFile ~/.ssh/my_key.pem
+        **Why this happens:**
 
-Host prod
-    HostName 192.168.1.100
-    User admin
-    IdentityFile ~/.ssh/prod_key.pem
-```
+        - Server is configured to only accept SSH keys (no password login)
+        - Your public key hasn't been added to the server yet
 
-Now you can connect with just: `ssh staging`
+        **What to do:**
 
-**Keep connections alive:**
+        Contact your team - they'll either:
 
-If your SSH session disconnects when idle, add this to `~/.ssh/config`:
+        - Enable password authentication for your account, or
+        - Tell you their process for getting SSH access (ticket system, send public key to team lead, etc.)
 
-```
-Host *
-    ServerAliveInterval 60
-```
+        **Note:** SSH key setup is covered in a future article. For now, work with your team to get initial access.
 
----
+    ??? question "Host Key Verification Failed"
+        **What it means:** The server's fingerprint has changed since you last connected.
 
-## Scenario B: Setting Up Your Own Linux Environment
+        **Why this happens:**
 
-You want to learn Linux but don't have a server to practice on? No problem. You've got several good options.
+        - Server was rebuilt or reinstalled
+        - Server's SSH keys were regenerated
+        - Someone is trying to intercept your connection (rare but possible)
 
-### Your Options (Pick One)
+        **What to try:**
 
-Here are the most popular approaches, with honest pros and cons:
+        ⚠️ **First, verify with your team** that the server was recently rebuilt or changed. Don't ignore this warning!
 
-#### 1. WSL2 (Windows Subsystem for Linux) - Easiest for Windows Users
+        If confirmed safe, remove the old fingerprint:
 
-**Best for:** Windows users who want Linux immediately, no reboot required
+        ``` bash title="Remove Old Fingerprint"
+        ssh-keygen -R hostname
+        # or
+        ssh-keygen -R 192.168.1.100
+        ```
 
-**How it works:** Linux runs inside Windows - full Linux terminal, native speed
+        Then try connecting again. You'll see the fingerprint warning (as if it's your first connection).
 
-**Setup time:** 5-10 minutes
+=== "Scenario B: Set Up Your Own Environment"
 
-**Get started:** [Microsoft's official WSL2 installation guide](https://learn.microsoft.com/en-us/windows/wsl/install)
+    ## Setting Up Your Own Linux Environment
 
-**Pros:**
-- Fastest setup - one command and you're running Linux
-- No separate VM, no dual-boot complexity
-- Access Windows and Linux files seamlessly
-- Perfect for development work
+    You want to learn Linux but don't have a server to practice on? No problem. Pick the setup that matches your situation:
 
-**Cons:**
-- Windows-only (obviously)
-- Not a "real" server environment (no systemd in older versions)
-- Requires Windows 10/11
+    === "VirtualBox/VMware (Recommended)"
 
-#### 2. VirtualBox or VMware - Safest Learning Environment
+        **Best for:** The best learning experience - full Linux with snapshots
 
-**Best for:** Anyone who wants a full Linux experience with zero risk
+        **Why this is recommended:** You get a complete Linux installation that you can break and restore in seconds. Perfect for learning.
 
-**How it works:** Linux runs in a virtual machine on your current OS (Windows, Mac, Linux)
+        **How it works:** Linux runs in a virtual machine on your current OS (Windows, Mac, or Linux)
 
-**Setup time:** 30-60 minutes (download + install + configure)
+        **Setup time:** 30-60 minutes
 
-**Get started:**
-- [VirtualBox (free)](https://www.virtualbox.org/)
-- [Download Ubuntu Desktop ISO](https://ubuntu.com/download/desktop)
-- [Ubuntu's VM installation tutorial](https://ubuntu.com/tutorials/how-to-run-ubuntu-desktop-on-a-virtual-machine-using-virtualbox)
+        **Get started:**
 
-**Pros:**
-- Snapshots! Break something? Roll back in seconds
-- Complete isolation from your main OS
-- Works on any operating system
-- Closest to a "real" Linux installation
+        1. Download and install [VirtualBox (free)](https://www.virtualbox.org/)
+        2. Download [Ubuntu Desktop ISO](https://ubuntu.com/download/desktop)
+        3. Follow [Ubuntu's VM installation tutorial](https://ubuntu.com/tutorials/how-to-run-ubuntu-desktop-on-a-virtual-machine-using-virtualbox)
 
-**Cons:**
-- Requires decent hardware (4GB+ RAM recommended)
-- Slightly more setup than WSL2
-- Takes disk space (20GB+ for the VM)
+        | Pros | Cons |
+        |------|------|
+        | **Snapshots!** Break something? Roll back in seconds | Requires decent hardware (4GB+ RAM) |
+        | Complete isolation from your main OS | Takes disk space (20GB+ for VM) |
+        | Works on Windows, Mac, or Linux | Slightly longer initial setup |
+        | Full Linux experience (desktop + terminal) | |
+        | Safe environment to experiment | |
 
-#### 3. Cloud Free Tier - Real Server Experience
+        **Hardware requirements:**
 
-**Best for:** Anyone who wants a "real" server environment accessible from anywhere
+        - 4GB RAM minimum (8GB+ recommended)
+        - 25GB free disk space
+        - CPU with virtualization support (most modern CPUs)
 
-**How it works:** Cloud provider gives you a small Linux server for free (with limitations)
+    === "WSL2 (Windows Quick Start)"
 
-**Setup time:** 15-30 minutes (create account, launch instance, SSH in)
+        **Best for:** Windows users who want Linux immediately
 
-**Get started:**
-- [Oracle Cloud Free Tier](https://www.oracle.com/cloud/free/) - Most generous, always free
-- [AWS Free Tier](https://aws.amazon.com/free/) - 12 months free
-- [Google Cloud Free Tier](https://cloud.google.com/free) - 90-day trial
+        **How it works:** Linux runs inside Windows - full Linux terminal, native speed
 
-**Pros:**
-- Real server environment (not a VM on your laptop)
-- Access from anywhere - phone, tablet, any computer
-- Learn cloud concepts alongside Linux
-- No hardware requirements
+        **Setup time:** 5-10 minutes
 
-**Cons:**
-- Requires credit card (even for free tier)
-- Need to manage instance lifecycle (costs after free period)
-- Requires internet connection
-- SSH access only (no desktop GUI)
+        **Get started:** [Microsoft's official WSL2 installation guide](https://learn.microsoft.com/en-us/windows/wsl/install)
 
-#### 4. Raspberry Pi - Physical Learning Device
+        | Pros | Cons |
+        |------|------|
+        | Fastest setup - one command | Windows 10/11 only |
+        | No separate VM needed | Not a complete server environment |
+        | Access Windows and Linux files seamlessly | No desktop environment (terminal only) |
+        | Perfect for development work | |
 
-**Best for:** People who already have a Raspberry Pi or want a dedicated Linux device
+        **When to choose this:**
 
-**Cost:** ~$50-100 for starter kit
+        - You're on Windows and want to start immediately
+        - You primarily need the Linux command line
+        - You don't need a full GUI desktop
 
-**Get started:** [Raspberry Pi official documentation](https://www.raspberrypi.com/documentation/)
+    === "Cloud Provider"
 
-**Pros:**
-- Physical device you can touch, disconnect, learn hardware with
-- Low power consumption, can run 24/7
-- Great for projects beyond just learning Linux
+        **Best for:** Real server experience, accessible from anywhere
 
-**Cons:**
-- Costs money (though not much)
-- ARM architecture (slightly different from typical x86 servers)
-- Requires some hardware setup
+        **How it works:** Cloud provider gives you a small Linux server for free (with limitations and time restrictions)
 
-#### 5. Physical Installation (Dual-Boot or Dedicated Machine)
+        **Setup time:** 15-30 minutes
 
-**Best for:** People ready to commit, or have an old laptop/desktop to repurpose
+        **Get started:** Most major cloud providers offer free tiers - search for "free tier" at your preferred provider. You'll create an account, launch an instance, and SSH to it.
 
-**Get started:** [Ubuntu installation guide](https://ubuntu.com/tutorials/install-ubuntu-desktop)
+        | Pros | Cons |
+        |------|------|
+        | Real server environment | Requires credit card (even for free tier) |
+        | Access from anywhere | Watch for costs after free period |
+        | Learn cloud concepts | Requires internet connection |
+        | No hardware requirements | SSH access only (no desktop GUI) |
 
-**Pros:**
-- Full native performance
-- Complete Linux experience
-- No virtualization overhead
+        **Important:** Set up billing alerts immediately to avoid surprise charges when free period ends.
 
-**Cons:**
-- Dual-boot can be tricky (backup your data!)
-- No easy rollback if you break something
-- Requires compatible hardware
-- More commitment than other options
+    === "Physical Install"
 
-### Which Should You Choose?
+        **Best for:** People with a spare machine or ready to commit to dual-boot
 
-**My recommendation for most learners:**
+        **How it works:** Install Linux directly on hardware (dedicated machine or dual-boot)
 
-1. **Windows user?** → Start with WSL2 (easiest, fastest)
-2. **Mac/Linux user wanting full Linux?** → Use VirtualBox (safest)
-3. **Want real server experience?** → Oracle Cloud Free Tier (most realistic)
+        **Setup time:** 1-2 hours
 
-All of these will get you to the same place - a Linux terminal where you can learn. Pick what matches your comfort level and equipment.
+        **Get started:** [Ubuntu installation guide](https://ubuntu.com/tutorials/install-ubuntu-desktop)
 
-### External Resources Are Your Friend
+        | Pros | Cons |
+        |------|------|
+        | Full native performance | Dual-boot can be tricky (backup first!) |
+        | Complete Linux experience | No easy rollback if you break something |
+        | No virtualization overhead | Requires compatible hardware |
+        | Can repurpose old hardware | More commitment than other options |
 
-Notice I'm linking to official documentation rather than recreating installation tutorials? That's intentional. The official guides are:
+        **Best use case:** You have an old laptop/desktop you can dedicate to Linux learning.
 
-- Always up-to-date (I can't maintain screenshots for 5 platforms)
-- Comprehensive and well-tested
-- Supported by the companies/communities behind them
+        !!! tip "Have a Raspberry Pi?"
+            If you already own a Raspberry Pi, that's a great learning platform! Affordable (~$50-100), low power, and perfect for hands-on Linux learning.
 
-When you hit issues, the official docs and forums are your best resource.
+            - [Raspberry Pi official documentation](https://www.raspberrypi.com/documentation/)
+            - Note: Pi uses ARM architecture, which differs slightly from typical x86 servers
+            - Great for projects beyond just learning Linux
+
+    ### Why We Recommend VMs
+
+    Virtual machines (VirtualBox/VMware) offer the best learning experience because:
+
+    - **Snapshots** - Take a snapshot before trying something risky, roll back if needed
+    - **Safe experimentation** - Break things without consequences
+    - **Full Linux** - Desktop + terminal, complete experience
+    - **Professional relevance** - Many professionals use VMs for testing
+
+    All options will get you to the same Linux command line. Pick what fits your situation.
 
 ---
 
@@ -313,14 +342,20 @@ Regardless of which path you took (SSH into a server or set up your own environm
 
 ``` bash title="Validation Test"
 whoami
-# Should show your username
+# jsmith
 
 pwd
-# Should show your current directory (probably /home/username)
+# /home/jsmith
 
 ls
-# Should list files (might be empty, that's fine!)
+# Documents  Downloads  projects
 ```
+
+**What these commands tell you:**
+
+- `whoami` - Confirms your username (here: `jsmith`). This is your identity on the system.
+- `pwd` - Shows your current location in the filesystem (here: your home directory `/home/jsmith`). You start here when you log in.
+- `ls` - Lists what's in your current directory. An empty result is fine - it just means your home directory is empty.
 
 **If all three commands work, you're ready!**
 
@@ -328,11 +363,89 @@ You have a working Linux environment. Time to learn what to do with it.
 
 ---
 
+## Practice Exercises
+
+Now that you're connected, let's reinforce what you've learned.
+
+??? question "Exercise 1: Test Your Connection"
+    Practice connecting to your Linux environment using the method you chose.
+
+    **Goal:** Successfully connect and run `whoami` to verify you're logged in.
+
+    **For SSH users:** Try connecting, then disconnecting, then reconnecting to build familiarity.
+
+    ??? tip "Solution"
+        **SSH users:**
+
+        ``` bash title="Connect to Your Server"
+        ssh username@hostname
+        # Enter your password when prompted
+        ```
+
+        Once connected:
+
+        ``` bash title="Verify You're Logged In"
+        whoami
+        # Should show your username
+        ```
+
+        **Local setup users:**
+
+        Just open your terminal (WSL, VirtualBox terminal, etc.) and run:
+
+        ``` bash title="Verify Your Environment"
+        whoami
+        # Should show your username
+        ```
+
+??? question "Exercise 2: Understand Your Environment"
+    Run the validation commands and interpret what each one tells you about your system.
+
+    **Tasks:**
+
+    1. Run `whoami` - What username are you using?
+    2. Run `pwd` - Where in the filesystem are you?
+    3. Run `ls -la` - What hidden files are in your home directory?
+
+    ??? tip "Solution"
+        ``` bash title="Explore Your Environment"
+        whoami
+        # Shows your current username
+
+        pwd
+        # Shows your current working directory (usually /home/yourusername)
+
+        ls -la
+        # Lists ALL files including hidden ones (starting with .)
+        # You might see .bashrc, .profile, .ssh directory
+        ```
+
+        **What you learned:** The `-la` flags mean "long format" and "all files (including hidden)". Hidden files in Linux start with a dot.
+
+---
+
+## Further Reading
+
+Want to dive deeper into SSH and connection options?
+
+- `man ssh` - Complete SSH manual (run this in your terminal)
+- `man ssh_config` - SSH configuration file format
+- [OpenSSH official documentation](https://www.openssh.com/manual.html) - Comprehensive SSH reference
+- [SSH Academy](https://www.ssh.com/academy/ssh) - SSH concepts and best practices
+
+---
+
 ## What's Next?
 
 You're in. You've got a Linux terminal in front of you. Now what?
 
-Head to **[First 60 Seconds: Orientation](orientation.md)** to learn what to do in those critical first moments - where you are, who you are, and what this system actually is.
+The next articles in Day One will cover:
+
+- **Orientation** - What to do in your first 60 seconds (coming soon)
+- **Safe Exploration** - How to look around without breaking things (coming soon)
+- **Reading Logs** - Understanding what the system is telling you (coming soon)
+
+For now, try the Practice Exercises above to build familiarity with your new Linux environment.
 
 !!! tip "Bookmark This Page"
     If you're using SSH or cloud instances, you might need to reconnect frequently. Bookmark this page so you can quickly reference connection commands.

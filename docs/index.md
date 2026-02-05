@@ -15,15 +15,15 @@ A subsection of [BradPenney.io](https://bradpenney.io), this site teaches practi
 
 <div class="grid cards" markdown>
 
-- :material-login-variant: **Day One - Getting Started** *(Coming Soon)*
+- :material-login-variant: **[Day One - Getting Started](day_one/overview.md)**
 
     ---
 
-    **Access** — SSH Connection, Local Setup (WSL2, VirtualBox, Cloud)
+    **[Getting Access](day_one/getting_access.md)** — SSH connection, local setup (WSL2, VirtualBox, Cloud)
 
-    **Orientation** — First 60 Seconds, Understanding Permissions, Safe Exploration
+    **Orientation** — First 60 seconds, understanding permissions, safe exploration *(coming soon)*
 
-    **Essential Skills** — Reading Logs, Finding Documentation, Common First Tasks, Safety Guide
+    **Essential Skills** — Reading logs, finding documentation, common first tasks, safety guide *(coming soon)*
 
 - :material-console-line: **Level 1 - Everyday Navigation** *(Coming Soon)*
 

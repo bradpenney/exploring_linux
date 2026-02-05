@@ -72,13 +72,14 @@ nav:
   - Home: index.md
   - Day One - Getting Started:
       - Overview: day_one/overview.md
+      - Getting Access: day_one/getting_access.md
 
   # EDITORIAL NOTE: Content below is commented out pending quality review
   # Goal: Match cs.bradpenney.io standards before publishing
   # Uncomment articles ONE AT A TIME after thorough editorial vetting
   # See CLAUDE.md for quality standards and vetting checklist
 
-  #     - Getting Access: day_one/getting_access.md
+  #
   #     - Orientation: day_one/orientation.md
   #     - Permissions: day_one/permissions.md
   #     - Safe Exploration: day_one/safe_exploration.md
@@ -89,6 +90,7 @@ nav:
 
   # - Level 1 - Everyday Navigation:
   #     - Overview: level_1/overview.md
+  #     - Working Efficiently with Remote Systems: level_1/working_efficiently_with_remote_systems.md
   #     - Using the Command Line: getting_around/using_the_command_line.md
   #     - Finding Files: getting_around/finding_files.md
   #     - Finding Help: getting_around/finding_help.md

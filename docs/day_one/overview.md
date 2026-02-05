@@ -33,7 +33,7 @@ This guide acknowledges that people come to Linux from different starting points
 
     **You have server credentials.**
 
-    Someone gave you an IP address, username, and password (or SSH key). Maybe it's a production server, staging environment, or cloud instance. You need to connect and start working—safely.
+    Someone gave you an IP address, username, and password. Maybe it's a production server, staging environment, or cloud instance. You need to connect and start working—safely.
 
     **We'll cover:** Connecting via SSH, orienting yourself on an unfamiliar system, understanding what you can and cannot do, and staying in read-only mode until you're comfortable.
 
@@ -83,17 +83,17 @@ This guide acknowledges that people come to Linux from different starting points
 
 Work through these in order for the full Day One experience:
 
-1. **Getting Access to Linux** - Connect via SSH or set up your own environment
-2. **First 60 Seconds: Orientation** - Where am I? What is this?
-3. **Understanding Your Permissions** - What can I actually do here?
-4. **Safe Exploration** - How to look around without breaking things
-5. **Reading Logs Like a Pro** - tail, journalctl, and grep
-6. **Finding Documentation** - Where's the team wiki?
-7. **Common First Tasks** - Checking status, finding configs
-8. **The "Don't Do This" Guide** - Safety rules for real systems
+1. **[Getting Access to Linux](getting_access.md)** - Connect via SSH or set up your own environment
+2. **First 60 Seconds: Orientation** - Where am I? What is this? (coming soon)
+3. **Understanding Your Permissions** - What can I actually do here? (coming soon)
+4. **Safe Exploration** - How to look around without breaking things (coming soon)
+5. **Reading Logs Like a Pro** - tail, journalctl, and grep (coming soon)
+6. **Finding Documentation** - Where's the team wiki? (coming soon)
+7. **Common First Tasks** - Checking status, finding configs (coming soon)
+8. **The "Don't Do This" Guide** - Safety rules for real systems (coming soon)
 
 !!! note "Articles Publishing Soon"
-    These articles are currently being reviewed for quality. Check back soon as we publish them one at a time.
+    Articles are being published as they're reviewed for quality. Start with Getting Access to get connected to a Linux system.
 
 ## The Philosophy
 
@@ -143,6 +143,6 @@ Once you're comfortable navigating a Linux system and reading logs, you're ready
 
 ## Ready?
 
-Articles are being published as they're reviewed. Start with **Getting Access to Linux** (coming soon) and we'll get you connected to a Linux system.
+Start with **[Getting Access to Linux](getting_access.md)** and we'll get you connected to a Linux system.
 
 Remember: The person who looks like a Linux wizard today? They had a Day One too. This is yours.
