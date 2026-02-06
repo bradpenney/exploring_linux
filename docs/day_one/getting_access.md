@@ -439,9 +439,10 @@ Want to dive deeper into SSH and connection options?
 
 You're in. You've got a Linux terminal in front of you. Now what?
 
-The next articles in Day One will cover:
+Head to **[First 60 Seconds: Orientation](orientation.md)** to learn what to do immediately after logging in—checking who you are, what server you're on, and what resources are available.
 
-- **Orientation** - What to do in your first 60 seconds (coming soon)
+The next articles in Day One will also cover:
+
 - **Safe Exploration** - How to look around without breaking things (coming soon)
 - **Reading Logs** - Understanding what the system is telling you (coming soon)
 

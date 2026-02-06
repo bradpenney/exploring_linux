@@ -84,7 +84,7 @@ This guide acknowledges that people come to Linux from different starting points
 Work through these in order for the full Day One experience:
 
 1. **[Getting Access to Linux](getting_access.md)** - Connect via SSH or set up your own environment
-2. **First 60 Seconds: Orientation** - Where am I? What is this? (coming soon)
+2. **[First 60 Seconds: Orientation](orientation.md)** - Where am I? What is this server? Who am I?
 3. **Understanding Your Permissions** - What can I actually do here? (coming soon)
 4. **Safe Exploration** - How to look around without breaking things (coming soon)
 5. **Reading Logs Like a Pro** - tail, journalctl, and grep (coming soon)

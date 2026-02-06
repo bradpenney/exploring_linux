@@ -1,5 +1,8 @@
 # First 60 Seconds: Orientation
 
+!!! tip "Part of Day One"
+    This is the second article in the [Day One: Getting Started](overview.md) series. If you just got Linux access, start with [Getting Access](getting_access.md) first.
+
 You're in. The SSH connection worked, and now you're staring at a blinking cursor on some Linux server. Maybe it looks like this:
 
 ```
@@ -14,252 +17,252 @@ These first 60 seconds are about understanding your environment before you start
 
 ---
 
-## Who Am I?
+## The Orientation Workflow
 
-First question: What user account are you logged in as?
+Here's your path from login to confident exploration:
 
-``` bash title="Check Your Username"
-whoami
-# jsmith
+``` mermaid
+graph LR
+    A[🔐 Login] --> B[👤 Identity]
+    B --> C[🖥️ Server Info]
+    C --> D[💾 Resources]
+    D --> E[👥 Other Users]
+    E --> F[✅ Safe to Explore]
+
+    style A fill:#2d3748,stroke:#4a5568,color:#fff
+    style F fill:#48bb78,stroke:#38a169,color:#fff
+    style B fill:#4299e1,stroke:#3182ce,color:#fff
+    style C fill:#4299e1,stroke:#3182ce,color:#fff
+    style D fill:#4299e1,stroke:#3182ce,color:#fff
+    style E fill:#4299e1,stroke:#3182ce,color:#fff
 ```
 
-Simple. But there's more to know about your identity. The `id` command tells you the full picture:
-
-``` bash title="Full User Identity"
-id
-# uid=1001(jsmith) gid=1001(jsmith) groups=1001(jsmith),27(sudo),100(users)
-```
-
-**What this tells you:**
-
-- `uid=1001(jsmith)` — Your user ID and username
-- `gid=1001(jsmith)` — Your primary group
-- `groups=...` — All groups you belong to
-
-!!! tip "Spot the sudo"
-    If you see `sudo` or `wheel` in your groups, you can run commands as root using `sudo`. That's significant — it means you have elevated privileges.
+Each step answers a critical question. Let's explore what you need to check.
 
 ---
 
-## Where Am I?
+## What You Need to Check
 
-When you log in, you start in your home directory. But let's verify:
+<div class="grid cards" markdown>
 
-``` bash title="Print Working Directory"
-pwd
-# /home/jsmith
-```
+-   :material-account: **Your Identity**
 
-The `~` symbol is shorthand for your home directory. You'll see it in prompts like `[jsmith@server ~]$`.
+    ---
 
-**Where is home?**
+    **Why it matters:** You need to know your privilege level before exploring. Do you have sudo access?
 
-- Regular users: `/home/username`
-- Root user: `/root`
-- Service accounts: Varies (sometimes `/var/lib/servicename`)
+    ``` bash title="Check Who You Are"
+    whoami
+    # jsmith
 
----
+    id
+    # uid=1001(jsmith) gid=1001(jsmith) groups=1001(jsmith),27(sudo)
+    ```
 
-## What Is This Server?
+    **Key insight:** If you see `sudo` or `wheel` in your groups, you have elevated privileges. That's significant power—use it carefully.
 
-Now let's figure out what machine you're actually on.
+-   :material-server: **Server Identity**
 
-### Hostname
+    ---
 
-``` bash title="Check Hostname"
-hostname
-# prod-web-01
-```
+    **Why it matters:** Know what server you're on before making any changes. Production? Staging? Dev?
 
-Hostnames often give clues about the server's purpose:
-- `prod-web-01` — Production web server
-- `staging-db` — Staging database server
-- `dev-app-02` — Development application server
+    ``` bash title="What Server Is This?"
+    hostname
+    # prod-web-01
 
-### Operating System
+    cat /etc/os-release | grep -E "^NAME=|^VERSION="
+    # NAME="Red Hat Enterprise Linux"
+    # VERSION="8.6 (Ootpa)"
+    ```
 
-What Linux distribution is running here?
+    **Key insight:** Hostnames reveal purpose: `prod-web-01` = production, `staging-db` = staging database. Know before you act.
 
-``` bash title="Check OS Version"
-cat /etc/os-release
-```
+-   :material-memory: **Resource Check**
 
-You'll see something like:
+    ---
 
-```
-NAME="Red Hat Enterprise Linux"
-VERSION="8.6 (Ootpa)"
-ID="rhel"
-...
-```
+    **Why it matters:** Don't run heavy operations on a struggling server. Check capacity before acting.
 
-Or for Ubuntu:
+    ``` bash title="System Health Snapshot"
+    free -h
+    # Available: 10Gi (check this number!)
 
-```
-NAME="Ubuntu"
-VERSION="22.04.1 LTS (Jammy Jellyfish)"
-ID=ubuntu
-...
-```
+    df -h /
+    # Use%: 45% (under 90% is good)
 
-**Quick one-liner for the essentials:**
+    uptime
+    # load average: 0.15, 0.10, 0.08 (compare to CPU count)
+    ```
 
-``` bash title="OS Name and Version"
-cat /etc/os-release | grep -E "^NAME=|^VERSION="
-```
+    **Key insight:** Low available memory (<10%) or high disk usage (>90%) means proceed carefully. High load (>2× CPU cores) means the server is busy.
 
-### Kernel Version
+-   :material-account-multiple: **Who Else Is Here?**
 
-The kernel is the heart of Linux. Check which version you're running:
+    ---
 
-``` bash title="Check Kernel Version"
-uname -r
-# 5.14.0-284.11.1.el9_2.x86_64
-```
+    **Why it matters:** If someone else is actively working, coordinate before making changes.
 
-For more system details:
+    ``` bash title="Check Other Users"
+    w
+    # Shows who's logged in and what they're doing
+    ```
 
-``` bash title="Full System Info"
-uname -a
-# Linux prod-web-01 5.14.0-284.11.1.el9_2.x86_64 #1 SMP PREEMPT_DYNAMIC ...
-```
+    **Key insight:** See someone with `IDLE` time of 0-5 minutes? They're actively working. Coordinate changes with them.
+
+</div>
 
 ---
 
-## How Long Has This Server Been Running?
+## Common Scenarios
 
-``` bash title="Check Uptime"
-uptime
-# 14:23:01 up 47 days, 3:12, 2 users, load average: 0.15, 0.10, 0.08
-```
+Different situations call for different orientation checks. Pick your scenario:
 
-**What this tells you:**
+=== "Just Logged In - First 30 Seconds"
 
-- `14:23:01` — Current server time
-- `up 47 days, 3:12` — Server has been running for 47 days
-- `2 users` — Two users currently logged in
-- `load average: 0.15, 0.10, 0.08` — CPU load (1, 5, 15 minute averages)
+    **Goal:** Get your bearings immediately after connecting.
 
-!!! info "About Load Average"
-    Load average shows how busy the CPU is. As a rough guide:
+    You just need to know: Who am I, where am I, what server is this, and is it healthy?
 
-    - **Below 1.0** (per CPU core): Server is relaxed
-    - **1.0-2.0** (per CPU core): Normal load
-    - **Above 2.0** (per CPU core): Getting busy
+    ``` bash title="Quick Orientation (30 seconds)"
+    whoami              # Your username
+    # jsmith
 
-    A server with 4 cores can comfortably handle a load of 4.0.
+    pwd                 # Where am I in the filesystem?
+    # /home/jsmith
+
+    hostname            # Server name
+    # prod-web-01
+
+    uptime              # Is it healthy?
+    # 14:23:01 up 47 days, 3:12, 2 users, load average: 0.15, 0.10, 0.08
+    ```
+
+    **What you learned:**
+
+    - You're logged in as `jsmith`
+    - You're in your home directory (`/home/jsmith`)
+    - This is the `prod-web-01` server
+    - It's been running 47 days with low load (healthy)
+
+    !!! tip "Understanding Your Location"
+        When you log in, you start in your **home directory**:
+
+        - Regular users: `/home/username`
+        - Root user: `/root`
+        - Service accounts: Varies (often `/var/lib/servicename`)
+
+        The `~` symbol is shorthand for your home directory. You'll see it in prompts like `[jsmith@server ~]$`.
+
+    **Next step:** If load looks good and it's the right server, you're safe to explore.
+
+=== "Before Making Changes"
+
+    **Goal:** Safety check before modifying files, restarting services, or running commands.
+
+    Before you change anything, verify three things: correct server, no high load, no active users.
+
+    ``` bash title="Pre-Change Safety Check"
+    hostname            # Confirm correct server
+    # prod-web-01       ✓ Correct server
+
+    w                   # Who else is here?
+    # jsmith   pts/0    14:20    0.00s  -bash
+    # admin    pts/1    09:45   4:30m   -bash    ← Someone idle (safe)
+
+    uptime              # Is it busy?
+    # load average: 0.15, 0.10, 0.08    ← Low load (safe to proceed)
+    ```
+
+    **Decision time:**
+
+    - ✅ **Proceed:** Load is low, other users are idle, correct server
+    - ⚠️ **Wait:** Load is high (>2× CPU cores)—find out why first
+    - ⚠️ **Coordinate:** Other user has low idle time—ask before changing things
+
+=== "Manager Asked About Resources"
+
+    **Goal:** Report on server capacity and utilization.
+
+    Your manager or team lead wants to know if the server has capacity for new workloads.
+
+    ``` bash title="Resource Report Commands"
+    # CPU capacity
+    nproc
+    # 4                  ← 4 CPU cores available
+
+    # Memory status
+    free -h
+    #               total        used        free      available
+    # Mem:           15Gi       4.2Gi       8.1Gi        10Gi    ← 10Gi available for new work
+
+    # Disk space
+    df -h | grep -vE "tmpfs|devtmpfs"
+    # /dev/sda1       100G   45G   55G  45% /              ← 55GB free (55%)
+    # /dev/sdb1       500G  320G  180G  64% /data          ← 180GB free (36%)
+
+    # Current load
+    uptime
+    # load average: 0.15, 0.10, 0.08    ← Very light load (0.15 on 4 cores = 3.75% utilization)
+
+    # OS and kernel version
+    cat /etc/os-release | grep -E "^NAME=|^VERSION="
+    # NAME="Red Hat Enterprise Linux"
+    # VERSION="8.6 (Ootpa)"
+
+    uname -r
+    # 5.14.0-284.11.1.el9_2.x86_64      ← Kernel version
+    ```
+
+    **What to report:**
+
+    - **CPU:** 4 cores, currently at ~4% utilization (load 0.15)
+    - **Memory:** 15GB total, 10GB available for new processes
+    - **Disk:** Root filesystem 55% free (55GB), data volume 36% free (180GB)
+    - **OS:** Red Hat Enterprise Linux 8.6, kernel 5.14.0
+    - **Assessment:** Server has significant capacity for additional workloads
+
+=== "Something Seems Wrong"
+
+    **Goal:** Diagnose why the server feels slow or unresponsive.
+
+    The server is sluggish or commands are taking forever. Check what's happening.
+
+    ``` bash title="Health Diagnostics"
+    # Check system load
+    uptime
+    # load average: 8.45, 7.23, 6.12    ← High load! (on 4 cores = 2× capacity)
+
+    # Check memory pressure
+    free -h
+    #               total        used        free      available
+    # Mem:           15Gi        14Gi       512Mi       800Mi    ← Low available memory!
+
+    # Check disk space
+    df -h /
+    # /dev/sda1       100G   98G   2.0G  98% /          ← Disk almost full!
+
+    # See what's running
+    top
+    # Press 'q' to exit when done
+    ```
+
+    **Red flags:**
+
+    - ⚠️ **High load (>2× CPU cores):** Something is consuming CPU heavily
+    - ⚠️ **Low available memory (<10%):** System is memory-constrained
+    - 🚨 **Disk >90% full:** Critical—things will start failing soon
+
+    **What to do:**
+
+    - Don't make changes yet—you could make it worse
+    - Document what you found (screenshot or copy the output)
+    - Escalate to your team: "Server XYZ has [high load / low memory / full disk]"
+    - Let experienced team members investigate root cause
 
 ---
 
-## What Resources Does This Server Have?
-
-Before you start working, it's good to know what you're working with.
-
-### CPU Information
-
-``` bash title="Check CPU Info"
-lscpu | grep -E "^CPU\(s\)|^Model name"
-# CPU(s):                  4
-# Model name:              Intel(R) Xeon(R) CPU E5-2686 v4 @ 2.30GHz
-```
-
-Or the quick version:
-
-``` bash title="CPU Core Count"
-nproc
-# 4
-```
-
-### Memory (RAM)
-
-``` bash title="Check Memory"
-free -h
-```
-
-```
-              total        used        free      shared  buff/cache   available
-Mem:           15Gi       4.2Gi       8.1Gi       312Mi       3.1Gi        10Gi
-Swap:         2.0Gi          0B       2.0Gi
-```
-
-**Key numbers:**
-
-- `total` — Total RAM installed
-- `available` — How much is actually available for new processes (this is what matters!)
-- `Swap` — Disk space used as "emergency" memory
-
-!!! warning "Low Available Memory"
-    If `available` is very low (less than 10% of total), the server might be struggling. Proceed carefully.
-
-### Disk Space
-
-``` bash title="Check Disk Space"
-df -h
-```
-
-```
-Filesystem      Size  Used Avail Use% Mounted on
-/dev/sda1       100G   45G   55G  45% /
-/dev/sdb1       500G  320G  180G  64% /data
-```
-
-**What to look for:**
-
-- `Use%` above 90% is concerning — disk is getting full
-- 100% means trouble — things will start failing
-
-Quick version to see just the important filesystems:
-
-``` bash title="Disk Space Summary"
-df -h | grep -vE "tmpfs|devtmpfs"
-```
-
----
-
-## Who Else Is Here?
-
-Are other people logged into this server right now?
-
-``` bash title="Who's Logged In"
-who
-# jsmith   pts/0        2024-01-15 14:20 (192.168.1.50)
-# admin    pts/1        2024-01-15 09:45 (192.168.1.25)
-```
-
-Or for more detail:
-
-``` bash title="Detailed User List"
-w
-```
-
-```
- 14:25:01 up 47 days,  3:14,  2 users,  load average: 0.12, 0.10, 0.08
-USER     TTY      FROM             LOGIN@   IDLE   WHAT
-jsmith   pts/0    192.168.1.50     14:20    0.00s  w
-admin    pts/1    192.168.1.25     09:45    4:30m  -bash
-```
-
-This shows you're not alone — and if someone else is actively working on the server, it's polite to coordinate before making changes.
-
----
-
-## Quick System Health Check
-
-Want a snapshot of what's happening right now? Here's a one-liner that gives you the essentials:
-
-``` bash title="Quick Health Check"
-echo "=== Hostname ===" && hostname && echo "=== Uptime ===" && uptime && echo "=== Memory ===" && free -h | head -2 && echo "=== Disk ===" && df -h / | tail -1
-```
-
-Or just use `top` for a live dashboard (press `q` to exit):
-
-``` bash title="Live System Monitor"
-top
-```
-
----
-
-## The Orientation Checklist
+## Quick Reference Checklist
 
 Here's your first-60-seconds checklist:
 
@@ -292,6 +295,50 @@ You're still in reconnaissance mode. Keep exploring safely — there's a whole a
 
 ---
 
+## Practice Exercises
+
+??? question "Exercise 1: Server Reconnaissance"
+    Log into a server and gather the following information:
+
+    - Username and groups
+    - Hostname
+    - OS distribution and version
+    - Available memory
+    - Disk space usage
+
+    **Goal:** Complete this in under 60 seconds.
+
+    ??? tip "Solution"
+        ``` bash title="Quick Orientation Commands"
+        whoami
+        id
+        hostname
+        cat /etc/os-release | grep -E "^NAME=|^VERSION="
+        free -h
+        df -h
+        ```
+
+        **Tip:** Create a shell alias or script to run these commands automatically on login.
+
+??? question "Exercise 2: Interpret Load Average"
+    A server shows: `load average: 8.45, 7.23, 6.12`
+
+    It has 4 CPU cores. Is this server:
+
+    - Relaxed
+    - Normal load
+    - Getting busy
+    - Critical?
+
+    **Hint:** Compare the load to the number of cores.
+
+    ??? tip "Solution"
+        **Getting busy / Critical**
+
+        With 4 cores, a comfortable load is around 4.0. At 8.45, the server is handling twice its comfortable capacity. You should investigate what's consuming resources using `top` or `htop`.
+
+---
+
 ## Quick Recap
 
 Your first 60 seconds should answer:
@@ -305,9 +352,37 @@ Your first 60 seconds should answer:
 
 ---
 
+## Further Reading
+
+### Command References
+
+- `man whoami` - User identity commands
+- `man uptime` - System uptime and load
+- `man free` - Memory usage reporting
+- `man df` - Disk space reporting
+- `man w` - Show who is logged in and what they're doing
+- `man uname` - Print system information
+
+### Deep Dives
+
+- [Understanding Linux Load Averages](https://www.brendangregg.com/blog/2017-08-08/linux-load-averages.html) - Comprehensive explanation of load metrics
+- [Brendan Gregg's Linux Performance](https://www.brendangregg.com/linuxperf.html) - Performance analysis tools and methodology
+
+### Official Documentation
+
+- [Red Hat Enterprise Linux Documentation](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/) - RHEL system administration guides
+- [Ubuntu Server Documentation](https://ubuntu.com/server/docs) - Ubuntu-specific server guides
+- [Debian Administrator's Handbook](https://debian-handbook.info/) - Comprehensive Debian/Ubuntu reference
+- [The Linux Documentation Project](https://tldp.org/) - Guides, HOWTOs, and FAQs
+- [Linux Kernel Documentation](https://www.kernel.org/doc/html/latest/) - Official kernel documentation
+
+---
+
 ## What's Next?
 
-Now that you know where you are and what you're working with, let's talk about what you can actually do here. Head to [Understanding Your Permissions](permissions.md) to learn about sudo, groups, and what level of access you actually have.
+Now that you know where you are and what you're working with, you're ready to start exploring the system. More Day One articles covering safe exploration, understanding permissions, and reading logs are coming soon.
+
+Return to the [Day One Overview](overview.md) to see the full learning path, or practice the exercises above to solidify your orientation skills.
 
 !!! tip "Make It a Habit"
     Run these orientation commands every time you log into a new server. It takes 30 seconds and prevents a lot of confusion later.

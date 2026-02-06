@@ -73,6 +73,7 @@ nav:
   - Day One - Getting Started:
       - Overview: day_one/overview.md
       - Getting Access: day_one/getting_access.md
+      - Orientation: day_one/orientation.md
 
   # EDITORIAL NOTE: Content below is commented out pending quality review
   # Goal: Match cs.bradpenney.io standards before publishing
@@ -80,7 +81,6 @@ nav:
   # See CLAUDE.md for quality standards and vetting checklist
 
   #
-  #     - Orientation: day_one/orientation.md
   #     - Permissions: day_one/permissions.md
   #     - Safe Exploration: day_one/safe_exploration.md
   #     - Reading Logs: day_one/reading_logs.md

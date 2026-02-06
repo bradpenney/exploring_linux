@@ -21,7 +21,7 @@ A subsection of [BradPenney.io](https://bradpenney.io), this site teaches practi
 
     **[Getting Access](day_one/getting_access.md)** — SSH connection, local setup (WSL2, VirtualBox, Cloud)
 
-    **Orientation** — First 60 seconds, understanding permissions, safe exploration *(coming soon)*
+    **[Orientation](day_one/orientation.md)** — First 60 seconds on a new server, system reconnaissance
 
     **Essential Skills** — Reading logs, finding documentation, common first tasks, safety guide *(coming soon)*
 
