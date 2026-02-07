@@ -15,15 +15,17 @@ This guide is for anyone starting their Linux journey—whether someone handed y
 
 ## What You'll Learn
 
-By the end of Day One, you'll know how to:
+By the end of Day One, you'll have these essential Linux skills:
 
-- **Get access** to a Linux environment (via SSH or setting up your own)
-- **Orient yourself** after login—where am I, what is this server, who am I?
-- **Explore safely** without breaking things
-- **Understand your permissions** and access levels
-- **Read logs like a pro** using tail, grep, and journalctl
-- **Find help** when you're stuck
-- **Avoid common mistakes** that could impact production systems
+| Skill | What You'll Master |
+|-------|-------------------|
+| **Getting Access** | Connect via SSH or set up your own Linux environment |
+| **Orientation** | Know where you are, what server, who you are |
+| **Permissions** | Understand your access level and use sudo safely |
+| **Safe Exploration** | Look around without breaking things |
+| **Reading Logs** | Use tail, grep, and journalctl effectively |
+| **Finding Help** | Know where to look when stuck |
+| **Avoiding Mistakes** | Common pitfalls that impact production |
 
 ## Two Paths, One Destination
 
@@ -85,7 +87,7 @@ Work through these in order for the full Day One experience:
 
 1. **[Getting Access to Linux](getting_access.md)** - Connect via SSH or set up your own environment
 2. **[First 60 Seconds: Orientation](orientation.md)** - Where am I? What is this server? Who am I?
-3. **Understanding Your Permissions** - What can I actually do here? (coming soon)
+3. **[Understanding Your Permissions](permissions.md)** - What can I actually do here? Groups, sudo, and access levels
 4. **Safe Exploration** - How to look around without breaking things (coming soon)
 5. **Reading Logs Like a Pro** - tail, journalctl, and grep (coming soon)
 6. **Finding Documentation** - Where's the team wiki? (coming soon)

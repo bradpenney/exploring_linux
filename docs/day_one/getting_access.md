@@ -52,6 +52,11 @@ Pick your scenario below, complete the setup, then meet us at the [validation ch
         2. Enter your password when prompted
         3. You're in! You should see the server's command prompt
 
+        ??? tip "Your Password Won't Show When You Type"
+            When Linux asks for your password, **nothing appears on screen** - no characters, no asterisks, nothing.
+
+            **Don't panic.** Your keyboard is working. Just type your password and press Enter. This is normal Linux behavior for security - it's not showing anything to prevent others from seeing how long your password is.
+
         !!! tip "Server Requires SSH Keys?"
             If you're getting "Permission Denied (Publickey)" errors, see the Troubleshooting section below. SSH key setup will be covered in a future article.
 
@@ -83,6 +88,11 @@ Pick your scenario below, complete the setup, then meet us at the [validation ch
             2. Enter your password when prompted
             3. You're in! You should see the server's command prompt
 
+            ??? tip "Your Password Won't Show When You Type"
+                When Linux asks for your password, **nothing appears on screen** - no characters, no asterisks, nothing.
+
+                **Don't panic.** Your keyboard is working. Just type your password and press Enter. This is normal Linux behavior for security - it's not showing anything to prevent others from seeing how long your password is.
+
             That's it! Same syntax and behavior as Linux/Mac.
 
         === "PuTTY"
@@ -100,6 +110,11 @@ Pick your scenario below, complete the setup, then meet us at the [validation ch
             5. Click "Open"
             6. Enter your username when prompted
             7. Enter your password when prompted
+
+            ??? tip "Your Password Won't Show When You Type"
+                When Linux asks for your password, **nothing appears on screen** - no characters, no asterisks, nothing.
+
+                **Don't panic.** Your keyboard is working. Just type your password and press Enter. This is normal Linux behavior for security - it's not showing anything to prevent others from seeing how long your password is.
 
             !!! tip "Server Requires SSH Keys?"
                 If you're getting "Permission Denied (Publickey)" errors, see the Troubleshooting section below. SSH key setup for PuTTY will be covered in a future article.

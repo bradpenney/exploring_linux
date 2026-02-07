@@ -22,12 +22,12 @@ These first 60 seconds are about understanding your environment before you start
 Here's your path from login to confident exploration:
 
 ``` mermaid
-graph LR
-    A[🔐 Login] --> B[👤 Identity]
-    B --> C[🖥️ Server Info]
-    C --> D[💾 Resources]
-    D --> E[👥 Other Users]
-    E --> F[✅ Safe to Explore]
+graph TD
+    A[🔐 Login] --> B[👤 Check Identity]
+    B --> C[🖥️ Check Server Info]
+    C --> D[💾 Check Resources]
+    D --> E[👥 Check Other Users]
+    E --> F[✅ Ready to Explore]
 
     style A fill:#2d3748,stroke:#4a5568,color:#fff
     style F fill:#48bb78,stroke:#38a169,color:#fff
@@ -380,9 +380,9 @@ Your first 60 seconds should answer:
 
 ## What's Next?
 
-Now that you know where you are and what you're working with, you're ready to start exploring the system. More Day One articles covering safe exploration, understanding permissions, and reading logs are coming soon.
+Now that you know where you are and what you're working with, it's time to understand what you're actually allowed to do on this server. Head to **[Understanding Your Permissions](permissions.md)** to learn about your access level and how to use sudo safely.
 
-Return to the [Day One Overview](overview.md) to see the full learning path, or practice the exercises above to solidify your orientation skills.
+More Day One articles covering safe exploration, reading logs, and finding documentation are coming soon. Return to the [Day One Overview](overview.md) to see the full learning path.
 
 !!! tip "Make It a Habit"
     Run these orientation commands every time you log into a new server. It takes 30 seconds and prevents a lot of confusion later.
