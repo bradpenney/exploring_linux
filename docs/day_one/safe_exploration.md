@@ -1,6 +1,9 @@
 # Safe Exploration
 
-You're logged in, you've oriented yourself, and you understand your permission level. Now you want to poke around — see what's on this server, find the application code, locate config files.
+!!! tip "Part of Day One"
+    This is the fourth article in the [Day One: Getting Started](overview.md) series. You should have already completed [Getting Access](getting_access.md), [Orientation](orientation.md), and [Understanding Your Permissions](permissions.md).
+
+You're [logged in](getting_access.md), you've [oriented yourself](orientation.md), and you [understand your permission level](permissions.md). Now you want to poke around — see what's on this server, find the application code, locate config files.
 
 But there's a voice in your head: *"What if I break something?"*
 
@@ -8,29 +11,55 @@ But there's a voice in your head: *"What if I break something?"*
 
 This article is about read-only reconnaissance. Looking without modifying. Finding things without moving them. By the end, you'll be able to confidently explore any server knowing you're not going to accidentally bring down production.
 
+## The Exploration Workflow
+
+Here's your path to safely exploring a server:
+
+``` mermaid
+graph TD
+    A[Start: You're Logged In] --> B[List Directories<br/>ls, tree]
+    B --> C[Read Files<br/>cat, less, head, tail]
+    C --> D[Follow Logs<br/>tail -f]
+    D --> E[Understand Server<br/>Confident & Safe]
+
+    style A fill:#2d3748,stroke:#4a5568,color:#fff
+    style E fill:#2f855a,stroke:#276749,color:#fff
+    style B fill:#2b6cb0,stroke:#2c5282,color:#fff
+    style C fill:#2b6cb0,stroke:#2c5282,color:#fff
+    style D fill:#2b6cb0,stroke:#2c5282,color:#fff
+```
+
 ---
 
 ## The Golden Rule: Read, Don't Write
 
-These commands are **safe** — they only read data:
+=== ":material-check-circle: Safe Commands (Read-Only)"
 
-- `ls` — List files
-- `cat`, `less`, `head`, `tail` — View file contents
-- `find` — Search for files
-- `grep` — Search inside files
-- `ps`, `top` — View processes
-- `df`, `du` — Check disk usage
-- `pwd`, `whoami`, `id` — Check your context
+    These commands **only read data** - use them freely:
 
-These commands **modify things** — avoid until you know what you're doing:
+    | Command | What It Does | Safety Level |
+    |---------|-------------|--------------|
+    | `ls` | List files and directories | ✅ Completely safe |
+    | `tree` | Show directory structure | ✅ Completely safe |
+    | `cat`, `less` | View file contents | ✅ Completely safe |
+    | `head`, `tail` | View beginning/end of files | ✅ Completely safe |
+    | `pwd`, `cd` | Check/change location | ✅ Completely safe |
+    | `whoami`, `id` | Check your identity | ✅ Completely safe |
 
-- `rm` — Delete files
-- `mv` — Move/rename files
-- `cp` — Copy files (generally safe, but creates new files)
-- `chmod`, `chown` — Change permissions
-- `systemctl restart/stop` — Modify services
-- `vim`, `nano` — Open editor (might accidentally save changes)
-- Any command with `>` or `>>` — Redirects output to files
+=== ":material-alert: Dangerous Commands (Modify Data)"
+
+    These commands **change things** - avoid during exploration:
+
+    | Command | What It Does | Why It's Dangerous |
+    |---------|-------------|-------------------|
+    | `rm` | Delete files | ⚠️ Cannot be undone |
+    | `mv` | Move/rename files | ⚠️ Can overwrite files |
+    | `cp` | Copy files | ⚠️ Creates new files, uses disk space |
+    | `chmod`, `chown` | Change permissions | ⚠️ Can break access control |
+    | `systemctl restart/stop` | Modify services | 🚨 Can disrupt service |
+    | `vim`, `nano` | Open editor | ⚠️ Might accidentally save changes |
+    | `>` or `>>` | Redirect output to file | ⚠️ Can overwrite or create files |
+    | `sudo` anything | Run as root | 🚨 Maximum impact if wrong |
 
 ---
 
@@ -51,19 +80,20 @@ The `-la` flags give you the full picture:
 
 ### What Those Columns Mean
 
+We covered permissions in detail in [Understanding Your Permissions](permissions.md), but here's what you're seeing when you explore with `ls -la`:
+
 ```
 drwxr-xr-x 2 root root 4096 Jan 15 10:30 nginx
--rw-r----- 1 root adm  52428 Jan 15 14:22 syslog
+│          │ │    │    │    │            └─── Filename
+│          │ │    │    │    └────────────────── Last modified (when changed)
+│          │ │    │    └─────────────────────── Size in bytes
+│          │ │    └──────────────────────────── Group
+│          │ └─────────────────────────────────── Owner
+│          └──────────────────────────────────────  Link count
+└─────────────────────────────────────────────────  Permissions (d=dir, -=file, see previous article for rwx details)
 ```
 
-| Column | Meaning |
-|--------|---------|
-| `d` or `-` | Directory or file |
-| `rwxr-xr-x` | Permissions (owner/group/others) |
-| `root root` | Owner and group |
-| `4096` | Size in bytes |
-| `Jan 15 10:30` | Last modified |
-| `nginx` | Name |
+**For exploration, focus on:** filename, size, and last modified date. These tell you what's here, how big it is, and how recent it is.
 
 ### Explore Directory Trees
 
@@ -85,7 +115,7 @@ tree /var/www/ -L 2
 
 The `-L 2` limits depth to 2 levels (so you don't dump thousands of files).
 
-!!! tip "tree Not Installed?"
+??? tip "tree Not Installed?"
     Some minimal servers don't have `tree`. Use this alternative:
 
     ``` bash title="Tree Alternative"
@@ -127,21 +157,85 @@ less /var/log/syslog
 
 ### View Just the Beginning or End
 
-``` bash title="First 20 Lines"
-head -20 /var/log/nginx/access.log
-```
+Often you don't need to see the entire file—just the start to check format, or the end to see recent activity.
 
-``` bash title="Last 20 Lines"
-tail -20 /var/log/nginx/access.log
-```
+=== ":material-arrow-up-bold: Beginning (`head`)"
 
-``` bash title="Last 50 Lines"
-tail -50 /var/log/nginx/error.log
-```
+    **When to use this:**
+
+    - Check file format or headers (CSV files, config files)
+    - See the shebang line in scripts (`#!/bin/bash`)
+    - Preview what a file contains without opening it all
+    - Check documentation structure (README files, man pages)
+
+    ``` bash title="First 20 Lines"
+    head -n 20 /var/log/nginx/access.log
+    ```
+
+    ``` bash title="First 10 Lines (default)"
+    head /etc/hosts
+    ```
+
+=== ":material-arrow-down-bold: End (`tail`)"
+
+    **When to use this:**
+
+    - **Most common:** View recent log entries (logs append to the end)
+    - See the latest errors or activity
+    - Check if a process recently wrote to a file
+    - Find the current state vs historical data
+
+    ``` bash title="Last 20 Lines"
+    tail -n 20 /var/log/nginx/access.log
+    ```
+
+    ``` bash title="Last 50 Lines"
+    tail -n 50 /var/log/nginx/error.log
+    ```
+
+    ``` bash title="Last 10 Lines (default)"
+    tail /var/log/syslog
+    ```
+
+=== ":material-arrow-expand-vertical: Headers + Recent"
+
+    !!! tip "Advanced Pattern - Don't Worry About Memorizing This"
+        This is a handy trick once you're comfortable with `head` and `tail`. For Day One, just knowing the basic commands is enough!
+
+    **When to use this:**
+
+    - See column headers plus the most recent entries (filesystem usage, process lists)
+    - Check table structure and latest data without scrolling through everything
+    - Common pattern: "Show me what the columns mean and the last few entries"
+
+    ``` bash title="Filesystem Headers + Last 3 Mounts"
+    df -h | { head -n 1; tail -n 3; }
+    # Filesystem      Size  Used Avail Use% Mounted on
+    # /dev/sda5       100G   45G   50G  48% /data
+    # /dev/sdb1       500G  320G  180G  64% /backups
+    # tmpfs           7.8G     0  7.8G   0% /run/user/1000
+    ```
+
+    **What you see:** The header row explaining the columns, then just the last 3 filesystem mounts—skipping everything in between.
+
+    ``` bash title="Process List Headers + Last 5 Processes"
+    ps aux | { head -n 1; tail -n 5; }
+    ```
+
+    ``` bash title="How It Works"
+    # The { } groups commands together
+    # head -n 1 shows the header row
+    # tail -n 3 shows the last 3 lines
+    # Together: header + recent entries
+    ```
+
+    **Pro tip:** This pattern works great with any command that outputs tables with headers.
 
 ### Follow a File in Real-Time
 
-This is incredibly useful for watching logs:
+This is incredibly useful for watching logs as they're being written:
+
+**Using `tail -f` (most common):**
 
 ``` bash title="Watch Log Updates Live"
 tail -f /var/log/nginx/access.log
@@ -149,167 +243,21 @@ tail -f /var/log/nginx/access.log
 
 New lines appear as they're written. Press `Ctrl+C` to stop.
 
----
+**Using `less` + `F` key:**
 
-## Finding Files
+If you're already viewing a file in `less`, press `F` to enter follow mode (same as `tail -f`). Press `Ctrl+C` to stop following and return to normal `less` navigation.
 
-### Find by Name
-
-``` bash title="Find Files Named config"
-find /etc -name "*.conf" 2>/dev/null | head -20
+``` bash title="View File, Then Follow"
+less /var/log/nginx/access.log
+# Press F to start following
+# Press Ctrl+C to stop following
+# Press q to quit less
 ```
 
-The `2>/dev/null` hides "permission denied" errors for directories you can't access.
+**When to use which:**
 
-### Find Recently Modified Files
-
-What changed in the last day?
-
-``` bash title="Files Modified in Last 24 Hours"
-find /var/www -mtime -1 -type f 2>/dev/null
-```
-
-What changed in the last hour?
-
-``` bash title="Files Modified in Last Hour"
-find /var/log -mmin -60 -type f 2>/dev/null
-```
-
-### Find Large Files
-
-What's eating up disk space?
-
-``` bash title="Find Files Over 100MB"
-find / -type f -size +100M 2>/dev/null
-```
-
----
-
-## Searching Inside Files
-
-### Search for Text
-
-``` bash title="Find Error Messages"
-grep "error" /var/log/syslog
-```
-
-Case-insensitive search:
-
-``` bash title="Case-Insensitive Search"
-grep -i "error" /var/log/syslog
-```
-
-### Search with Context
-
-Show lines before and after the match:
-
-``` bash title="Show Surrounding Lines"
-grep -B 2 -A 2 "error" /var/log/syslog
-```
-
-`-B 2` shows 2 lines before, `-A 2` shows 2 lines after.
-
-### Search Recursively
-
-Search all files in a directory:
-
-``` bash title="Search All Files in Directory"
-grep -r "database" /etc/nginx/ 2>/dev/null
-```
-
-### Find Which Files Contain a String
-
-Just list the filenames, not the matching lines:
-
-``` bash title="List Files Containing String"
-grep -l "password" /etc/*.conf 2>/dev/null
-```
-
-!!! warning "Be Careful What You Search For"
-    Searching for "password" might show you credentials. If you find any, **don't screenshot, copy, or share them**. Report to your security team if you find exposed secrets.
-
----
-
-## Exploring Running Processes
-
-### What's Running Right Now?
-
-``` bash title="List All Processes"
-ps aux
-```
-
-There's a lot of output. Filter to what matters:
-
-``` bash title="Find Specific Process"
-ps aux | grep nginx
-```
-
-``` bash title="Find Java Processes"
-ps aux | grep java
-```
-
-### Interactive Process Viewer
-
-``` bash title="Live Process Monitor"
-top
-```
-
-**Useful `top` shortcuts:**
-
-| Key | Action |
-|-----|--------|
-| `M` | Sort by memory usage |
-| `P` | Sort by CPU usage |
-| `k` | Kill a process (careful!) |
-| `q` | Quit |
-
-For a friendlier interface (if installed):
-
-``` bash title="Better Process Viewer"
-htop
-```
-
-### Find What's Listening on Ports
-
-``` bash title="Show Listening Ports"
-netstat -tlnp 2>/dev/null
-# or
-ss -tlnp
-```
-
-```
-State    Local Address:Port    Process
-LISTEN   0.0.0.0:80            nginx
-LISTEN   0.0.0.0:443           nginx
-LISTEN   127.0.0.1:3306        mysqld
-```
-
-This tells you what services are running and what ports they use.
-
----
-
-## Exploring Services
-
-### List All Services
-
-``` bash title="List Systemd Services"
-systemctl list-units --type=service
-```
-
-### Check a Specific Service
-
-``` bash title="Service Status (Safe)"
-systemctl status nginx
-```
-
-This shows:
-
-- Whether it's running
-- Recent log output
-- Process ID
-- Memory usage
-
-**This is read-only and completely safe.** It doesn't restart or modify anything.
+- Use `tail -f` when you know you want to follow from the start
+- Use `less` + `F` when you're browsing a file and decide you want to follow it
 
 ---
 
@@ -327,68 +275,193 @@ Before running any command, ask yourself:
 
 ---
 
-## Common Exploration Workflows
+## Common Day One Exploration Tasks
 
-### "Where's the Application Code?"
+=== ":material-folder-open: What's in This Directory?"
 
-``` bash title="Find Web Application"
-ls -la /var/www/
-ls -la /opt/
-ls -la /home/*/
-find / -name "*.py" -o -name "*.js" -o -name "*.java" 2>/dev/null | head -30
-```
+    ``` bash title="List Everything with Details"
+    ls -la
+    ```
 
-### "Where Are the Logs?"
+    **Look for:**
 
-``` bash title="Find Log Directories"
-ls -la /var/log/
-find /var/log -name "*.log" -type f 2>/dev/null
-```
+    - Files and directories (first column: `-` = file, `d` = directory)
+    - File sizes (helpful to know before opening)
+    - Last modified dates (when was this last touched?)
 
-### "What Config Files Exist?"
+=== ":material-file-document-multiple: Where Are the Logs?"
 
-``` bash title="Explore Config Files"
-ls -la /etc/
-find /etc -name "*.conf" 2>/dev/null | head -30
-```
+    Logs are almost always in `/var/log/`:
 
-### "What's This Server's Purpose?"
+    ``` bash title="Explore Log Directory"
+    ls -la /var/log/
+    ```
 
-``` bash title="Identify Server Role"
-systemctl list-units --type=service --state=running
-netstat -tlnp 2>/dev/null
-cat /etc/hostname
-```
+    **Common log files you'll see:**
+
+    - `syslog` - System messages
+    - `auth.log` - Authentication attempts
+    - `kern.log` - Kernel messages
+    - Application-specific directories (nginx/, apache2/, etc.)
+
+=== ":material-file-eye: What's in This File?"
+
+    **Quick peek at a file:**
+
+    ``` bash title="View a Small File"
+    cat /etc/hostname
+    ```
+
+    **Browse a larger file:**
+
+    ``` bash title="Browse with less"
+    less /var/log/syslog
+    ```
+
+    **See just the end (for logs):**
+
+    ``` bash title="Last 20 Lines"
+    tail -n 20 /var/log/syslog
+    ```
 
 ---
 
-## Quick Recap
+## Practice Exercises
 
-**Safe commands (read-only):**
+Now that you know how to explore safely, try these hands-on exercises:
 
-- `ls`, `cat`, `less`, `head`, `tail`
-- `find`, `grep`
-- `ps`, `top`, `htop`
-- `systemctl status`
-- `df`, `du`
+??? question "Exercise 1: Explore a Directory"
+    Navigate to `/var/log` and explore its structure without opening any files.
 
-**Dangerous commands (modify data):**
+    1. List all files and directories with details
+    2. Notice the file sizes and dates
+    3. Try using `tree` if available
 
-- `rm`, `mv`, `chmod`, `chown`
-- `systemctl restart/stop/start`
-- Anything with `>`, `>>`, or `sudo` (unless you're sure)
+    **Hint:** Use `ls -la` and optionally `tree`.
 
-**When in doubt:**
+    ??? tip "Solution"
+        ``` bash title="Explore /var/log"
+        # List everything with details
+        ls -la /var/log
 
-- Don't run it
-- Ask someone
-- Use `--help` to understand what a command does first
+        # Show directory tree (if tree is installed)
+        tree /var/log -L 2
+        ```
+
+        **What to notice:**
+        - Directory vs file (first column: `d` = directory, `-` = file)
+        - File sizes (some logs can be very large)
+        - Last modified dates (when was this last touched?)
+        - Ownership (most owned by root or specific service accounts)
+
+??? question "Exercise 2: Read a Log File"
+    Look at the system log to see what's been happening on the server.
+
+    1. View the last 20 lines of `/var/log/syslog` (or `/var/log/messages` on some systems)
+    2. Follow the log in real-time for a few seconds
+
+    **Hint:** Use `tail` with `-n 20` and `-f` flags.
+
+    ??? tip "Solution"
+        ``` bash title="View Recent System Logs"
+        # See the last 20 lines
+        tail -n 20 /var/log/syslog
+
+        # Follow in real-time (press Ctrl+C to stop)
+        tail -f /var/log/syslog
+        ```
+
+        **What to notice:**
+        - Timestamps on each log line
+        - Service names (what's generating these messages)
+        - Different message types (info, warning, error)
+
+??? question "Exercise 3: Explore Your Home Directory"
+    Get familiar with where your personal files live.
+
+    1. List all files in your home directory (including hidden files)
+    2. Look at the structure with `tree` if available
+    3. Use `less` to browse your `.bashrc` or `.profile` file
+
+    **Hint:** Use `cd ~` to go home, then `ls -la` to list everything.
+
+    ??? tip "Solution"
+        ``` bash title="Explore Your Home"
+        # Go to your home directory
+        cd ~
+
+        # List everything including hidden files
+        ls -la
+
+        # View directory tree
+        tree -L 1
+
+        # Browse your bash config (read-only, safe)
+        less .bashrc
+        ```
+
+        **What to notice:**
+        - Hidden files start with `.` (like `.bashrc`, `.profile`)
+        - Your home directory is your personal workspace
+        - Config files here customize your terminal experience
+
+---
+
+## Day One Exploration Cheat Sheet
+
+Now that you've learned the commands, here's a quick reference for common Day One tasks:
+
+| Task | Safe Commands | What to Look For | Avoid |
+|------|---------------|------------------|-------|
+| **Explore a directory** | `ls -la`<br/>`tree -L 2` | File sizes, dates, permissions | `rm`, `mv` - Don't delete or move |
+| **Find logs** | `ls -la /var/log/` | syslog, auth.log, app directories | Don't modify or delete logs |
+| **Read a file** | `cat filename`<br/>`less filename`<br/>`head -n 20 filename`<br/>`tail -n 20 filename` | File contents, structure, recent entries | `vim`, `nano` - Don't edit accidentally |
+| **Follow logs live** | `tail -f /var/log/syslog`<br/>`less` then press `F` | Real-time updates, errors as they happen | `>`, `>>` - Don't redirect to files |
+| **When unsure** | Use `command --help` | Command documentation | Never run with `sudo` unless certain |
+
+**Golden rule:** If you're just looking, you're safe. If you're changing, stop and think.
+
+---
+
+## Further Reading
+
+### Command References
+
+- `man ls` - List directory contents with all options
+- `man less` - View file contents interactively
+- `man cat` - Display file contents
+- `man head` - Output the first part of files
+- `man tail` - Output the last part of files
+- `man tree` - Display directory trees
+
+### Beginner Guides
+
+- [Explain Shell](https://explainshell.com/) - Visual breakdown of shell commands
+- [TLDR Pages](https://tldr.sh/) - Simplified command examples
+- [Linux Journey: Command Line](https://linuxjourney.com/lesson/the-shell) - Interactive learning path
+
+### Official Documentation
+
+- [GNU Coreutils Manual](https://www.gnu.org/software/coreutils/manual/) - Official docs for `ls`, `cat`, `head`, `tail`, etc.
+
+### Safe Practice
+
+- [OverTheWire: Bandit](https://overthewire.org/wargames/bandit/) - Security wargame for learning Linux commands safely in a controlled environment
 
 ---
 
 ## What's Next?
 
-You can explore safely. Now let's get really good at one of the most important exploration skills: reading logs. Head to [Reading Logs Like a Pro](reading_logs.md) to master `tail`, `journalctl`, and log analysis.
+You now have the essential skills for safe exploration! You can:
 
-!!! tip "Practice Makes Permanent"
-    The more you explore Linux servers, the more comfortable you'll become. These read-only commands can't hurt anything — use them liberally to build familiarity.
+- Navigate directories and list files with `ls` and `tree`
+- Read file contents without modifying them
+- Understand what you're seeing in `ls` output
+- Follow log files in real-time to see what's happening
+
+**Practice these skills:** The best way to get comfortable is to use these commands regularly. Log into a server and just look around - you can't break anything with read-only commands.
+
+**Continue Day One:** Head back to the [Day One Overview](overview.md) to see the other published articles. Each one builds on your Linux foundation.
+
+!!! tip "Day One Is About Looking, Not Doing"
+    These read-only commands can't break anything. Use them liberally to build familiarity with Linux servers. The more you explore, the more comfortable you'll become!

@@ -458,7 +458,7 @@ Head to **[First 60 Seconds: Orientation](orientation.md)** to learn what to do 
 
 The next articles in Day One will also cover:
 
-- **Safe Exploration** - How to look around without breaking things (coming soon)
+- **[Safe Exploration](safe_exploration.md)** - How to look around without breaking things
 - **Reading Logs** - Understanding what the system is telling you (coming soon)
 
 For now, try the Practice Exercises above to build familiarity with your new Linux environment.

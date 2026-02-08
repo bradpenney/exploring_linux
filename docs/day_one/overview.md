@@ -21,9 +21,9 @@ By the end of Day One, you'll have these essential Linux skills:
 |-------|-------------------|
 | **Getting Access** | Connect via SSH or set up your own Linux environment |
 | **Orientation** | Know where you are, what server, who you are |
-| **Permissions** | Understand your access level and use sudo safely |
+| **Permissions** | Understand your access level and use `sudo` safely |
 | **Safe Exploration** | Look around without breaking things |
-| **Reading Logs** | Use tail, grep, and journalctl effectively |
+| **Reading Logs** | Use `tail`, `grep`, and `journalctl` effectively |
 | **Finding Help** | Know where to look when stuck |
 | **Avoiding Mistakes** | Common pitfalls that impact production |
 
@@ -87,9 +87,9 @@ Work through these in order for the full Day One experience:
 
 1. **[Getting Access to Linux](getting_access.md)** - Connect via SSH or set up your own environment
 2. **[First 60 Seconds: Orientation](orientation.md)** - Where am I? What is this server? Who am I?
-3. **[Understanding Your Permissions](permissions.md)** - What can I actually do here? Groups, sudo, and access levels
-4. **Safe Exploration** - How to look around without breaking things (coming soon)
-5. **Reading Logs Like a Pro** - tail, journalctl, and grep (coming soon)
+3. **[Understanding Your Permissions](permissions.md)** - What can I actually do here? Groups, `sudo`, and access levels
+4. **[Safe Exploration](safe_exploration.md)** - How to look around without breaking things
+5. **Reading Logs Like a Pro** - `tail`, `journalctl`, and `grep` (coming soon)
 6. **Finding Documentation** - Where's the team wiki? (coming soon)
 7. **Common First Tasks** - Checking status, finding configs (coming soon)
 8. **The "Don't Do This" Guide** - Safety rules for real systems (coming soon)

@@ -113,7 +113,7 @@ ls -la /etc/shadow
     |------------|--------|-----------|-----------------|
     | **Read** | `r` | View file contents | List directory contents |
     | **Write** | `w` | Modify file | Create/delete files inside |
-    | **Execute** | `x` | Run as program/script | Enter the directory (cd into it) |
+    | **Execute** | `x` | Run as program/script | Enter the directory (`cd` into it) |
     | **None** | `-` | No access | No access |
 
     Permissions are shown in groups of three: **owner**, **group**, **others**
@@ -218,7 +218,7 @@ Use these commands to determine what access you have on the server:
 
     The `sudo` command lets you run commands as root (the superuser). But having the `sudo` group doesn't always mean you can do everything.
 
-    **Check what sudo lets you do:**
+    **Check what `sudo` lets you do:**
 
     ``` bash title="Check Sudo Permissions"
     sudo -l
@@ -241,7 +241,7 @@ Use these commands to determine what access you have on the server:
         (root) /usr/bin/tail /var/log/nginx/*
     ```
 
-    This means you can only restart nginx and read its logs — nothing else with sudo.
+    This means you can only restart `nginx` and read its logs — nothing else with `sudo`.
 
     **Or you might see:**
 
@@ -249,7 +249,7 @@ Use these commands to determine what access you have on the server:
     Sorry, user jsmith may not run sudo on prod-web-01.
     ```
 
-    No sudo for you. You're working with regular user permissions only.
+    No `sudo` for you. You're working with regular user permissions only.
 
 ## What "Permission Denied" Actually Means
 
@@ -284,8 +284,8 @@ You're not root, and you're probably not in the nginx group. Linux checked the p
 
 ### Your Options When Blocked
 
-1. **You need to read it:** Ask someone to add you to the right group, or use sudo if you have it
-2. **You need to edit it:** You almost certainly need sudo (or shouldn't be editing it)
+1. **You need to read it:** Ask someone to add you to the right group, or use `sudo` if you have it
+2. **You need to edit it:** You almost certainly need `sudo` (or shouldn't be editing it)
 3. **You're just exploring:** Move on, find files you CAN read
 
 ---
@@ -319,14 +319,14 @@ In most companies, getting elevated access follows a formal process:
 
 === ":material-server: Standard Environments"
 
-    **Typical sudo access for dev/staging servers:**
+    **Typical `sudo` access for dev/staging servers:**
 
     | Aspect | What to Expect |
     |--------|---------------|
     | **Scope** | Specific servers or server groups (not blanket access) |
     | **Approval** | Manager or team lead approval required |
     | **Duration** | Time-limited, renewed periodically (quarterly/annually) |
-    | **Auditing** | All sudo commands logged and reviewable |
+    | **Auditing** | All `sudo` commands logged and reviewable |
 
     **Bottom line:** You'll have reasonable access, but it's controlled and monitored.
 
@@ -336,7 +336,7 @@ In most companies, getting elevated access follows a formal process:
 
     | Feature | How It Works |
     |---------|-------------|
-    | **ID Checkout** | Check out privileged IDs (not permanent sudo) |
+    | **ID Checkout** | Check out privileged IDs (not permanent `sudo`) |
     | **Justification** | Must provide ticket number or business reason |
     | **Time-Boxed** | Access expires after hours, not days |
     | **Multiple Approvers** | May need manager + security team approval |
@@ -375,12 +375,12 @@ In most companies, getting elevated access follows a formal process:
 
 | Task | Check With | What You Need |
 |------|-----------|---------------|
-| Read a file | `ls -la filename` | Read (r) permission or sudo |
-| Edit a file | `ls -la filename` | Write (w) permission or sudo |
+| Read a file | `ls -la filename` | Read (r) permission or `sudo` |
+| Edit a file | `ls -la filename` | Write (w) permission or `sudo` |
 | Run a script | `ls -la script.sh` | Execute (x) permission |
 | Access a directory | `ls -la dirname` | Execute (x) on directory |
-| Restart service | `sudo -l` | Sudo with service permission |
-| Read protected logs | `sudo -l` or group membership | `adm` group or sudo |
+| Restart service | `sudo -l` | `sudo` with service permission |
+| Read protected logs | `sudo -l` or group membership | `adm` group or `sudo` |
 
 ---
 
@@ -393,7 +393,7 @@ Now that you understand permissions, try these hands-on exercises to build confi
 
     1. What is your username?
     2. What groups are you in?
-    3. Can you use sudo? If so, what can you sudo?
+    3. Can you use `sudo`? If so, what can you `sudo`?
 
     **Hint:** Use `whoami`, `groups`, `id`, and `sudo -l`.
 
@@ -432,7 +432,7 @@ Now that you understand permissions, try these hands-on exercises to build confi
     3. What permissions does the owner have?
     4. What permissions do you (as "others") have?
 
-    **Challenge:** Can you read it with sudo (if you have sudo access)?
+    **Challenge:** Can you read it with `sudo` (if you have `sudo` access)?
 
     ??? tip "Solution"
         ``` bash title="Investigate the Permissions"
@@ -452,7 +452,7 @@ Now that you understand permissions, try these hands-on exercises to build confi
         - Others: no permissions (---)
         - You're not root and not in the shadow group, so you're blocked
 
-        **With sudo (if available):**
+        **With `sudo` (if available):**
 
         ``` bash title="Read with Sudo"
         sudo cat /etc/shadow
@@ -468,19 +468,17 @@ Now that you understand permissions, try these hands-on exercises to build confi
 | Scenario | What to Do | Commands |
 |----------|-----------|----------|
 | **First time on server** | Find your access level | `groups` - What groups am I in?<br/>`sudo -l` - What can I sudo?<br/>`id` - Full identity info |
-| **Permission denied error** | Investigate why | `ls -la filename` - Check ownership<br/>Try sudo if you have it<br/>Ask for access if needed |
-| **Using sudo** | Use carefully | Run minimum command needed<br/>Double-check before Enter<br/>Never run unknown commands |
+| **Permission denied error** | Investigate why | `ls -la filename` - Check ownership<br/>Try `sudo` if you have it<br/>Ask for access if needed |
+| **Using `sudo`** | Use carefully | Run minimum command needed<br/>Double-check before Enter<br/>Never run unknown commands |
 | **Need more access** | Follow process | Ask team lead politely<br/>Explain what you need<br/>Request minimum required |
 
 ---
 
 ## What's Next?
 
-Now that you understand your permission level, you're ready to explore the server safely. The next article in the Day One series will cover safe exploration techniques—how to look around without accidentally changing anything.
+Now that you understand your permission level, you're ready to explore the server safely. Head to **[Safe Exploration](safe_exploration.md)** to learn read-only exploration techniques—how to look around without accidentally changing anything.
 
-**Coming soon:** Safe Exploration - Read-only exploration techniques
-
-For now, head back to the [Day One Overview](overview.md) to see what's available and track upcoming articles.
+More Day One articles covering reading logs, finding documentation, and common tasks are coming soon. Return to the [Day One Overview](overview.md) to see the full learning path.
 
 !!! tip "Bookmark Your Access Level"
     First time on a server, run `id` and `sudo -l` and make a mental note. Knowing your access level prevents frustration and keeps you from accidentally trying things that won't work.
@@ -491,7 +489,7 @@ For now, head back to the [Day One Overview](overview.md) to see what's availabl
 
 ### Command References
 
-- `man sudo` - Complete sudo documentation with all options and configuration
+- `man sudo` - Complete `sudo` documentation with all options and configuration
 - `man id` - Display user and group identity information
 - `man groups` - Show group memberships
 - `man chmod` - Change file permissions (covered in depth in Level 3)
@@ -501,17 +499,17 @@ For now, head back to the [Day One Overview](overview.md) to see what's availabl
 
 ### Deep Dives
 
-- [Sudo Manual](https://www.sudo.ws/about/intro/) - Official sudo project documentation
+- [Sudo Manual](https://www.sudo.ws/about/intro/) - Official `sudo` project documentation
 - [Understanding Linux File Permissions](https://www.redhat.com/sysadmin/linux-file-permissions-explained) - Red Hat's comprehensive guide
 - [Principle of Least Privilege](https://en.wikipedia.org/wiki/Principle_of_least_privilege) - Why systems limit access by default
 
 ### Official Documentation
 
-- [Red Hat: Managing sudo access](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/configuring_basic_system_settings/managing-sudo-access_configuring-basic-system-settings) - Enterprise Linux sudo configuration
+- [Red Hat: Managing sudo access](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/configuring_basic_system_settings/managing-sudo-access_configuring-basic-system-settings) - Enterprise Linux `sudo` configuration
 - [Ubuntu Server Guide: User Management](https://ubuntu.com/server/docs/security-users) - Ubuntu-specific user and permission guidance
 - [Linux Documentation Project: Users and Groups](https://tldp.org/LDP/lame/LAME/linux-admin-made-easy/users-and-groups.html) - Classic reference on Linux user management
 
 ### Security Considerations
 
-- [CIS Benchmarks](https://www.cisecurity.org/cis-benchmarks) - Industry-standard security configurations (includes sudo hardening)
+- [CIS Benchmarks](https://www.cisecurity.org/cis-benchmarks) - Industry-standard security configurations (includes `sudo` hardening)
 - [NIST: Least Privilege](https://csrc.nist.gov/glossary/term/least_privilege) - Official definition and security guidance

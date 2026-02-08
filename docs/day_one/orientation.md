@@ -49,7 +49,7 @@ Each step answers a critical question. Let's explore what you need to check.
 
     ---
 
-    **Why it matters:** You need to know your privilege level before exploring. Do you have sudo access?
+    **Why it matters:** You need to know your privilege level before exploring. Do you have `sudo` access?
 
     ``` bash title="Check Who You Are"
     whoami
@@ -291,7 +291,7 @@ You've oriented yourself. You know what server you're on, what resources it has,
 - Delete anything
 - Run scripts you don't understand
 
-You're still in reconnaissance mode. Keep exploring safely — there's a whole article on that coming up.
+You're still in reconnaissance mode. Keep exploring safely — head to **[Safe Exploration](safe_exploration.md)** to learn how to look around without breaking things.
 
 ---
 
@@ -380,7 +380,7 @@ Your first 60 seconds should answer:
 
 ## What's Next?
 
-Now that you know where you are and what you're working with, it's time to understand what you're actually allowed to do on this server. Head to **[Understanding Your Permissions](permissions.md)** to learn about your access level and how to use sudo safely.
+Now that you know where you are and what you're working with, it's time to understand what you're actually allowed to do on this server. Head to **[Understanding Your Permissions](permissions.md)** to learn about your access level and how to use `sudo` safely.
 
 More Day One articles covering safe exploration, reading logs, and finding documentation are coming soon. Return to the [Day One Overview](overview.md) to see the full learning path.
 

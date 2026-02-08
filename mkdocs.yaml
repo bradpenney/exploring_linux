@@ -75,6 +75,7 @@ nav:
       - Getting Access: day_one/getting_access.md
       - Orientation: day_one/orientation.md
       - Permissions: day_one/permissions.md
+      - Safe Exploration: day_one/safe_exploration.md
 
   # EDITORIAL NOTE: Content below is commented out pending quality review
   # Goal: Match cs.bradpenney.io standards before publishing
@@ -82,7 +83,6 @@ nav:
   # See CLAUDE.md for quality standards and vetting checklist
 
   #
-  #     - Safe Exploration: day_one/safe_exploration.md
   #     - Reading Logs: day_one/reading_logs.md
   #     - Finding Documentation: day_one/finding_docs.md
   #     - First Tasks: day_one/first_tasks.md
@@ -95,6 +95,9 @@ nav:
   #     - Finding Files: getting_around/finding_files.md
   #     - Finding Help: getting_around/finding_help.md
   #     - Generating the Manual: getting_around/generating_the_manual.md
+  #     # DRAFT CONTENT: level_1/_DRAFT_finding_and_filtering.md contains advanced exploration
+  #     # content removed from Day One (find, grep, ps, systemctl). Review and integrate when
+  #     # creating Level 1 finding/filtering articles.
   # - Level 2 - Finding & Filtering:
   #     - Overview: level_2/overview.md
   #     - Pipes and Redirection: text_processing/pipes_and_redirection.md
