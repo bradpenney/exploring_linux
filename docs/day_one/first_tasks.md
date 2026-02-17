@@ -1,4 +1,12 @@
+---
+title: Common First Tasks on a Linux Server
+description: Walk through the real tasks you'll be asked to do on Day One: checking service status, reading logs, inspecting configs, and verifying system health.
+---
+
 # Common First Tasks
+
+!!! tip "Part of Day One"
+    This is the seventh article in the [Day One: Getting Started](overview.md) series. You should have already completed [Getting Access](getting_access.md), [Orientation](orientation.md), [Understanding Your Permissions](permissions.md), [Safe Exploration](safe_exploration.md), [Reading Logs](reading_logs.md), and [Finding Documentation](finding_docs.md).
 
 Your team lead sends you a message: *"Can you check if the API service is running?"*
 
@@ -66,41 +74,20 @@ If nothing shows up, the service isn't listening.
 
 **The ask:** "Check the logs and see what's happening"
 
-### Find the Logs First
+Log reading is covered in depth in [Reading Logs Like a Pro](reading_logs.md). Here are the quick commands for checking logs as part of a task:
 
-``` bash title="Common Log Locations"
-# Web servers
-ls /var/log/nginx/
-ls /var/log/apache2/
-
-# System logs
-ls /var/log/
-
-# Application logs (varies!)
-ls /var/log/app-name/
-ls /opt/app-name/logs/
-```
-
-### Watch Logs in Real-Time
-
-``` bash title="Follow Logs"
+``` bash title="Follow Logs in Real-Time"
 tail -f /var/log/nginx/error.log
 ```
 
-Now reproduce the problem (refresh the page, trigger the API call) and watch for errors.
-
-### Search for Errors
-
-``` bash title="Find Recent Errors"
-tail -500 /var/log/nginx/error.log | grep -i error
-```
-
-### Using journalctl
+Reproduce the problem and watch for new entries. Press `Ctrl+C` to stop.
 
 ``` bash title="Service Logs with journalctl"
 journalctl -u nginx -f
 journalctl -u app-name --since "10 minutes ago"
 ```
+
+For time-windowed searches, common log formats, and error pattern analysis, see [Reading Logs Like a Pro](reading_logs.md).
 
 ---
 
@@ -357,6 +344,55 @@ Watch for a few minutes. No errors? The fix probably worked.
 
 ---
 
+## Practice Exercises
+
+??? question "Exercise 1: Check Whether a Service Is Healthy"
+    Your team lead asks: "Is nginx running and actually accepting connections?" Check the service status AND verify it's listening on port 80.
+
+    **Hint:** You need two commands — `systemctl` and `ss`.
+
+??? tip "Solution"
+    ```bash title="Check nginx Status and Port"
+    systemctl status nginx
+    ss -tlnp | grep :80
+    ```
+
+    You want to see `Active: active (running)` from the first command, and a `LISTEN` entry on port 80 from the second. If the service is running but not listening, something is wrong with its configuration.
+
+??? question "Exercise 2: Find What's Eating Disk Space"
+    `df -h` shows that `/var` is at 91% usage. Find the top 10 largest directories inside `/var`.
+
+    **Hint:** Use `du` with appropriate flags, then sort.
+
+??? tip "Solution"
+    ```bash title="Find Large Directories in /var"
+    du -sh /var/* 2>/dev/null | sort -hr | head -10
+    ```
+
+    `/var/log` is the usual culprit on busy servers. From there, drill deeper:
+    ```bash title="Drill Into /var/log"
+    du -sh /var/log/* 2>/dev/null | sort -hr | head -10
+    ```
+
+??? question "Exercise 3: Verify a Fix Worked"
+    After a colleague restarts a service, you're asked to confirm it's working. What's your verification process for nginx?
+
+    **Hint:** Three steps — service status, port listening, no new errors in logs.
+
+??? tip "Solution"
+    ```bash title="Full nginx Health Check"
+    # 1. Service is running
+    systemctl status nginx
+
+    # 2. Listening on expected ports
+    ss -tlnp | grep nginx
+
+    # 3. No new errors in last 50 lines
+    tail -50 /var/log/nginx/error.log
+    ```
+
+    Watch the logs for 30–60 seconds after the restart. A clean log with no new errors is a good sign.
+
 ## Quick Recap
 
 **Service checks:**
@@ -378,6 +414,27 @@ Watch for a few minutes. No errors? The fix probably worked.
 3. `nc -zv` — Port connectivity
 
 ---
+
+## Further Reading
+
+### Command References
+
+- `man systemctl` — Full systemctl documentation including all unit states and sub-commands
+- `man ss` — Socket statistics; replaces the deprecated `netstat` on modern systems
+- `man top` — Interactive process viewer; press `h` inside `top` for a keyboard shortcut reference
+- `man df` — Disk free space; `-i` shows inode usage (a different way a filesystem can "fill up")
+- `man du` — Disk usage; `--max-depth` controls how many levels deep to report
+- `man curl` — HTTP client with extensive options for testing endpoints and APIs
+
+### Official Documentation
+
+- [systemd documentation](https://systemd.io/) — Comprehensive systemd and systemctl reference
+- [Red Hat: Managing Services with systemd](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_basic_system_settings/managing-services-with-systemd_configuring-basic-system-settings) — Practical systemd service management guide
+
+### Related Articles
+
+- [Reading Logs](reading_logs.md) — In-depth guide to log analysis; covers everything in the Tailing Logs section above and much more
+- [Safe Exploration](safe_exploration.md) — Reminder of which commands are safe to run on production without permission
 
 ## What's Next?
 

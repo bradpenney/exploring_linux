@@ -1,4 +1,12 @@
+---
+title: The Linux Production Safety Guide
+description: Learn what NOT to do on a production Linux server. The rules exist because someone broke something. Understand dangerous commands and how to avoid disasters.
+---
+
 # The "Don't Do This" Guide
+
+!!! tip "Part of Day One"
+    This is the final article in the [Day One: Getting Started](overview.md) series. Read this before making any changes to a production server.
 
 You've learned what to do on a production server. Now let's talk about what **not** to do.
 
@@ -280,6 +288,47 @@ If any answer is "no", **stop and get help**.
 
 ---
 
+## Practice Exercises
+
+??? question "Exercise 1: Safe Config Edit Workflow"
+    You need to check the `worker_processes` setting in `/etc/nginx/nginx.conf`. Walk through the safe approach: backup, view, verify — without actually changing anything.
+
+    **Hint:** Three steps — backup the file, read it, validate the syntax.
+
+??? tip "Solution"
+    ```bash title="Safe Config Inspection Workflow"
+    # 1. Make a backup (even before read-only inspection, if you might edit later)
+    sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup
+
+    # 2. Read the config (safe, read-only)
+    grep "worker_processes" /etc/nginx/nginx.conf
+
+    # 3. Validate current syntax (before touching anything)
+    sudo nginx -t
+    ```
+
+    If you did edit and broke something:
+    ```bash title="Restore from Backup"
+    sudo cp /etc/nginx/nginx.conf.backup /etc/nginx/nginx.conf
+    sudo nginx -t
+    sudo systemctl reload nginx
+    ```
+
+??? question "Exercise 2: The Pre-Change Checklist"
+    Your team lead asks you to restart the `mysql` service on a production server. Before touching the keyboard, what questions do you need answers to?
+
+??? tip "Solution"
+    Work through the production safety checklist:
+
+    1. **Do I understand what `systemctl restart mysql` does?** — Brief downtime. All active connections will drop.
+    2. **Have I tested this in staging?** — Is there a staging server to verify first?
+    3. **Do I have a rollback plan?** — If MySQL doesn't come back up, what's the procedure?
+    4. **Does anyone else need to know?** — Is anyone currently using the database? Alert the team first.
+    5. **Is there a change management process?** — Does this require a ticket, approval, or maintenance window?
+    6. **Am I comfortable explaining this to my team lead?** — If not, ask before acting.
+
+    If any answer is "no" or "I don't know" — stop and ask before proceeding.
+
 ## When Things Go Wrong
 
 You made a mistake. Something broke. Now what?
@@ -362,6 +411,25 @@ diff /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup
 
 ---
 
+## Further Reading
+
+### Command References
+
+- `man cp` — Understand the `-p` flag to preserve file permissions and timestamps when making backups
+- `man diff` — Compare two files side-by-side to verify what changed before and after an edit
+- `man chmod` — Understand permission notation before changing it
+
+### Deep Dives
+
+- [Google SRE Book - Managing Risk](https://sre.google/sre-book/managing-risk/) — Production safety from a site reliability engineering perspective; free online
+- [The Art of Unix Programming](http://www.catb.org/esr/writings/taoup/) — Classic Unix philosophy including the principle of least surprise
+
+### Related Articles
+
+- [Understanding Your Permissions](permissions.md) — Know what you're allowed to do before you do it
+- [Reading Logs](reading_logs.md) — When something goes wrong, logs are how you figure out what happened
+- [Day One Overview](overview.md) — Recap of the complete Day One series
+
 ## You've Completed Day One!
 
 Congratulations! You now know how to:
@@ -377,7 +445,7 @@ Congratulations! You now know how to:
 
 **What's next?**
 
-Ready to level up your command-line skills? Head to [Level 1: Everyday Navigation](../level_1/overview.md) to master the commands you'll use every single day.
+Ready to keep leveling up? **Level 1: Everyday Navigation** is coming soon — covering the daily commands you'll use on any Linux system. In the meantime, head back to the [Day One overview](overview.md) to review everything you've covered.
 
 !!! success "You're Going to Be Fine"
     Everyone who's comfortable on Linux servers started exactly where you are now. The fact that you read a safety guide before diving in shows good instincts. Keep asking questions, keep learning, and you'll be the one helping new people before you know it.

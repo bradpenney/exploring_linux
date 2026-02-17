@@ -1,4 +1,5 @@
 ---
+title: Exploring Enterprise Linux
 description: Exploring Enterprise Linux teaches practical Linux skills with production safety in mind—from first server login to system administration.
 ---
 <img src="images/exploring_linux.png" alt="Exploring Linux" class="img-responsive-right" width="300">
@@ -23,7 +24,13 @@ A subsection of [BradPenney.io](https://bradpenney.io), this site teaches practi
 
     **[Orientation](day_one/orientation.md)** — First 60 seconds on a new server, system reconnaissance
 
-    **Essential Skills** — Reading logs, finding documentation, common first tasks, safety guide *(coming soon)*
+    **[Understanding Your Permissions](day_one/permissions.md)** — Access levels, `sudo`, and file permission basics
+
+    **[Safe Exploration](day_one/safe_exploration.md)** — Read-only reconnaissance without breaking things
+
+    **[Reading Logs Like a Pro](day_one/reading_logs.md)** — `tail`, `grep`, and `journalctl` for production debugging
+
+    **Finding Documentation, First Tasks, Safety Guide** — *(coming soon)*
 
 - :material-console-line: **Level 1 - Everyday Navigation** *(Coming Soon)*
 

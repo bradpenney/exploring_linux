@@ -1,3 +1,8 @@
+---
+title: Getting Access to Linux
+description: Set up your first Linux environment via SSH or a local VM. Step-by-step guidance to get safely connected and ready to start exploring your new system.
+---
+
 # Getting Access to Linux
 
 !!! tip "Part of Day One"
@@ -333,7 +338,7 @@ Pick your scenario below, complete the setup, then meet us at the [validation ch
             If you already own a Raspberry Pi, that's a great learning platform! Affordable (~$50-100), low power, and perfect for hands-on Linux learning.
 
             - [Raspberry Pi official documentation](https://www.raspberrypi.com/documentation/)
-            - Note: Pi uses ARM architecture, which differs slightly from typical x86 servers
+            - Note: Pi uses ARM architecture, which differs from typical x86 servers — though ARM is increasingly common in enterprise environments (AWS Graviton, Ampere cloud instances), so skills learned here transfer directly to modern production work
             - Great for projects beyond just learning Linux
 
     ### Why We Recommend VMs
@@ -441,12 +446,20 @@ Now that you're connected, let's reinforce what you've learned.
 
 ## Further Reading
 
-Want to dive deeper into SSH and connection options?
+### Command References
 
-- `man ssh` - Complete SSH manual (run this in your terminal)
-- `man ssh_config` - SSH configuration file format
+- `man ssh` - Complete SSH manual; covers all connection options and flags
+- `man ssh_config` - Configuration file format for persistent SSH connection settings
+
+### Official Documentation
+
 - [OpenSSH official documentation](https://www.openssh.com/manual.html) - Comprehensive SSH reference
 - [SSH Academy](https://www.ssh.com/academy/ssh) - SSH concepts and best practices
+
+### Related Articles
+
+- [Orientation](orientation.md) - What to do immediately after you've connected
+- [Understanding Your Permissions](permissions.md) - Know what you're allowed to do on the server
 
 ---
 
@@ -458,8 +471,9 @@ Head to **[First 60 Seconds: Orientation](orientation.md)** to learn what to do 
 
 The next articles in Day One will also cover:
 
+- **[Understanding Your Permissions](permissions.md)** - Know what you're allowed to do on the server
 - **[Safe Exploration](safe_exploration.md)** - How to look around without breaking things
-- **Reading Logs** - Understanding what the system is telling you (coming soon)
+- **[Reading Logs Like a Pro](reading_logs.md)** - Using `tail`, `grep`, and `journalctl` to understand what the system is telling you
 
 For now, try the Practice Exercises above to build familiarity with your new Linux environment.
 

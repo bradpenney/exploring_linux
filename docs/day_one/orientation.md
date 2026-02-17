@@ -1,3 +1,8 @@
+---
+title: First 60 Seconds - Linux Server Orientation
+description: Just logged in? Learn what the prompt tells you, how to identify the server you're on, and which safe read-only commands reveal everything you need to know.
+---
+
 # First 60 Seconds: Orientation
 
 !!! tip "Part of Day One"
@@ -256,9 +261,10 @@ Different situations call for different orientation checks. Pick your scenario:
     **What to do:**
 
     - Don't make changes yet—you could make it worse
+    - If load is the issue, `top` (already in the commands above) sorts processes by CPU at the top of the list — the culprit is usually the first entry. `htop` is a friendlier alternative if installed
     - Document what you found (screenshot or copy the output)
-    - Escalate to your team: "Server XYZ has [high load / low memory / full disk]"
-    - Let experienced team members investigate root cause
+    - Escalate to your team: "Server XYZ has [high load / low memory / full disk], top process is [name]"
+    - Let experienced team members decide whether to intervene
 
 ---
 
@@ -382,7 +388,7 @@ Your first 60 seconds should answer:
 
 Now that you know where you are and what you're working with, it's time to understand what you're actually allowed to do on this server. Head to **[Understanding Your Permissions](permissions.md)** to learn about your access level and how to use `sudo` safely.
 
-More Day One articles covering safe exploration, reading logs, and finding documentation are coming soon. Return to the [Day One Overview](overview.md) to see the full learning path.
+Once you've worked through **[Safe Exploration](safe_exploration.md)**, continue to **[Reading Logs Like a Pro](reading_logs.md)** to learn how to diagnose problems on production systems.
 
 !!! tip "Make It a Habit"
     Run these orientation commands every time you log into a new server. It takes 30 seconds and prevents a lot of confusion later.

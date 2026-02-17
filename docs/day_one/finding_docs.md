@@ -1,4 +1,12 @@
+---
+title: Finding Documentation on a Linux Server
+description: Can't find how something works? Learn to locate README files, team wikis, runbooks, git repos, and the right people to answer your questions on any server.
+---
+
 # Finding Documentation
+
+!!! tip "Part of Day One"
+    This is the sixth article in the [Day One: Getting Started](overview.md) series. You should have already completed [Getting Access](getting_access.md), [Orientation](orientation.md), [Understanding Your Permissions](permissions.md), [Safe Exploration](safe_exploration.md), and [Reading Logs](reading_logs.md).
 
 You're on a server, you've explored around, and now you have questions:
 
@@ -53,9 +61,12 @@ ls -la /usr/local/share/doc/ 2>/dev/null
 Deployment scripts often explain how things work:
 
 ``` bash title="Find Deployment Scripts"
-find / -name "deploy*" -type f 2>/dev/null | head -20
-find / -name "*.sh" -path "*/scripts/*" 2>/dev/null | head -20
+find /var /opt /home /usr/local -name "deploy*" -type f 2>/dev/null | head -20
+find /var /opt /home /usr/local -name "*.sh" -path "*/scripts/*" 2>/dev/null | head -20
 ```
+
+!!! warning "Scope Your Searches"
+    Searching from `/` can take minutes on a large server and puts unnecessary load on the disk. Always scope searches to likely directories like `/var`, `/opt`, `/home`, and `/usr/local`.
 
 Read them (don't run them!) to understand the deployment process:
 
@@ -109,7 +120,7 @@ The code often has the best documentation.
 ### Check for Git on the Server
 
 ``` bash title="Find Git Repositories"
-find / -name ".git" -type d 2>/dev/null | head -10
+find /var /opt /home -name ".git" -type d 2>/dev/null | head -10
 ```
 
 ``` bash title="Check Git Remote"
@@ -257,10 +268,10 @@ When you get access to a new server, get answers to these:
 find /var/www /opt /home -name "README*" 2>/dev/null
 
 # Git repos
-find / -name ".git" -type d 2>/dev/null | head -10
+find /var /opt /home -name ".git" -type d 2>/dev/null | head -10
 
 # Scripts that explain things
-find / -name "*.sh" -path "*/scripts/*" 2>/dev/null | head -20
+find /var /opt /home /usr/local -name "*.sh" -path "*/scripts/*" 2>/dev/null | head -20
 
 # Login message
 cat /etc/motd
@@ -285,6 +296,41 @@ cat /etc/motd
 | Slack | App/team channels |
 
 ---
+
+## Practice Exercises
+
+??? question "Exercise 1: Hunt for Documentation on the Server"
+    You've just been given access to a new server running an app called `webapp`. Without touching anything, find every README file under `/var`, `/opt`, and `/home`, and check whether there's a message of the day with useful context.
+
+    **Hint:** Use `find` scoped to specific directories, and `cat /etc/motd`.
+
+??? tip "Solution"
+    ```bash title="Find README Files"
+    find /var /opt /home -name "README*" 2>/dev/null
+    ```
+
+    ```bash title="Check the Message of the Day"
+    cat /etc/motd
+    ```
+
+    If a README exists, read it with `cat` or `less`. It often contains the application name, deployment notes, or contact information.
+
+??? question "Exercise 2: Find the Git Repository and Who to Call"
+    You need to find who last modified the application's configuration files. Find git repositories under `/var`, `/opt`, and `/home`, then — once you're in one — check the last 10 commits.
+
+    **Hint:** Use `find` to locate `.git` directories, then `git log`.
+
+??? tip "Solution"
+    ```bash title="Find Git Repos"
+    find /var /opt /home -name ".git" -type d 2>/dev/null | head -10
+    ```
+
+    ```bash title="Recent Commits"
+    cd /var/www/app
+    git log --oneline -10
+    ```
+
+    The commit authors are the people who know the code. Their names and the commit messages give you context on what changed recently.
 
 ## Quick Recap
 
@@ -312,6 +358,24 @@ cat /etc/motd
 - Help the next person
 
 ---
+
+## Further Reading
+
+### Command References
+
+- `man find` — Full `find` options; `-maxdepth` limits search scope to avoid runaway searches
+- `man git-log` — Git history options for understanding what changed and when
+- `man git-blame` — Track down who last modified specific lines of a file
+
+### Official Documentation
+
+- [Git Documentation](https://git-scm.com/doc) — Comprehensive Git reference; the `git log` formatting options are especially useful
+- [The Linux Documentation Project](https://tldp.org/) — Broad Linux reference including filesystem layout guides
+
+### Related Articles
+
+- [Orientation](orientation.md) — Initial server orientation covers how to identify what's running on an unfamiliar system
+- [Reading Logs](reading_logs.md) — Once you find the logs, learn to read them effectively
 
 ## What's Next?
 

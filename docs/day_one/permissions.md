@@ -1,13 +1,18 @@
+---
+title: Understanding Your Linux Permissions
+description: Learn to check your Linux privilege level before touching anything. Understand regular users, sudo access, and root on enterprise production servers.
+---
+
 # Understanding Your Permissions
+
+!!! tip "Part of Day One"
+    This is the third article in the [Day One: Getting Started](overview.md) series. You should have already completed [Getting Access](getting_access.md) and [Orientation](orientation.md).
 
 You're [logged in](getting_access.md), you've [oriented yourself](orientation.md), and now you're wondering: *What am I actually allowed to do on this server?*
 
 This is a crucial question. Enterprise servers have strict access controls for good reason — one wrong command with elevated privileges can bring down production. Before you start working, you need to understand your permission level.
 
 **Let's figure out what powers you have (and don't have).**
-
-!!! tip "Part of Day One"
-    This article is part of the [Day One series](overview.md) - essential skills for your first day on a Linux server.
 
 ---
 
@@ -177,6 +182,14 @@ ls -la /etc/shadow
 
     **Important:** Even if alice is ALSO in the developers group, she gets owner permissions (`rw-`), not group permissions. First match wins.
 
+    !!! warning "Gotcha: sudo Group ≠ File Access"
+        Being in the `sudo` group does **not** give you access to files you couldn't read before. `sudo` is a command that lets you *run programs as root* — it doesn't change the permission check on the file itself.
+
+        - `cat /etc/nginx/nginx.conf` → **Permission denied** (you're not root, not in the nginx group)
+        - `sudo cat /etc/nginx/nginx.conf` → **Works**, because `sudo` runs `cat` as root
+
+        The file permissions didn't change. You temporarily borrowed a different identity to bypass them. This is one of the most common points of confusion on day one.
+
 ---
 
 ## How to Check Your Permission Level
@@ -250,6 +263,8 @@ Use these commands to determine what access you have on the server:
     ```
 
     No `sudo` for you. You're working with regular user permissions only.
+
+---
 
 ## What "Permission Denied" Actually Means
 
@@ -478,7 +493,7 @@ Now that you understand permissions, try these hands-on exercises to build confi
 
 Now that you understand your permission level, you're ready to explore the server safely. Head to **[Safe Exploration](safe_exploration.md)** to learn read-only exploration techniques—how to look around without accidentally changing anything.
 
-More Day One articles covering reading logs, finding documentation, and common tasks are coming soon. Return to the [Day One Overview](overview.md) to see the full learning path.
+Once you're comfortable exploring safely, head to **[Reading Logs Like a Pro](reading_logs.md)** — it's the most important debugging skill you'll develop for working on production Linux systems.
 
 !!! tip "Bookmark Your Access Level"
     First time on a server, run `id` and `sudo -l` and make a mental note. Knowing your access level prevents frustration and keeps you from accidentally trying things that won't work.
@@ -502,14 +517,11 @@ More Day One articles covering reading logs, finding documentation, and common t
 - [Sudo Manual](https://www.sudo.ws/about/intro/) - Official `sudo` project documentation
 - [Understanding Linux File Permissions](https://www.redhat.com/sysadmin/linux-file-permissions-explained) - Red Hat's comprehensive guide
 - [Principle of Least Privilege](https://en.wikipedia.org/wiki/Principle_of_least_privilege) - Why systems limit access by default
+- [CIS Benchmarks](https://www.cisecurity.org/cis-benchmarks) - Industry-standard security configurations (includes `sudo` hardening)
+- [NIST: Least Privilege](https://csrc.nist.gov/glossary/term/least_privilege) - Official definition and security guidance
 
 ### Official Documentation
 
 - [Red Hat: Managing sudo access](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/configuring_basic_system_settings/managing-sudo-access_configuring-basic-system-settings) - Enterprise Linux `sudo` configuration
 - [Ubuntu Server Guide: User Management](https://ubuntu.com/server/docs/security-users) - Ubuntu-specific user and permission guidance
 - [Linux Documentation Project: Users and Groups](https://tldp.org/LDP/lame/LAME/linux-admin-made-easy/users-and-groups.html) - Classic reference on Linux user management
-
-### Security Considerations
-
-- [CIS Benchmarks](https://www.cisecurity.org/cis-benchmarks) - Industry-standard security configurations (includes `sudo` hardening)
-- [NIST: Least Privilege](https://csrc.nist.gov/glossary/term/least_privilege) - Official definition and security guidance

@@ -1,3 +1,8 @@
+---
+title: Safe Exploration of a Linux Server
+description: Explore a Linux server without breaking anything. Learn which commands are safe, how to navigate the filesystem confidently, and what to avoid in production.
+---
+
 # Safe Exploration
 
 !!! tip "Part of Day One"
@@ -423,6 +428,19 @@ Now that you've learned the commands, here's a quick reference for common Day On
 
 ---
 
+## Quick Recap
+
+**The golden rule:** Read-only commands can't break things. Stay in that lane during Day One.
+
+- **Navigate:** `ls -la` to list, `tree -L 2` for structure
+- **Read files:** `cat` for small files, `less` for large ones, `head`/`tail` for beginning or end
+- **Watch live:** `tail -f` to follow a log as it's written
+- **Before you open:** Run `ls -la filename` first — file size tells you whether `cat` is safe or whether you need `less`
+
+See the [cheat sheet above](#day-one-exploration-cheat-sheet) for a full command reference.
+
+---
+
 ## Further Reading
 
 ### Command References
@@ -434,34 +452,19 @@ Now that you've learned the commands, here's a quick reference for common Day On
 - `man tail` - Output the last part of files
 - `man tree` - Display directory trees
 
-### Beginner Guides
+### Deep Dives
 
 - [Explain Shell](https://explainshell.com/) - Visual breakdown of shell commands
 - [TLDR Pages](https://tldr.sh/) - Simplified command examples
 - [Linux Journey: Command Line](https://linuxjourney.com/lesson/the-shell) - Interactive learning path
+- [OverTheWire: Bandit](https://overthewire.org/wargames/bandit/) - Security wargame for learning Linux commands safely in a controlled environment
 
 ### Official Documentation
 
 - [GNU Coreutils Manual](https://www.gnu.org/software/coreutils/manual/) - Official docs for `ls`, `cat`, `head`, `tail`, etc.
 
-### Safe Practice
-
-- [OverTheWire: Bandit](https://overthewire.org/wargames/bandit/) - Security wargame for learning Linux commands safely in a controlled environment
-
 ---
 
 ## What's Next?
 
-You now have the essential skills for safe exploration! You can:
-
-- Navigate directories and list files with `ls` and `tree`
-- Read file contents without modifying them
-- Understand what you're seeing in `ls` output
-- Follow log files in real-time to see what's happening
-
-**Practice these skills:** The best way to get comfortable is to use these commands regularly. Log into a server and just look around - you can't break anything with read-only commands.
-
-**Continue Day One:** Head back to the [Day One Overview](overview.md) to see the other published articles. Each one builds on your Linux foundation.
-
-!!! tip "Day One Is About Looking, Not Doing"
-    These read-only commands can't break anything. Use them liberally to build familiarity with Linux servers. The more you explore, the more comfortable you'll become!
+Now that you can explore safely, head to **[Reading Logs Like a Pro](reading_logs.md)** — learning to read logs is the most powerful skill you'll develop for diagnosing problems on production systems.

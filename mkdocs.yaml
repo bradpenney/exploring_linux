@@ -1,4 +1,9 @@
 site_name: "Exploring Enterprise Linux"
+site_url: https://linux.bradpenney.io
+extra:
+  analytics:
+    provider: google
+    property: G-V01MJ4R3SQ
 extra_css:
   - stylesheets/extra.css
 theme:
@@ -33,6 +38,15 @@ theme:
 
 plugins:
   - search
+  - meta
+  - exclude:
+      glob:
+        - "level_1/*"
+        - "level_2/*"
+        - "level_3/*"
+        - "level_4/*"
+        - "level_5/*"
+        - "level_6/*"
   - social:
       cards: true
       cards_layout_options:
@@ -76,6 +90,7 @@ nav:
       - Orientation: day_one/orientation.md
       - Permissions: day_one/permissions.md
       - Safe Exploration: day_one/safe_exploration.md
+      - Reading Logs: day_one/reading_logs.md
 
   # EDITORIAL NOTE: Content below is commented out pending quality review
   # Goal: Match cs.bradpenney.io standards before publishing

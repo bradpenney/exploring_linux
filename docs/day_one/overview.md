@@ -1,3 +1,8 @@
+---
+title: Day One - Getting Started with Linux
+description: New to Linux? The Day One series takes you from nervous first login to confident navigation—covering access, orientation, permissions, and safe exploration.
+---
+
 # Day One: Getting Started with Linux
 
 !!! tip "Every Linux expert started exactly where you are. This is Day One."
@@ -89,12 +94,12 @@ Work through these in order for the full Day One experience:
 2. **[First 60 Seconds: Orientation](orientation.md)** - Where am I? What is this server? Who am I?
 3. **[Understanding Your Permissions](permissions.md)** - What can I actually do here? Groups, `sudo`, and access levels
 4. **[Safe Exploration](safe_exploration.md)** - How to look around without breaking things
-5. **Reading Logs Like a Pro** - `tail`, `journalctl`, and `grep` (coming soon)
+5. **[Reading Logs Like a Pro](reading_logs.md)** - `tail`, `journalctl`, and `grep`
 6. **Finding Documentation** - Where's the team wiki? (coming soon)
 7. **Common First Tasks** - Checking status, finding configs (coming soon)
 8. **The "Don't Do This" Guide** - Safety rules for real systems (coming soon)
 
-!!! note "Articles Publishing Soon"
+!!! tip "Articles Publishing Soon"
     Articles are being published as they're reviewed for quality. Start with Getting Access to get connected to a Linux system.
 
 ## The Philosophy
@@ -121,21 +126,10 @@ Throughout Day One, we emphasize **safety and confidence**. How you approach Lin
 
 Day One focuses on **practical, immediate needs**—the skills you need in your first hours and days working with Linux.
 
-<div class="grid cards" markdown>
-
--   :material-lightbulb-on: **We Teach**
-
-    ---
-
-    **The "Why"** — Understanding purpose, not just syntax
-
-    **Real Scenarios** — Situations you'll actually encounter
-
-    **Finding Answers** — How to help yourself when stuck
-
-    **Safety Habits** — Practices that serve you forever
-
-</div>
+- **The "Why"** — Understanding purpose, not just syntax
+- **Real Scenarios** — Situations you'll actually encounter
+- **Finding Answers** — How to help yourself when stuck
+- **Safety Habits** — Practices that serve you forever
 
 ## What's Next?
 
