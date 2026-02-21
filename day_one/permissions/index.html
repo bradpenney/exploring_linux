@@ -1,0 +1,1596 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Learn to check your Linux privilege level before touching anything. Understand regular users, sudo access, and root on enterprise production servers.">
+      
+      
+      
+        <link rel="canonical" href="https://linux.bradpenney.io/day_one/permissions/">
+      
+      
+        <link rel="prev" href="../orientation/">
+      
+      
+        <link rel="next" href="../safe_exploration/">
+      
+      
+      <link rel="icon" href="../../images/exploring_linux.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>Understanding Your Linux Permissions - Exploring Enterprise Linux</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+  
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M1%207.775V2.75C1%201.784%201.784%201%202.75%201h5.025c.464%200%20.91.184%201.238.513l6.25%206.25a1.75%201.75%200%200%201%200%202.474l-5.026%205.026a1.75%201.75%200%200%201-2.474%200l-6.25-6.25A1.75%201.75%200%200%201%201%207.775m1.5%200c0%20.066.026.13.073.177l6.25%206.25a.25.25%200%200%200%20.354%200l5.025-5.025a.25.25%200%200%200%200-.354l-6.25-6.25a.25.25%200%200%200-.177-.073H2.75a.25.25%200%200%200-.25.25ZM6%205a1%201%200%201%201%200%202%201%201%200%200%201%200-2%22/%3E%3C/svg%3E');--md-admonition-icon--abstract:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M2.5%201.75v11.5c0%20.138.112.25.25.25h3.17a.75.75%200%200%201%200%201.5H2.75A1.75%201.75%200%200%201%201%2013.25V1.75C1%20.784%201.784%200%202.75%200h8.5C12.216%200%2013%20.784%2013%201.75v7.736a.75.75%200%200%201-1.5%200V1.75a.25.25%200%200%200-.25-.25h-8.5a.25.25%200%200%200-.25.25m13.274%209.537zl-4.557%204.45a.75.75%200%200%201-1.055-.008l-1.943-1.95a.75.75%200%200%201%201.062-1.058l1.419%201.425%204.026-3.932a.75.75%200%201%201%201.048%201.074M4.75%204h4.5a.75.75%200%200%201%200%201.5h-4.5a.75.75%200%200%201%200-1.5M4%207.75A.75.75%200%200%201%204.75%207h2a.75.75%200%200%201%200%201.5h-2A.75.75%200%200%201%204%207.75%22/%3E%3C/svg%3E');--md-admonition-icon--info:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M0%208a8%208%200%201%201%2016%200A8%208%200%200%201%200%208m8-6.5a6.5%206.5%200%201%200%200%2013%206.5%206.5%200%200%200%200-13M6.5%207.75A.75.75%200%200%201%207.25%207h1a.75.75%200%200%201%20.75.75v2.75h.25a.75.75%200%200%201%200%201.5h-2a.75.75%200%200%201%200-1.5h.25v-2h-.25a.75.75%200%200%201-.75-.75M8%206a1%201%200%201%201%200-2%201%201%200%200%201%200%202%22/%3E%3C/svg%3E');--md-admonition-icon--tip:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M3.499.75a.75.75%200%200%201%201.5%200v.996C5.9%202.903%206.793%203.65%207.662%204.376l.24.202c-.036-.694.055-1.422.426-2.163C9.1.873%2010.794-.045%2012.622.26%2014.408.558%2016%201.94%2016%204.25c0%201.278-.954%202.575-2.44%202.734l.146.508.065.22c.203.701.412%201.455.476%202.226.142%201.707-.4%203.03-1.487%203.898C11.714%2014.671%2010.27%2015%208.75%2015h-6a.75.75%200%200%201%200-1.5h1.376a4.5%204.5%200%200%201-.563-1.191%203.84%203.84%200%200%201-.05-2.063%204.65%204.65%200%200%201-2.025-.293.75.75%200%200%201%20.525-1.406c1.357.507%202.376-.006%202.698-.318l.009-.01a.747.747%200%200%201%201.06%200%20.75.75%200%200%201-.012%201.074c-.912.92-.992%201.835-.768%202.586.221.74.745%201.337%201.196%201.621H8.75c1.343%200%202.398-.296%203.074-.836.635-.507%201.036-1.31.928-2.602-.05-.603-.216-1.224-.422-1.93l-.064-.221c-.12-.407-.246-.84-.353-1.29a2.4%202.4%200%200%201-.507-.441%203.1%203.1%200%200%201-.633-1.248.75.75%200%200%201%201.455-.364c.046.185.144.436.31.627.146.168.353.305.712.305.738%200%201.25-.615%201.25-1.25%200-1.47-.95-2.315-2.123-2.51-1.172-.196-2.227.387-2.706%201.345-.46.92-.27%201.774.019%203.062l.042.19.01.05c.348.443.666.949.94%201.553a.75.75%200%201%201-1.365.62c-.553-1.217-1.32-1.94-2.3-2.768L6.7%205.527c-.814-.68-1.75-1.462-2.692-2.619a3.7%203.7%200%200%200-1.023.88c-.406.495-.663%201.036-.722%201.508.116.122.306.21.591.239.388.038.797-.06%201.032-.19a.75.75%200%200%201%20.728%201.31c-.515.287-1.23.439-1.906.373-.682-.067-1.473-.38-1.879-1.193L.75%205.677V5.5c0-.984.48-1.94%201.077-2.664.46-.559%201.05-1.055%201.673-1.353z%22/%3E%3C/svg%3E');--md-admonition-icon--success:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M13.78%204.22a.75.75%200%200%201%200%201.06l-7.25%207.25a.75.75%200%200%201-1.06%200L2.22%209.28a.75.75%200%200%201%20.018-1.042.75.75%200%200%201%201.042-.018L6%2010.94l6.72-6.72a.75.75%200%200%201%201.06%200%22/%3E%3C/svg%3E');--md-admonition-icon--question:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M0%208a8%208%200%201%201%2016%200A8%208%200%200%201%200%208m8-6.5a6.5%206.5%200%201%200%200%2013%206.5%206.5%200%200%200%200-13M6.92%206.085h.001a.749.749%200%201%201-1.342-.67c.169-.339.436-.701.849-.977C6.845%204.16%207.369%204%208%204a2.76%202.76%200%200%201%201.637.525c.503.377.863.965.863%201.725%200%20.448-.115.83-.329%201.15-.205.307-.47.513-.692.662-.109.072-.22.138-.313.195l-.006.004a6%206%200%200%200-.26.16%201%201%200%200%200-.276.245.75.75%200%200%201-1.248-.832c.184-.264.42-.489.692-.661q.154-.1.313-.195l.007-.004c.1-.061.182-.11.258-.161a1%201%200%200%200%20.277-.245C8.96%206.514%209%206.427%209%206.25a.61.61%200%200%200-.262-.525A1.27%201.27%200%200%200%208%205.5c-.369%200-.595.09-.74.187a1%201%200%200%200-.34.398M9%2011a1%201%200%201%201-2%200%201%201%200%200%201%202%200%22/%3E%3C/svg%3E');--md-admonition-icon--warning:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M6.457%201.047c.659-1.234%202.427-1.234%203.086%200l6.082%2011.378A1.75%201.75%200%200%201%2014.082%2015H1.918a1.75%201.75%200%200%201-1.543-2.575Zm1.763.707a.25.25%200%200%200-.44%200L1.698%2013.132a.25.25%200%200%200%20.22.368h12.164a.25.25%200%200%200%20.22-.368Zm.53%203.996v2.5a.75.75%200%200%201-1.5%200v-2.5a.75.75%200%200%201%201.5%200M9%2011a1%201%200%201%201-2%200%201%201%200%200%201%202%200%22/%3E%3C/svg%3E');--md-admonition-icon--failure:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M2.344%202.343za8%208%200%200%201%2011.314%2011.314A8.002%208.002%200%200%201%20.234%2010.089a8%208%200%200%201%202.11-7.746m1.06%2010.253a6.5%206.5%200%201%200%209.108-9.275%206.5%206.5%200%200%200-9.108%209.275M6.03%204.97%208%206.94l1.97-1.97a.749.749%200%200%201%201.275.326.75.75%200%200%201-.215.734L9.06%208l1.97%201.97a.749.749%200%200%201-.326%201.275.75.75%200%200%201-.734-.215L8%209.06l-1.97%201.97a.749.749%200%200%201-1.275-.326.75.75%200%200%201%20.215-.734L6.94%208%204.97%206.03a.75.75%200%200%201%20.018-1.042.75.75%200%200%201%201.042-.018%22/%3E%3C/svg%3E');--md-admonition-icon--danger:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M9.504.43a1.516%201.516%200%200%201%202.437%201.713L10.415%205.5h2.123c1.57%200%202.346%201.909%201.22%203.004l-7.34%207.142a1.25%201.25%200%200%201-.871.354h-.302a1.25%201.25%200%200%201-1.157-1.723L5.633%2010.5H3.462c-1.57%200-2.346-1.909-1.22-3.004zm1.047%201.074L3.286%208.571A.25.25%200%200%200%203.462%209H6.75a.75.75%200%200%201%20.694%201.034l-1.713%204.188%206.982-6.793A.25.25%200%200%200%2012.538%207H9.25a.75.75%200%200%201-.683-1.06l2.008-4.418.003-.006-.004-.009-.006-.006-.008-.001q-.005%200-.009.004%22/%3E%3C/svg%3E');--md-admonition-icon--bug:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M4.72.22a.75.75%200%200%201%201.06%200l1%20.999a3.5%203.5%200%200%201%202.441%200l.999-1a.748.748%200%200%201%201.265.332.75.75%200%200%201-.205.729l-.775.776c.616.63.995%201.493.995%202.444v.327q0%20.15-.025.292c.408.14.764.392%201.029.722l1.968-.787a.75.75%200%200%201%20.556%201.392L13%207.258V9h2.25a.75.75%200%200%201%200%201.5H13v.5q-.002.615-.141%201.186l2.17.868a.75.75%200%200%201-.557%201.392l-2.184-.873A5%205%200%200%201%208%2016a5%205%200%200%201-4.288-2.427l-2.183.873a.75.75%200%200%201-.558-1.392l2.17-.868A5%205%200%200%201%203%2011v-.5H.75a.75.75%200%200%201%200-1.5H3V7.258L.971%206.446a.75.75%200%200%201%20.558-1.392l1.967.787c.265-.33.62-.583%201.03-.722a1.7%201.7%200%200%201-.026-.292V4.5c0-.951.38-1.814.995-2.444L4.72%201.28a.75.75%200%200%201%200-1.06m.53%206.28a.75.75%200%200%200-.75.75V11a3.5%203.5%200%201%200%207%200V7.25a.75.75%200%200%200-.75-.75ZM6.173%205h3.654A.17.17%200%200%200%2010%204.827V4.5a2%202%200%201%200-4%200v.327c0%20.096.077.173.173.173%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M5%205.782V2.5h-.25a.75.75%200%200%201%200-1.5h6.5a.75.75%200%200%201%200%201.5H11v3.282l3.666%205.76C15.619%2013.04%2014.543%2015%2012.767%2015H3.233c-1.776%200-2.852-1.96-1.899-3.458Zm-2.4%206.565a.75.75%200%200%200%20.633%201.153h9.534a.75.75%200%200%200%20.633-1.153L12.225%2010.5h-8.45ZM9.5%202.5h-3V6c0%20.143-.04.283-.117.403L4.73%209h6.54L9.617%206.403A.75.75%200%200%201%209.5%206Z%22/%3E%3C/svg%3E');--md-admonition-icon--quote:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M1.75%202.5h10.5a.75.75%200%200%201%200%201.5H1.75a.75.75%200%200%201%200-1.5m4%205h8.5a.75.75%200%200%201%200%201.5h-8.5a.75.75%200%200%201%200-1.5m0%205h8.5a.75.75%200%200%201%200%201.5h-8.5a.75.75%200%200%201%200-1.5M2.5%207.75v6a.75.75%200%200%201-1.5%200v-6a.75.75%200%200%201%201.5%200%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-V01MJ4R3SQ"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-V01MJ4R3SQ",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-V01MJ4R3SQ",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+      
+        <meta  property="og:type"  content="website" >
+      
+        <meta  property="og:title"  content="Understanding Your Linux Permissions - Exploring Enterprise Linux" >
+      
+        <meta  property="og:description"  content="Learn to check your Linux privilege level before touching anything. Understand regular users, sudo access, and root on enterprise production servers." >
+      
+        <meta  property="og:image"  content="https://linux.bradpenney.io/assets/images/social/day_one/permissions.png" >
+      
+        <meta  property="og:image:type"  content="image/png" >
+      
+        <meta  property="og:image:width"  content="1200" >
+      
+        <meta  property="og:image:height"  content="630" >
+      
+        <meta  property="og:url"  content="https://linux.bradpenney.io/day_one/permissions/" >
+      
+        <meta  name="twitter:card"  content="summary_large_image" >
+      
+        <meta  name="twitter:title"  content="Understanding Your Linux Permissions - Exploring Enterprise Linux" >
+      
+        <meta  name="twitter:description"  content="Learn to check your Linux privilege level before touching anything. Understand regular users, sudo access, and root on enterprise production servers." >
+      
+        <meta  name="twitter:image"  content="https://linux.bradpenney.io/assets/images/social/day_one/permissions.png" >
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#understanding-your-permissions" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Exploring Enterprise Linux" class="md-header__button md-logo" aria-label="Exploring Enterprise Linux" data-md-component="logo">
+      
+  <img src="../../images/exploring_linux.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Exploring Enterprise Linux
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Understanding Your Linux Permissions
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Exploring Enterprise Linux" class="md-nav__button md-logo" aria-label="Exploring Enterprise Linux" data-md-component="logo">
+      
+  <img src="../../images/exploring_linux.png" alt="logo">
+
+    </a>
+    Exploring Enterprise Linux
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Day One - Getting Started
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Day One - Getting Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting_access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Getting Access
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../orientation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Orientation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Permissions
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Permissions
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#understanding-linux-permission-hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Understanding Linux Permission Hierarchy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-three-permission-levels" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Three Permission Levels
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#understanding-file-permissions-rwx" class="md-nav__link">
+    <span class="md-ellipsis">
+      Understanding File Permissions (rwx)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Understanding File Permissions (rwx)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why This Matters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-details-optional-for-day-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Details (Optional for Day One)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-check-your-permission-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      How to Check Your Permission Level
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-permission-denied-actually-means" class="md-nav__link">
+    <span class="md-ellipsis">
+      What "Permission Denied" Actually Means
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What &#34;Permission Denied&#34; Actually Means">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#your-options-when-blocked" class="md-nav__link">
+    <span class="md-ellipsis">
+      Your Options When Blocked
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-to-ask-for-more-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      When to Ask for More Access
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="When to Ask for More Access">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#enterprise-access-processes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Enterprise Access Processes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-permissions-cheat-sheet" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Permissions Cheat Sheet
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practice-exercises" class="md-nav__link">
+    <span class="md-ellipsis">
+      Practice Exercises
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-recap" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quick Recap
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      What's Next?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#further-reading" class="md-nav__link">
+    <span class="md-ellipsis">
+      Further Reading
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Further Reading">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#command-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      Command References
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deep-dives" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deep Dives
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#official-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Official Documentation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../safe_exploration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Safe Exploration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reading_logs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Reading Logs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#understanding-linux-permission-hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Understanding Linux Permission Hierarchy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-three-permission-levels" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Three Permission Levels
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#understanding-file-permissions-rwx" class="md-nav__link">
+    <span class="md-ellipsis">
+      Understanding File Permissions (rwx)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Understanding File Permissions (rwx)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-this-matters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why This Matters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-details-optional-for-day-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Details (Optional for Day One)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-check-your-permission-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      How to Check Your Permission Level
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-permission-denied-actually-means" class="md-nav__link">
+    <span class="md-ellipsis">
+      What "Permission Denied" Actually Means
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="What &#34;Permission Denied&#34; Actually Means">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#your-options-when-blocked" class="md-nav__link">
+    <span class="md-ellipsis">
+      Your Options When Blocked
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#when-to-ask-for-more-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      When to Ask for More Access
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="When to Ask for More Access">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#enterprise-access-processes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Enterprise Access Processes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-permissions-cheat-sheet" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Permissions Cheat Sheet
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practice-exercises" class="md-nav__link">
+    <span class="md-ellipsis">
+      Practice Exercises
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-recap" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quick Recap
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      What's Next?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#further-reading" class="md-nav__link">
+    <span class="md-ellipsis">
+      Further Reading
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Further Reading">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#command-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      Command References
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deep-dives" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deep Dives
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#official-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Official Documentation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="understanding-your-permissions">Understanding Your Permissions</h1>
+<div class="admonition tip">
+<p class="admonition-title">Part of Day One</p>
+<p>This is the third article in the <a href="../overview/">Day One: Getting Started</a> series. You should have already completed <a href="../getting_access/">Getting Access</a> and <a href="../orientation/">Orientation</a>.</p>
+</div>
+<p>You're <a href="../getting_access/">logged in</a>, you've <a href="../orientation/">oriented yourself</a>, and now you're wondering: <em>What am I actually allowed to do on this server?</em></p>
+<p>This is a crucial question. Enterprise servers have strict access controls for good reason — one wrong command with elevated privileges can bring down production. Before you start working, you need to understand your permission level.</p>
+<p><strong>Let's figure out what powers you have (and don't have).</strong></p>
+<hr />
+<h2 id="understanding-linux-permission-hierarchy">Understanding Linux Permission Hierarchy</h2>
+<p>Here's how Linux organizes user permissions from most to least powerful:</p>
+<pre class="mermaid"><code>graph TD
+    A["🔴 Root User (uid=0)&lt;br/&gt;&lt;br/&gt;Full System Access&lt;br/&gt;No Restrictions&lt;br/&gt;Can Break Everything"]
+    B["🟡 Regular User + Sudo&lt;br/&gt;&lt;br/&gt;Temporarily Become Root&lt;br/&gt;For Specific Commands&lt;br/&gt;Requires Authentication"]
+    C["🟢 Regular User&lt;br/&gt;&lt;br/&gt;Own Files Only&lt;br/&gt;Limited System Access&lt;br/&gt;Safest Default"]
+
+    style A fill:#c92a2a,stroke:#ff6b6b,stroke-width:3px,color:#fff
+    style B fill:#d97706,stroke:#fbbf24,stroke-width:3px,color:#fff
+    style C fill:#2f9e44,stroke:#51cf66,stroke-width:3px,color:#fff</code></pre>
+<p><strong>You are ONE of these.</strong> You don't "escalate" - you either have an identity (Regular or Root) and may have sudo permissions that let you temporarily run commands as root.</p>
+<hr />
+<h2 id="the-three-permission-levels">The Three Permission Levels</h2>
+<p>On most servers, users fall into one of three categories:</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>What You Can Do</th>
+<th>Typical Users</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Regular User</strong></td>
+<td>Only your own files, limited system access</td>
+<td>Most developers</td>
+</tr>
+<tr>
+<td><strong>Sudo User</strong></td>
+<td>Elevate to root for specific tasks</td>
+<td>Senior devs, junior admins</td>
+</tr>
+<tr>
+<td><strong>Root</strong></td>
+<td>Everything. No limits.</td>
+<td>Admins only (rarely used directly)</td>
+</tr>
+</tbody>
+</table>
+<p>But before we figure out which one you are, you need to understand how Linux actually controls access to files.</p>
+<hr />
+<h2 id="understanding-file-permissions-rwx">Understanding File Permissions (rwx)</h2>
+<p>Every file and directory on Linux has permissions that determine who can read, write, or execute it. This is the foundation of Linux security.</p>
+<h3 id="why-this-matters">Why This Matters</h3>
+<p>Understanding file permissions explains:</p>
+<ul>
+<li>Why you can read some files but not others</li>
+<li>Why <code>cd /root</code> fails but <code>cd /home</code> works</li>
+<li>Why some scripts won't run even though you can read them (missing execute permission)</li>
+<li>Why you need <code>sudo</code> to edit system files</li>
+</ul>
+<p>Let's see this in action:</p>
+<div class="language-bash highlight"><span class="filename">Check Permissions on Common Locations</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>ls<span class="w"> </span>-ld<span class="w"> </span>/root
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1"># drwx------ 5 root root 4096 Jan 15 10:00 /root</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># Only root can access</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>ls<span class="w"> </span>-ld<span class="w"> </span>/home
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># drwxr-xr-x 5 root root 4096 Jan 15 10:00 /home</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1"># Everyone can list, only root can create users</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>ls<span class="w"> </span>-la<span class="w"> </span>/etc/shadow
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># -rw-r----- 1 root shadow 1234 Jan 15 10:00 /etc/shadow</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="c1"># Root can read/write, shadow group can read, others blocked</span>
+</span></code></pre></div>
+<p><strong>For Day One:</strong> You don't need to master all the details below. Just understand that those weird letter codes (<code>rwxr-xr-x</code>) control who can access what. Explore the tabs if you're curious.</p>
+<h3 id="the-details-optional-for-day-one">The Details (Optional for Day One)</h3>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 9h-2V7h2m0 10h-2v-6h2m-1-9A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2"/></svg></span> The Basics</label><label for="__tabbed_1_2"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2m5.6-4c-.8-2.3-3-4-5.6-4-3.3 0-6 2.7-6 6s2.7 6 6 6c2.6 0 4.8-1.7 5.6-4H16v4h4v-4h3v-4z"/></svg></span> Permission Types</label><label for="__tabbed_1_3"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 9h5.5L13 3.5zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m.12 13.5 3.74 3.74 1.42-1.41-2.33-2.33 2.33-2.33-1.42-1.41zm11.16 0-3.74-3.74-1.42 1.41 2.33 2.33-2.33 2.33 1.42 1.41z"/></svg></span> Common Patterns</label><label for="__tabbed_1_4"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"/></svg></span> How Linux Checks</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Every file has three pieces of permission information:</p>
+<ol>
+<li><strong>Owner</strong> - The user who owns the file</li>
+<li><strong>Group</strong> - The group that owns the file</li>
+<li><strong>Permissions</strong> - What the owner, group, and others can do</li>
+</ol>
+<p>Check any file's permissions:</p>
+<div class="language-bash highlight"><span class="filename">View File Permissions</span><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>ls<span class="w"> </span>-la<span class="w"> </span>/etc/hosts
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># -rw-r--r-- 1 root root 220 Jan 15 10:00 /etc/hosts</span>
+</span></code></pre></div>
+<p>Let's decode that permission string:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>-rw-r--r-- 1 root root 220 Jan 15 10:00 /etc/hosts
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>│└┬┘└┬┘└┬┘   └─┬┘ └─┬─┘
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>│ │  │  │      │    └── Group owner: root
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│ │  │  │      └─────── File owner: root
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│ │  │  └────────────── Others: read only (r--)
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│ │  └───────────────── Group: read only (r--)
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>│ └──────────────────── Owner: read+write (rw-)
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>└────────────────────── File type: regular file (-)
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>Each position can have one of three permissions:</p>
+<table>
+<thead>
+<tr>
+<th>Permission</th>
+<th>Symbol</th>
+<th>For Files</th>
+<th>For Directories</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Read</strong></td>
+<td><code>r</code></td>
+<td>View file contents</td>
+<td>List directory contents</td>
+</tr>
+<tr>
+<td><strong>Write</strong></td>
+<td><code>w</code></td>
+<td>Modify file</td>
+<td>Create/delete files inside</td>
+</tr>
+<tr>
+<td><strong>Execute</strong></td>
+<td><code>x</code></td>
+<td>Run as program/script</td>
+<td>Enter the directory (<code>cd</code> into it)</td>
+</tr>
+<tr>
+<td><strong>None</strong></td>
+<td><code>-</code></td>
+<td>No access</td>
+<td>No access</td>
+</tr>
+</tbody>
+</table>
+<p>Permissions are shown in groups of three: <strong>owner</strong>, <strong>group</strong>, <strong>others</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>rwxr-xr--
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>│││││││││
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>│││└┬┘└┬┘
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>│││ │  └─── Others: read only (r--)
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>│││ └────── Group: read + execute (r-x)
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>│└┴──────── Owner: read + write + execute (rwx)
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>└────────── File type (d=directory, -=file, l=link)
+</span></code></pre></div>
+</div>
+<div class="tabbed-block">
+<p><strong>Files:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>-rw-r--r--  (644)  # Config files - owner writes, others read
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>-rw-------  (600)  # Private files like SSH keys
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>-rwxr-xr-x  (755)  # Executable scripts
+</span></code></pre></div>
+<p><strong>Directories:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>drwxr-xr-x  (755)  # Standard directory
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>drwx------  (700)  # Private directory (like home directories)
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>drwxrwxr-x  (775)  # Shared directory
+</span></code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Avoid 777 Permissions in Enterprise</p>
+<p>Files with <code>-rwxrwxrwx</code> (777) permissions mean <strong>anyone can read, write, and execute</strong>. This is a major security risk.</p>
+<p><strong>In enterprise environments:</strong></p>
+<ul>
+<li>Security scanning tools will flag 777 files</li>
+<li>Compliance audits will require remediation</li>
+<li>You may be asked to fix these immediately</li>
+</ul>
+<p><strong>Never set 777 permissions on production systems.</strong> If you see them, it's usually a sign of improper configuration or a security issue that needs attention.</p>
+</div>
+</div>
+<div class="tabbed-block">
+<p><strong>Critical concept:</strong> Linux checks in order and stops at the first match.</p>
+<ol>
+<li><strong>Are you the owner?</strong> → Use owner permissions (stop checking)</li>
+<li><strong>Are you in the file's group?</strong> → Use group permissions (stop checking)</li>
+<li><strong>Else</strong> → Use "others" permissions</li>
+</ol>
+<p><strong>Example:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>-rw-r----- 1 alice developers 1024 Jan 15 10:00 report.txt
+</span></code></pre></div>
+<ul>
+<li><strong>alice</strong> (owner): Can read and write (<code>rw-</code>)</li>
+<li><strong>bob</strong> (in developers group): Can only read (<code>r--</code>)</li>
+<li><strong>charlie</strong> (not owner, not in group): No access (<code>---</code>)</li>
+</ul>
+<p><strong>Important:</strong> Even if alice is ALSO in the developers group, she gets owner permissions (<code>rw-</code>), not group permissions. First match wins.</p>
+<div class="admonition warning">
+<p class="admonition-title">Gotcha: sudo Group ≠ File Access</p>
+<p>Being in the <code>sudo</code> group does <strong>not</strong> give you access to files you couldn't read before. <code>sudo</code> is a command that lets you <em>run programs as root</em> — it doesn't change the permission check on the file itself.</p>
+<ul>
+<li><code>cat /etc/nginx/nginx.conf</code> → <strong>Permission denied</strong> (you're not root, not in the nginx group)</li>
+<li><code>sudo cat /etc/nginx/nginx.conf</code> → <strong>Works</strong>, because <code>sudo</code> runs <code>cat</code> as root</li>
+</ul>
+<p>The file permissions didn't change. You temporarily borrowed a different identity to bypass them. This is one of the most common points of confusion on day one.</p>
+</div>
+</div>
+</div>
+</div>
+<hr />
+<h2 id="how-to-check-your-permission-level">How to Check Your Permission Level</h2>
+<p>Now that you understand how file permissions work, let's figure out what level of access YOU have on this server.</p>
+<p>Use these commands to determine what access you have on the server:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 5.5A3.5 3.5 0 0 1 15.5 9a3.5 3.5 0 0 1-3.5 3.5A3.5 3.5 0 0 1 8.5 9 3.5 3.5 0 0 1 12 5.5M5 8c.56 0 1.08.15 1.53.42-.15 1.43.27 2.85 1.13 3.96C7.16 13.34 6.16 14 5 14a3 3 0 0 1-3-3 3 3 0 0 1 3-3m14 0a3 3 0 0 1 3 3 3 3 0 0 1-3 3c-1.16 0-2.16-.66-2.66-1.62a5.54 5.54 0 0 0 1.13-3.96c.45-.27.97-.42 1.53-.42M5.5 18.25c0-2.07 2.91-3.75 6.5-3.75s6.5 1.68 6.5 3.75V20h-13zM0 20v-1.5c0-1.39 1.89-2.56 4.45-2.9-.59.68-.95 1.62-.95 2.65V20zm24 0h-3.5v-1.75c0-1.03-.36-1.97-.95-2.65 2.56.34 4.45 1.51 4.45 2.9z"/></svg></span> Check Your Groups</label><label for="__tabbed_2_2"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5zm0 4a3 3 0 0 1 3 3 3 3 0 0 1-3 3 3 3 0 0 1-3-3 3 3 0 0 1 3-3m5.13 12A9.7 9.7 0 0 1 12 20.92 9.7 9.7 0 0 1 6.87 17c-.34-.5-.63-1-.87-1.53 0-1.65 2.71-3 6-3s6 1.32 6 3c-.24.53-.53 1.03-.87 1.53"/></svg></span> Check Sudo Access</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Your group memberships determine a lot about what you can do:</p>
+<div class="language-bash highlight"><span class="filename">List Your Groups</span><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>groups
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1"># jsmith sudo docker developers</span>
+</span></code></pre></div>
+<p>Or with more detail:</p>
+<div class="language-bash highlight"><span class="filename">Full Group Information</span><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>id
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="c1"># uid=1001(jsmith) gid=1001(jsmith) groups=1001(jsmith),27(sudo),998(docker),1002(developers)</span>
+</span></code></pre></div>
+<p><strong>Key groups to look for:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>What It Means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sudo</code> or <code>wheel</code></td>
+<td>You can run commands as root</td>
+</tr>
+<tr>
+<td><code>docker</code></td>
+<td>You can run Docker commands without sudo</td>
+</tr>
+<tr>
+<td><code>www-data</code></td>
+<td>Web server access (read/write web files)</td>
+</tr>
+<tr>
+<td><code>adm</code></td>
+<td>Can read most log files</td>
+</tr>
+<tr>
+<td>Custom groups</td>
+<td>Team-specific access (ask your team what they mean)</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="admonition-title">No sudo/wheel group?</p>
+<p>If you don't see <code>sudo</code> or <code>wheel</code> in your groups, you're a regular user without root access. That's normal for many developer accounts — it's a security feature, not a limitation of your skills.</p>
+</div>
+</div>
+<div class="tabbed-block">
+<p>The <code>sudo</code> command lets you run commands as root (the superuser). But having the <code>sudo</code> group doesn't always mean you can do everything.</p>
+<p><strong>Check what <code>sudo</code> lets you do:</strong></p>
+<div class="language-bash highlight"><span class="filename">Check Sudo Permissions</span><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>sudo<span class="w"> </span>-l
+</span></code></pre></div>
+<p>You might see:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>User jsmith may run the following commands on prod-web-01:
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    (ALL : ALL) ALL
+</span></code></pre></div>
+<p>This means you can run <strong>any command</strong> as root. Full power.</p>
+<p>Or you might see something more restrictive:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>User jsmith may run the following commands on prod-web-01:
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>    (root) /usr/bin/systemctl restart nginx
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>    (root) /usr/bin/tail /var/log/nginx/*
+</span></code></pre></div>
+<p>This means you can only restart <code>nginx</code> and read its logs — nothing else with <code>sudo</code>.</p>
+<p><strong>Or you might see:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>Sorry, user jsmith may not run sudo on prod-web-01.
+</span></code></pre></div>
+<p>No <code>sudo</code> for you. You're working with regular user permissions only.</p>
+</div>
+</div>
+</div>
+<hr />
+<h2 id="what-permission-denied-actually-means">What "Permission Denied" Actually Means</h2>
+<p>You'll inevitably see this error:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>-bash: /etc/nginx/nginx.conf: Permission denied
+</span></code></pre></div>
+<p>Or:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>cat: /var/log/secure: Permission denied
+</span></code></pre></div>
+<p><strong>This isn't a bug — it's Linux protecting the system.</strong></p>
+<p>Now you can use what you learned about file permissions to understand why. Check the file's permissions:</p>
+<div class="language-bash highlight"><span class="filename">Check File Permissions</span><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>ls<span class="w"> </span>-la<span class="w"> </span>/etc/nginx/nginx.conf
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="c1"># -rw-r----- 1 root nginx 2488 Jan 10 15:30 /etc/nginx/nginx.conf</span>
+</span></code></pre></div>
+<p>Reading the permission string: <code>-rw-r-----</code></p>
+<ul>
+<li><strong>Owner (root):</strong> read + write (<code>rw-</code>)</li>
+<li><strong>Group (nginx):</strong> read only (<code>r--</code>)</li>
+<li><strong>Others (you):</strong> no access (<code>---</code>)</li>
+</ul>
+<p>You're not root, and you're probably not in the nginx group. Linux checked the permissions and blocked you.</p>
+<h3 id="your-options-when-blocked">Your Options When Blocked</h3>
+<ol>
+<li><strong>You need to read it:</strong> Ask someone to add you to the right group, or use <code>sudo</code> if you have it</li>
+<li><strong>You need to edit it:</strong> You almost certainly need <code>sudo</code> (or shouldn't be editing it)</li>
+<li><strong>You're just exploring:</strong> Move on, find files you CAN read</li>
+</ol>
+<hr />
+<h2 id="when-to-ask-for-more-access">When to Ask for More Access</h2>
+<p>You'll sometimes need permissions you don't have. Here's the right approach:</p>
+<p><strong>DO:</strong></p>
+<ul>
+<li>Ask your team lead or sysadmin politely</li>
+<li>Explain what you're trying to accomplish</li>
+<li>Request the minimum access you need</li>
+<li>Accept "no" gracefully — there may be good reasons</li>
+</ul>
+<p><strong>DON'T:</strong></p>
+<ul>
+<li>Try to hack around permission limits</li>
+<li>Ask for root access when you need to read one log file</li>
+<li>Get frustrated — permissions protect the system (and you)</li>
+</ul>
+<p><strong>Example request:</strong></p>
+<blockquote>
+<p>"Hey, I need to read the nginx error logs to debug the API timeout issue. Can I get added to the <code>adm</code> group, or is there another way to access <code>/var/log/nginx/error.log</code>?"</p>
+</blockquote>
+<p>Much better than "I need root access."</p>
+<h3 id="enterprise-access-processes">Enterprise Access Processes</h3>
+<p>In most companies, getting elevated access follows a formal process:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:3"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 1h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1m0 8h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1m0 8h16a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1M9 5h1V3H9zm0 8h1v-2H9zm0 8h1v-2H9zM5 3v2h2V3zm0 8v2h2v-2zm0 8v2h2v-2z"/></svg></span> Standard Environments</label><label for="__tabbed_3_2"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5zm0 6c1.4 0 2.8 1.1 2.8 2.5V11c.6 0 1.2.6 1.2 1.3v3.5c0 .6-.6 1.2-1.3 1.2H9.2c-.6 0-1.2-.6-1.2-1.3v-3.5c0-.6.6-1.2 1.2-1.2V9.5C9.2 8.1 10.6 7 12 7m0 1.2c-.8 0-1.5.5-1.5 1.3V11h3V9.5c0-.8-.7-1.3-1.5-1.3"/></svg></span> Production Environments</label><label for="__tabbed_3_3"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m10 17-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9m-6-6a1 1 0 0 1 1 1 1 1 0 0 1-1 1 1 1 0 0 1-1-1 1 1 0 0 1 1-1m7 0h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2"/></svg></span> Example Workflow</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><strong>Typical <code>sudo</code> access for dev/staging servers:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>What to Expect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Scope</strong></td>
+<td>Specific servers or server groups (not blanket access)</td>
+</tr>
+<tr>
+<td><strong>Approval</strong></td>
+<td>Manager or team lead approval required</td>
+</tr>
+<tr>
+<td><strong>Duration</strong></td>
+<td>Time-limited, renewed periodically (quarterly/annually)</td>
+</tr>
+<tr>
+<td><strong>Auditing</strong></td>
+<td>All <code>sudo</code> commands logged and reviewable</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Bottom line:</strong> You'll have reasonable access, but it's controlled and monitored.</p>
+</div>
+<div class="tabbed-block">
+<p><strong>Stricter controls for production systems:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>How It Works</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID Checkout</strong></td>
+<td>Check out privileged IDs (not permanent <code>sudo</code>)</td>
+</tr>
+<tr>
+<td><strong>Justification</strong></td>
+<td>Must provide ticket number or business reason</td>
+</tr>
+<tr>
+<td><strong>Time-Boxed</strong></td>
+<td>Access expires after hours, not days</td>
+</tr>
+<tr>
+<td><strong>Multiple Approvers</strong></td>
+<td>May need manager + security team approval</td>
+</tr>
+<tr>
+<td><strong>Auto-Revocation</strong></td>
+<td>Access automatically removed when time expires</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Bottom line:</strong> Production access is heavily restricted. Plan ahead.</p>
+</div>
+<div class="tabbed-block">
+<p><strong>Typical enterprise access request:</strong></p>
+<pre class="mermaid"><code>graph TD
+    A[Submit Access Request&lt;br/&gt;ServiceNow, Jira, etc.] --&gt; B[Provide Justification&lt;br/&gt;Business reason + server list]
+    B --&gt; C[Manager Approval&lt;br/&gt;Direct manager reviews]
+    C --&gt; D[Security Review&lt;br/&gt;Security team validates]
+    D --&gt; E[Access Granted&lt;br/&gt;Limited scope, time-limited]
+    E --&gt; F[Monitoring Active&lt;br/&gt;All actions logged &amp; auditable]
+
+    style A fill:#2b6cb0,stroke:#2c5282,color:#fff
+    style B fill:#2b6cb0,stroke:#2c5282,color:#fff
+    style C fill:#d97706,stroke:#b45309,color:#fff
+    style D fill:#d97706,stroke:#b45309,color:#fff
+    style E fill:#2f855a,stroke:#276749,color:#fff
+    style F fill:#1a202c,stroke:#2d3748,color:#fff</code></pre>
+<p><strong>Timeline:</strong> Expect 1-3 days for standard access, 3-7 days for production.</p>
+<div class="admonition tip">
+<p class="admonition-title">Plan Ahead</p>
+<p>Don't wait until you urgently need access. Request it early in your project timeline, especially for production systems.</p>
+</div>
+</div>
+</div>
+</div>
+<hr />
+<h2 id="the-permissions-cheat-sheet">The Permissions Cheat Sheet</h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Check With</th>
+<th>What You Need</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Read a file</td>
+<td><code>ls -la filename</code></td>
+<td>Read (r) permission or <code>sudo</code></td>
+</tr>
+<tr>
+<td>Edit a file</td>
+<td><code>ls -la filename</code></td>
+<td>Write (w) permission or <code>sudo</code></td>
+</tr>
+<tr>
+<td>Run a script</td>
+<td><code>ls -la script.sh</code></td>
+<td>Execute (x) permission</td>
+</tr>
+<tr>
+<td>Access a directory</td>
+<td><code>ls -la dirname</code></td>
+<td>Execute (x) on directory</td>
+</tr>
+<tr>
+<td>Restart service</td>
+<td><code>sudo -l</code></td>
+<td><code>sudo</code> with service permission</td>
+</tr>
+<tr>
+<td>Read protected logs</td>
+<td><code>sudo -l</code> or group membership</td>
+<td><code>adm</code> group or <code>sudo</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="practice-exercises">Practice Exercises</h2>
+<p>Now that you understand permissions, try these hands-on exercises to build confidence:</p>
+<details class="question">
+<summary>Exercise 1: Check Your Access Level</summary>
+<p>Run the commands to determine your permission level on the server. Find out:</p>
+<ol>
+<li>What is your username?</li>
+<li>What groups are you in?</li>
+<li>Can you use <code>sudo</code>? If so, what can you <code>sudo</code>?</li>
+</ol>
+<p><strong>Hint:</strong> Use <code>whoami</code>, <code>groups</code>, <code>id</code>, and <code>sudo -l</code>.</p>
+<details class="tip">
+<summary>Solution</summary>
+<div class="language-bash highlight"><span class="filename">Check Your Identity and Access</span><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># Check your username</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>whoami
+</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c1"># Check your groups</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>groups
+</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>
+</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="c1"># Get detailed ID information</span>
+</span><span id="__span-16-8"><a id="__codelineno-16-8" name="__codelineno-16-8" href="#__codelineno-16-8"></a>id
+</span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a>
+</span><span id="__span-16-10"><a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a><span class="c1"># Check sudo privileges</span>
+</span><span id="__span-16-11"><a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a>sudo<span class="w"> </span>-l
+</span></code></pre></div>
+<p><strong>What to note:</strong></p>
+<ul>
+<li>Your username from <code>whoami</code></li>
+<li>Whether you see <code>sudo</code> or <code>wheel</code> in your groups</li>
+<li>What the <code>sudo -l</code> command shows (full access, limited access, or no access)</li>
+</ul>
+</details>
+</details>
+<details class="question">
+<summary>Exercise 2: Investigate a Permission Denied Error</summary>
+<p>Try to read a protected file (this is safe, it will just tell you "no"):</p>
+<div class="language-bash highlight"><span class="filename">Try Reading a Protected File</span><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>cat<span class="w"> </span>/etc/shadow
+</span></code></pre></div>
+<p>You'll get "Permission denied." Now investigate why:</p>
+<ol>
+<li>Check the file's permissions with <code>ls -la /etc/shadow</code></li>
+<li>Who owns the file?</li>
+<li>What permissions does the owner have?</li>
+<li>What permissions do you (as "others") have?</li>
+</ol>
+<p><strong>Challenge:</strong> Can you read it with <code>sudo</code> (if you have <code>sudo</code> access)?</p>
+<details class="tip">
+<summary>Solution</summary>
+<div class="language-bash highlight"><span class="filename">Investigate the Permissions</span><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1"># Try to read (will fail)</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>cat<span class="w"> </span>/etc/shadow
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="c1"># cat: /etc/shadow: Permission denied</span>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="c1"># Check why</span>
+</span><span id="__span-18-6"><a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>ls<span class="w"> </span>-la<span class="w"> </span>/etc/shadow
+</span><span id="__span-18-7"><a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a><span class="c1"># -rw-r----- 1 root shadow 1234 Jan 15 10:00 /etc/shadow</span>
+</span></code></pre></div>
+<p><strong>Analysis:</strong></p>
+<ul>
+<li>Owner: <code>root</code> (read+write)</li>
+<li>Group: <code>shadow</code> (read only)</li>
+<li>Others: no permissions (---)</li>
+<li>You're not root and not in the shadow group, so you're blocked</li>
+</ul>
+<p><strong>With <code>sudo</code> (if available):</strong></p>
+<div class="language-bash highlight"><span class="filename">Read with Sudo</span><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>sudo<span class="w"> </span>cat<span class="w"> </span>/etc/shadow
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="c1"># root:$6$random_hash...:18000:0:99999:7:::</span>
+</span></code></pre></div>
+<p><strong>Warning:</strong> The <code>/etc/shadow</code> file contains password hashes. In production, only read this if you have a legitimate reason.</p>
+</details>
+</details>
+<hr />
+<h2 id="quick-recap">Quick Recap</h2>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>What to Do</th>
+<th>Commands</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>First time on server</strong></td>
+<td>Find your access level</td>
+<td><code>groups</code> - What groups am I in?<br/><code>sudo -l</code> - What can I sudo?<br/><code>id</code> - Full identity info</td>
+</tr>
+<tr>
+<td><strong>Permission denied error</strong></td>
+<td>Investigate why</td>
+<td><code>ls -la filename</code> - Check ownership<br/>Try <code>sudo</code> if you have it<br/>Ask for access if needed</td>
+</tr>
+<tr>
+<td><strong>Using <code>sudo</code></strong></td>
+<td>Use carefully</td>
+<td>Run minimum command needed<br/>Double-check before Enter<br/>Never run unknown commands</td>
+</tr>
+<tr>
+<td><strong>Need more access</strong></td>
+<td>Follow process</td>
+<td>Ask team lead politely<br/>Explain what you need<br/>Request minimum required</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="whats-next">What's Next?</h2>
+<p>Now that you understand your permission level, you're ready to explore the server safely. Head to <strong><a href="../safe_exploration/">Safe Exploration</a></strong> to learn read-only exploration techniques—how to look around without accidentally changing anything.</p>
+<p>Once you're comfortable exploring safely, head to <strong><a href="../reading_logs/">Reading Logs Like a Pro</a></strong> — it's the most important debugging skill you'll develop for working on production Linux systems.</p>
+<div class="admonition tip">
+<p class="admonition-title">Bookmark Your Access Level</p>
+<p>First time on a server, run <code>id</code> and <code>sudo -l</code> and make a mental note. Knowing your access level prevents frustration and keeps you from accidentally trying things that won't work.</p>
+</div>
+<hr />
+<h2 id="further-reading">Further Reading</h2>
+<h3 id="command-references">Command References</h3>
+<ul>
+<li><code>man sudo</code> - Complete <code>sudo</code> documentation with all options and configuration</li>
+<li><code>man id</code> - Display user and group identity information</li>
+<li><code>man groups</code> - Show group memberships</li>
+<li><code>man chmod</code> - Change file permissions (covered in depth in Level 3)</li>
+<li><code>man chown</code> - Change file ownership</li>
+<li><code>man ls</code> - List directory contents (the <code>-l</code> flag shows permissions)</li>
+<li><code>man find</code> - Search for files (the <code>-readable</code>, <code>-writable</code> flags filter by access)</li>
+</ul>
+<h3 id="deep-dives">Deep Dives</h3>
+<ul>
+<li><a href="https://www.sudo.ws/about/intro/">Sudo Manual</a> - Official <code>sudo</code> project documentation</li>
+<li><a href="https://www.redhat.com/sysadmin/linux-file-permissions-explained">Understanding Linux File Permissions</a> - Red Hat's comprehensive guide</li>
+<li><a href="https://en.wikipedia.org/wiki/Principle_of_least_privilege">Principle of Least Privilege</a> - Why systems limit access by default</li>
+<li><a href="https://www.cisecurity.org/cis-benchmarks">CIS Benchmarks</a> - Industry-standard security configurations (includes <code>sudo</code> hardening)</li>
+<li><a href="https://csrc.nist.gov/glossary/term/least_privilege">NIST: Least Privilege</a> - Official definition and security guidance</li>
+</ul>
+<h3 id="official-documentation">Official Documentation</h3>
+<ul>
+<li><a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/configuring_basic_system_settings/managing-sudo-access_configuring-basic-system-settings">Red Hat: Managing sudo access</a> - Enterprise Linux <code>sudo</code> configuration</li>
+<li><a href="https://ubuntu.com/server/docs/security-users">Ubuntu Server Guide: User Management</a> - Ubuntu-specific user and permission guidance</li>
+<li><a href="https://tldp.org/LDP/lame/LAME/linux-admin-made-easy/users-and-groups.html">Linux Documentation Project: Users and Groups</a> - Classic reference on Linux user management</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "content.code.copy", "content.tabs.link", "content.code.highlight", "content.tooltips", "content.code.mermaid"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  </body>
+</html>

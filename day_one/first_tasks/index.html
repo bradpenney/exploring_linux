@@ -1,0 +1,1372 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Walk through the real tasks you'll be asked to do on Day One: checking service status, reading logs, inspecting configs, and verifying system health.">
+      
+      
+      
+        <link rel="canonical" href="https://linux.bradpenney.io/day_one/first_tasks/">
+      
+      
+      
+      
+      <link rel="icon" href="../../images/exploring_linux.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>Common First Tasks on a Linux Server - Exploring Enterprise Linux</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+  
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M1%207.775V2.75C1%201.784%201.784%201%202.75%201h5.025c.464%200%20.91.184%201.238.513l6.25%206.25a1.75%201.75%200%200%201%200%202.474l-5.026%205.026a1.75%201.75%200%200%201-2.474%200l-6.25-6.25A1.75%201.75%200%200%201%201%207.775m1.5%200c0%20.066.026.13.073.177l6.25%206.25a.25.25%200%200%200%20.354%200l5.025-5.025a.25.25%200%200%200%200-.354l-6.25-6.25a.25.25%200%200%200-.177-.073H2.75a.25.25%200%200%200-.25.25ZM6%205a1%201%200%201%201%200%202%201%201%200%200%201%200-2%22/%3E%3C/svg%3E');--md-admonition-icon--abstract:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M2.5%201.75v11.5c0%20.138.112.25.25.25h3.17a.75.75%200%200%201%200%201.5H2.75A1.75%201.75%200%200%201%201%2013.25V1.75C1%20.784%201.784%200%202.75%200h8.5C12.216%200%2013%20.784%2013%201.75v7.736a.75.75%200%200%201-1.5%200V1.75a.25.25%200%200%200-.25-.25h-8.5a.25.25%200%200%200-.25.25m13.274%209.537zl-4.557%204.45a.75.75%200%200%201-1.055-.008l-1.943-1.95a.75.75%200%200%201%201.062-1.058l1.419%201.425%204.026-3.932a.75.75%200%201%201%201.048%201.074M4.75%204h4.5a.75.75%200%200%201%200%201.5h-4.5a.75.75%200%200%201%200-1.5M4%207.75A.75.75%200%200%201%204.75%207h2a.75.75%200%200%201%200%201.5h-2A.75.75%200%200%201%204%207.75%22/%3E%3C/svg%3E');--md-admonition-icon--info:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M0%208a8%208%200%201%201%2016%200A8%208%200%200%201%200%208m8-6.5a6.5%206.5%200%201%200%200%2013%206.5%206.5%200%200%200%200-13M6.5%207.75A.75.75%200%200%201%207.25%207h1a.75.75%200%200%201%20.75.75v2.75h.25a.75.75%200%200%201%200%201.5h-2a.75.75%200%200%201%200-1.5h.25v-2h-.25a.75.75%200%200%201-.75-.75M8%206a1%201%200%201%201%200-2%201%201%200%200%201%200%202%22/%3E%3C/svg%3E');--md-admonition-icon--tip:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M3.499.75a.75.75%200%200%201%201.5%200v.996C5.9%202.903%206.793%203.65%207.662%204.376l.24.202c-.036-.694.055-1.422.426-2.163C9.1.873%2010.794-.045%2012.622.26%2014.408.558%2016%201.94%2016%204.25c0%201.278-.954%202.575-2.44%202.734l.146.508.065.22c.203.701.412%201.455.476%202.226.142%201.707-.4%203.03-1.487%203.898C11.714%2014.671%2010.27%2015%208.75%2015h-6a.75.75%200%200%201%200-1.5h1.376a4.5%204.5%200%200%201-.563-1.191%203.84%203.84%200%200%201-.05-2.063%204.65%204.65%200%200%201-2.025-.293.75.75%200%200%201%20.525-1.406c1.357.507%202.376-.006%202.698-.318l.009-.01a.747.747%200%200%201%201.06%200%20.75.75%200%200%201-.012%201.074c-.912.92-.992%201.835-.768%202.586.221.74.745%201.337%201.196%201.621H8.75c1.343%200%202.398-.296%203.074-.836.635-.507%201.036-1.31.928-2.602-.05-.603-.216-1.224-.422-1.93l-.064-.221c-.12-.407-.246-.84-.353-1.29a2.4%202.4%200%200%201-.507-.441%203.1%203.1%200%200%201-.633-1.248.75.75%200%200%201%201.455-.364c.046.185.144.436.31.627.146.168.353.305.712.305.738%200%201.25-.615%201.25-1.25%200-1.47-.95-2.315-2.123-2.51-1.172-.196-2.227.387-2.706%201.345-.46.92-.27%201.774.019%203.062l.042.19.01.05c.348.443.666.949.94%201.553a.75.75%200%201%201-1.365.62c-.553-1.217-1.32-1.94-2.3-2.768L6.7%205.527c-.814-.68-1.75-1.462-2.692-2.619a3.7%203.7%200%200%200-1.023.88c-.406.495-.663%201.036-.722%201.508.116.122.306.21.591.239.388.038.797-.06%201.032-.19a.75.75%200%200%201%20.728%201.31c-.515.287-1.23.439-1.906.373-.682-.067-1.473-.38-1.879-1.193L.75%205.677V5.5c0-.984.48-1.94%201.077-2.664.46-.559%201.05-1.055%201.673-1.353z%22/%3E%3C/svg%3E');--md-admonition-icon--success:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M13.78%204.22a.75.75%200%200%201%200%201.06l-7.25%207.25a.75.75%200%200%201-1.06%200L2.22%209.28a.75.75%200%200%201%20.018-1.042.75.75%200%200%201%201.042-.018L6%2010.94l6.72-6.72a.75.75%200%200%201%201.06%200%22/%3E%3C/svg%3E');--md-admonition-icon--question:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M0%208a8%208%200%201%201%2016%200A8%208%200%200%201%200%208m8-6.5a6.5%206.5%200%201%200%200%2013%206.5%206.5%200%200%200%200-13M6.92%206.085h.001a.749.749%200%201%201-1.342-.67c.169-.339.436-.701.849-.977C6.845%204.16%207.369%204%208%204a2.76%202.76%200%200%201%201.637.525c.503.377.863.965.863%201.725%200%20.448-.115.83-.329%201.15-.205.307-.47.513-.692.662-.109.072-.22.138-.313.195l-.006.004a6%206%200%200%200-.26.16%201%201%200%200%200-.276.245.75.75%200%200%201-1.248-.832c.184-.264.42-.489.692-.661q.154-.1.313-.195l.007-.004c.1-.061.182-.11.258-.161a1%201%200%200%200%20.277-.245C8.96%206.514%209%206.427%209%206.25a.61.61%200%200%200-.262-.525A1.27%201.27%200%200%200%208%205.5c-.369%200-.595.09-.74.187a1%201%200%200%200-.34.398M9%2011a1%201%200%201%201-2%200%201%201%200%200%201%202%200%22/%3E%3C/svg%3E');--md-admonition-icon--warning:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M6.457%201.047c.659-1.234%202.427-1.234%203.086%200l6.082%2011.378A1.75%201.75%200%200%201%2014.082%2015H1.918a1.75%201.75%200%200%201-1.543-2.575Zm1.763.707a.25.25%200%200%200-.44%200L1.698%2013.132a.25.25%200%200%200%20.22.368h12.164a.25.25%200%200%200%20.22-.368Zm.53%203.996v2.5a.75.75%200%200%201-1.5%200v-2.5a.75.75%200%200%201%201.5%200M9%2011a1%201%200%201%201-2%200%201%201%200%200%201%202%200%22/%3E%3C/svg%3E');--md-admonition-icon--failure:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M2.344%202.343za8%208%200%200%201%2011.314%2011.314A8.002%208.002%200%200%201%20.234%2010.089a8%208%200%200%201%202.11-7.746m1.06%2010.253a6.5%206.5%200%201%200%209.108-9.275%206.5%206.5%200%200%200-9.108%209.275M6.03%204.97%208%206.94l1.97-1.97a.749.749%200%200%201%201.275.326.75.75%200%200%201-.215.734L9.06%208l1.97%201.97a.749.749%200%200%201-.326%201.275.75.75%200%200%201-.734-.215L8%209.06l-1.97%201.97a.749.749%200%200%201-1.275-.326.75.75%200%200%201%20.215-.734L6.94%208%204.97%206.03a.75.75%200%200%201%20.018-1.042.75.75%200%200%201%201.042-.018%22/%3E%3C/svg%3E');--md-admonition-icon--danger:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M9.504.43a1.516%201.516%200%200%201%202.437%201.713L10.415%205.5h2.123c1.57%200%202.346%201.909%201.22%203.004l-7.34%207.142a1.25%201.25%200%200%201-.871.354h-.302a1.25%201.25%200%200%201-1.157-1.723L5.633%2010.5H3.462c-1.57%200-2.346-1.909-1.22-3.004zm1.047%201.074L3.286%208.571A.25.25%200%200%200%203.462%209H6.75a.75.75%200%200%201%20.694%201.034l-1.713%204.188%206.982-6.793A.25.25%200%200%200%2012.538%207H9.25a.75.75%200%200%201-.683-1.06l2.008-4.418.003-.006-.004-.009-.006-.006-.008-.001q-.005%200-.009.004%22/%3E%3C/svg%3E');--md-admonition-icon--bug:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M4.72.22a.75.75%200%200%201%201.06%200l1%20.999a3.5%203.5%200%200%201%202.441%200l.999-1a.748.748%200%200%201%201.265.332.75.75%200%200%201-.205.729l-.775.776c.616.63.995%201.493.995%202.444v.327q0%20.15-.025.292c.408.14.764.392%201.029.722l1.968-.787a.75.75%200%200%201%20.556%201.392L13%207.258V9h2.25a.75.75%200%200%201%200%201.5H13v.5q-.002.615-.141%201.186l2.17.868a.75.75%200%200%201-.557%201.392l-2.184-.873A5%205%200%200%201%208%2016a5%205%200%200%201-4.288-2.427l-2.183.873a.75.75%200%200%201-.558-1.392l2.17-.868A5%205%200%200%201%203%2011v-.5H.75a.75.75%200%200%201%200-1.5H3V7.258L.971%206.446a.75.75%200%200%201%20.558-1.392l1.967.787c.265-.33.62-.583%201.03-.722a1.7%201.7%200%200%201-.026-.292V4.5c0-.951.38-1.814.995-2.444L4.72%201.28a.75.75%200%200%201%200-1.06m.53%206.28a.75.75%200%200%200-.75.75V11a3.5%203.5%200%201%200%207%200V7.25a.75.75%200%200%200-.75-.75ZM6.173%205h3.654A.17.17%200%200%200%2010%204.827V4.5a2%202%200%201%200-4%200v.327c0%20.096.077.173.173.173%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M5%205.782V2.5h-.25a.75.75%200%200%201%200-1.5h6.5a.75.75%200%200%201%200%201.5H11v3.282l3.666%205.76C15.619%2013.04%2014.543%2015%2012.767%2015H3.233c-1.776%200-2.852-1.96-1.899-3.458Zm-2.4%206.565a.75.75%200%200%200%20.633%201.153h9.534a.75.75%200%200%200%20.633-1.153L12.225%2010.5h-8.45ZM9.5%202.5h-3V6c0%20.143-.04.283-.117.403L4.73%209h6.54L9.617%206.403A.75.75%200%200%201%209.5%206Z%22/%3E%3C/svg%3E');--md-admonition-icon--quote:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M1.75%202.5h10.5a.75.75%200%200%201%200%201.5H1.75a.75.75%200%200%201%200-1.5m4%205h8.5a.75.75%200%200%201%200%201.5h-8.5a.75.75%200%200%201%200-1.5m0%205h8.5a.75.75%200%200%201%200%201.5h-8.5a.75.75%200%200%201%200-1.5M2.5%207.75v6a.75.75%200%200%201-1.5%200v-6a.75.75%200%200%201%201.5%200%22/%3E%3C/svg%3E');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-V01MJ4R3SQ"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-V01MJ4R3SQ",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-V01MJ4R3SQ",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+      
+        <meta  property="og:type"  content="website" >
+      
+        <meta  property="og:title"  content="Common First Tasks on a Linux Server - Exploring Enterprise Linux" >
+      
+        <meta  property="og:description"  content="Walk through the real tasks you'll be asked to do on Day One: checking service status, reading logs, inspecting configs, and verifying system health." >
+      
+        <meta  property="og:image"  content="https://linux.bradpenney.io/assets/images/social/day_one/first_tasks.png" >
+      
+        <meta  property="og:image:type"  content="image/png" >
+      
+        <meta  property="og:image:width"  content="1200" >
+      
+        <meta  property="og:image:height"  content="630" >
+      
+        <meta  property="og:url"  content="https://linux.bradpenney.io/day_one/first_tasks/" >
+      
+        <meta  name="twitter:card"  content="summary_large_image" >
+      
+        <meta  name="twitter:title"  content="Common First Tasks on a Linux Server - Exploring Enterprise Linux" >
+      
+        <meta  name="twitter:description"  content="Walk through the real tasks you'll be asked to do on Day One: checking service status, reading logs, inspecting configs, and verifying system health." >
+      
+        <meta  name="twitter:image"  content="https://linux.bradpenney.io/assets/images/social/day_one/first_tasks.png" >
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#common-first-tasks" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Exploring Enterprise Linux" class="md-header__button md-logo" aria-label="Exploring Enterprise Linux" data-md-component="logo">
+      
+  <img src="../../images/exploring_linux.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Exploring Enterprise Linux
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Common First Tasks on a Linux Server
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Exploring Enterprise Linux" class="md-nav__button md-logo" aria-label="Exploring Enterprise Linux" data-md-component="logo">
+      
+  <img src="../../images/exploring_linux.png" alt="logo">
+
+    </a>
+    Exploring Enterprise Linux
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Day One - Getting Started
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Day One - Getting Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Overview
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting_access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Getting Access
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../orientation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Orientation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../permissions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Permissions
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../safe_exploration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Safe Exploration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reading_logs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Reading Logs
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#checking-if-a-service-is-running" class="md-nav__link">
+    <span class="md-ellipsis">
+      Checking If a Service Is Running
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Checking If a Service Is Running">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-systemctl-modern-linux" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using systemctl (Modern Linux)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-multiple-services" class="md-nav__link">
+    <span class="md-ellipsis">
+      Check Multiple Services
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is-it-listening-on-the-expected-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      Is It Listening on the Expected Port?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tailing-application-logs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tailing Application Logs
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#finding-configuration-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      Finding Configuration Files
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Finding Configuration Files">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-config-locations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Common Config Locations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#read-a-config-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      Read a Config File
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#search-for-a-specific-setting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Search for a Specific Setting
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-config-syntax-before-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Check Config Syntax (Before Changes)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checking-whats-using-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Checking What's Using Resources
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Checking What&#39;s Using Resources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cpu-and-memory-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      CPU and Memory Overview
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#find-the-hungry-processes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Find the Hungry Processes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-disk-space" class="md-nav__link">
+    <span class="md-ellipsis">
+      Check Disk Space
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#whats-using-all-the-disk" class="md-nav__link">
+    <span class="md-ellipsis">
+      What's Using All the Disk?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checking-database-connectivity" class="md-nav__link">
+    <span class="md-ellipsis">
+      Checking Database Connectivity
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Checking Database Connectivity">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#test-mysqlmariadb-connection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Test MySQL/MariaDB Connection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-postgresql-connection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Test PostgreSQL Connection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-from-application-perspective" class="md-nav__link">
+    <span class="md-ellipsis">
+      Check from Application Perspective
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checking-external-connectivity" class="md-nav__link">
+    <span class="md-ellipsis">
+      Checking External Connectivity
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Checking External Connectivity">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-connectivity-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic Connectivity Test
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-http-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      Test HTTP Endpoints
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-dns-resolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Check DNS Resolution
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-specific-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      Test Specific Port
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checking-recent-deployments" class="md-nav__link">
+    <span class="md-ellipsis">
+      Checking Recent Deployments
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Checking Recent Deployments">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#check-git-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      Check Git History
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-file-modification-times" class="md-nav__link">
+    <span class="md-ellipsis">
+      Check File Modification Times
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-deployment-logs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Check Deployment Logs
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verifying-a-fix-worked" class="md-nav__link">
+    <span class="md-ellipsis">
+      Verifying a Fix Worked
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Verifying a Fix Worked">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#check-service-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      Check Service Status
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-logs-for-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Check Logs for Errors
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-the-endpoint" class="md-nav__link">
+    <span class="md-ellipsis">
+      Test the Endpoint
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#monitor-for-a-few-minutes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Monitor for a Few Minutes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-quick-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      Task Quick Reference
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#practice-exercises" class="md-nav__link">
+    <span class="md-ellipsis">
+      Practice Exercises
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-recap" class="md-nav__link">
+    <span class="md-ellipsis">
+      Quick Recap
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#further-reading" class="md-nav__link">
+    <span class="md-ellipsis">
+      Further Reading
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Further Reading">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#command-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      Command References
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#official-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Official Documentation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#related-articles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Related Articles
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      What's Next?
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="common-first-tasks">Common First Tasks</h1>
+<div class="admonition tip">
+<p class="admonition-title">Part of Day One</p>
+<p>This is the seventh article in the <a href="../overview/">Day One: Getting Started</a> series. You should have already completed <a href="../getting_access/">Getting Access</a>, <a href="../orientation/">Orientation</a>, <a href="../permissions/">Understanding Your Permissions</a>, <a href="../safe_exploration/">Safe Exploration</a>, <a href="../reading_logs/">Reading Logs</a>, and <a href="../finding_docs/">Finding Documentation</a>.</p>
+</div>
+<p>Your team lead sends you a message: <em>"Can you check if the API service is running?"</em></p>
+<p>Or: <em>"The logs should show what's wrong."</em></p>
+<p>Or: <em>"Just verify the config looks correct."</em></p>
+<p>These are the tasks you'll actually be asked to do on your first day with a new server. Let's walk through them.</p>
+<hr />
+<h2 id="checking-if-a-service-is-running">Checking If a Service Is Running</h2>
+<p><strong>The ask:</strong> "Is nginx running?" / "Can you check if the app is up?"</p>
+<h3 id="using-systemctl-modern-linux">Using systemctl (Modern Linux)</h3>
+<div class="language-bash highlight"><span class="filename">Check Service Status</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>systemctl<span class="w"> </span>status<span class="w"> </span>nginx
+</span></code></pre></div>
+<p><strong>What to look for:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>● nginx.service - A high performance web server
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>   Loaded: loaded (/lib/systemd/system/nginx.service; enabled)
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>   Active: active (running) since Mon 2024-01-15 10:00:00 UTC; 5 days ago
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>   Main PID: 1234 (nginx)
+</span></code></pre></div>
+<ul>
+<li><code>Active: active (running)</code> — It's running ✅</li>
+<li><code>Active: inactive (dead)</code> — It's stopped ❌</li>
+<li><code>Active: failed</code> — It crashed ❌</li>
+</ul>
+<h3 id="check-multiple-services">Check Multiple Services</h3>
+<div class="language-bash highlight"><span class="filename">Check Common Services</span><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>systemctl<span class="w"> </span>status<span class="w"> </span>nginx
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>systemctl<span class="w"> </span>status<span class="w"> </span>mysql
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>systemctl<span class="w"> </span>status<span class="w"> </span>redis
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>systemctl<span class="w"> </span>status<span class="w"> </span>docker
+</span></code></pre></div>
+<h3 id="is-it-listening-on-the-expected-port">Is It Listening on the Expected Port?</h3>
+<p>A service can be "running" but not actually accepting connections:</p>
+<div class="language-bash highlight"><span class="filename">Check Listening Ports</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>nginx
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="c1"># or</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>netstat<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>:80
+</span></code></pre></div>
+<p><strong>What you want to see:</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>LISTEN  0  511  0.0.0.0:80  0.0.0.0:*  users:((&quot;nginx&quot;,pid=1234,fd=6))
+</span></code></pre></div>
+<p>If nothing shows up, the service isn't listening.</p>
+<hr />
+<h2 id="tailing-application-logs">Tailing Application Logs</h2>
+<p><strong>The ask:</strong> "Check the logs and see what's happening"</p>
+<p>Log reading is covered in depth in <a href="../reading_logs/">Reading Logs Like a Pro</a>. Here are the quick commands for checking logs as part of a task:</p>
+<div class="language-bash highlight"><span class="filename">Follow Logs in Real-Time</span><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>tail<span class="w"> </span>-f<span class="w"> </span>/var/log/nginx/error.log
+</span></code></pre></div>
+<p>Reproduce the problem and watch for new entries. Press <code>Ctrl+C</code> to stop.</p>
+<div class="language-bash highlight"><span class="filename">Service Logs with journalctl</span><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>nginx<span class="w"> </span>-f
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>app-name<span class="w"> </span>--since<span class="w"> </span><span class="s2">&quot;10 minutes ago&quot;</span>
+</span></code></pre></div>
+<p>For time-windowed searches, common log formats, and error pattern analysis, see <a href="../reading_logs/">Reading Logs Like a Pro</a>.</p>
+<hr />
+<h2 id="finding-configuration-files">Finding Configuration Files</h2>
+<p><strong>The ask:</strong> "Can you check the config for [setting]?"</p>
+<h3 id="common-config-locations">Common Config Locations</h3>
+<table>
+<thead>
+<tr>
+<th>Application</th>
+<th>Config Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nginx</td>
+<td><code>/etc/nginx/nginx.conf</code>, <code>/etc/nginx/sites-enabled/</code></td>
+</tr>
+<tr>
+<td>Apache</td>
+<td><code>/etc/apache2/apache2.conf</code>, <code>/etc/apache2/sites-enabled/</code></td>
+</tr>
+<tr>
+<td>MySQL</td>
+<td><code>/etc/mysql/my.cnf</code></td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td><code>/etc/postgresql/*/main/postgresql.conf</code></td>
+</tr>
+<tr>
+<td>SSH</td>
+<td><code>/etc/ssh/sshd_config</code></td>
+</tr>
+<tr>
+<td>System</td>
+<td><code>/etc/</code> (most things)</td>
+</tr>
+<tr>
+<td>Applications</td>
+<td><code>/opt/app-name/config/</code>, <code>/var/www/app/config/</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="read-a-config-file">Read a Config File</h3>
+<div class="language-bash highlight"><span class="filename">View Config</span><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>cat<span class="w"> </span>/etc/nginx/nginx.conf
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1"># or for large files</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>less<span class="w"> </span>/etc/nginx/nginx.conf
+</span></code></pre></div>
+<h3 id="search-for-a-specific-setting">Search for a Specific Setting</h3>
+<div class="language-bash highlight"><span class="filename">Find Setting in Config</span><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>grep<span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;worker_processes&quot;</span><span class="w"> </span>/etc/nginx/
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>grep<span class="w"> </span>-r<span class="w"> </span><span class="s2">&quot;database&quot;</span><span class="w"> </span>/var/www/app/config/
+</span></code></pre></div>
+<h3 id="check-config-syntax-before-changes">Check Config Syntax (Before Changes)</h3>
+<p>Many services can validate their config:</p>
+<div class="language-bash highlight"><span class="filename">Validate Config (Read-Only)</span><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>nginx<span class="w"> </span>-t
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="c1"># nginx: configuration file /etc/nginx/nginx.conf syntax is ok</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="c1"># nginx: configuration file /etc/nginx/nginx.conf test is successful</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>apache2ctl<span class="w"> </span>configtest
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>mysql<span class="w"> </span>--help<span class="w"> </span>--verbose<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;Default options&quot;</span>
+</span></code></pre></div>
+<hr />
+<h2 id="checking-whats-using-resources">Checking What's Using Resources</h2>
+<p><strong>The ask:</strong> "The server is slow, can you see what's happening?"</p>
+<h3 id="cpu-and-memory-overview">CPU and Memory Overview</h3>
+<div class="language-bash highlight"><span class="filename">Live System Monitor</span><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>top
+</span></code></pre></div>
+<p><strong>Quick reads:</strong></p>
+<ul>
+<li>Look at the top processes — are any using 100% CPU?</li>
+<li>Check memory (Mem line) — is it nearly full?</li>
+<li>Check load average — above 1.0 per core means busy</li>
+</ul>
+<p>Press <code>q</code> to exit.</p>
+<h3 id="find-the-hungry-processes">Find the Hungry Processes</h3>
+<div class="language-bash highlight"><span class="filename">Top CPU Consumers</span><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>ps<span class="w"> </span>aux<span class="w"> </span>--sort<span class="o">=</span>-%cpu<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-10
+</span></code></pre></div>
+<div class="language-bash highlight"><span class="filename">Top Memory Consumers</span><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>ps<span class="w"> </span>aux<span class="w"> </span>--sort<span class="o">=</span>-%mem<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-10
+</span></code></pre></div>
+<h3 id="check-disk-space">Check Disk Space</h3>
+<div class="language-bash highlight"><span class="filename">Disk Usage</span><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>df<span class="w"> </span>-h
+</span></code></pre></div>
+<p><strong>Red flag:</strong> Any filesystem at 90%+ usage.</p>
+<h3 id="whats-using-all-the-disk">What's Using All the Disk?</h3>
+<div class="language-bash highlight"><span class="filename">Find Large Directories</span><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>du<span class="w"> </span>-sh<span class="w"> </span>/*<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-hr<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-10
+</span></code></pre></div>
+<p>Then drill down:</p>
+<div class="language-bash highlight"><span class="filename">Drill Into Large Directory</span><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>du<span class="w"> </span>-sh<span class="w"> </span>/var/*<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-hr<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-10
+</span></code></pre></div>
+<hr />
+<h2 id="checking-database-connectivity">Checking Database Connectivity</h2>
+<p><strong>The ask:</strong> "Is the app connecting to the database?"</p>
+<h3 id="test-mysqlmariadb-connection">Test MySQL/MariaDB Connection</h3>
+<div class="language-bash highlight"><span class="filename">Test MySQL Connection</span><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>mysql<span class="w"> </span>-h<span class="w"> </span>localhost<span class="w"> </span>-u<span class="w"> </span>appuser<span class="w"> </span>-p<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;SELECT 1;&quot;</span>
+</span></code></pre></div>
+<p>If it connects, the database is accessible.</p>
+<h3 id="test-postgresql-connection">Test PostgreSQL Connection</h3>
+<div class="language-bash highlight"><span class="filename">Test PostgreSQL Connection</span><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>psql<span class="w"> </span>-h<span class="w"> </span>localhost<span class="w"> </span>-U<span class="w"> </span>appuser<span class="w"> </span>-d<span class="w"> </span>dbname<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;SELECT 1;&quot;</span>
+</span></code></pre></div>
+<h3 id="check-from-application-perspective">Check from Application Perspective</h3>
+<p>Look in the app logs for database errors:</p>
+<div class="language-bash highlight"><span class="filename">Find Database Errors in Logs</span><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;database\|mysql\|postgres\|connection&quot;</span><span class="w"> </span>/var/log/app/error.log
+</span></code></pre></div>
+<p>Common errors:</p>
+<ul>
+<li>"Connection refused" — Database isn't running or wrong port</li>
+<li>"Access denied" — Wrong credentials</li>
+<li>"Too many connections" — Database overwhelmed</li>
+</ul>
+<hr />
+<h2 id="checking-external-connectivity">Checking External Connectivity</h2>
+<p><strong>The ask:</strong> "Can the server reach [external service]?"</p>
+<h3 id="basic-connectivity-test">Basic Connectivity Test</h3>
+<div class="language-bash highlight"><span class="filename">Ping External Host</span><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>ping<span class="w"> </span>-c<span class="w"> </span><span class="m">4</span><span class="w"> </span>google.com
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>ping<span class="w"> </span>-c<span class="w"> </span><span class="m">4</span><span class="w"> </span>api.example.com
+</span></code></pre></div>
+<h3 id="test-http-endpoints">Test HTTP Endpoints</h3>
+<div class="language-bash highlight"><span class="filename">Test HTTP Connection</span><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>curl<span class="w"> </span>-I<span class="w"> </span>https://api.example.com/health
+</span></code></pre></div>
+<p><strong>What to look for:</strong></p>
+<ul>
+<li><code>HTTP/1.1 200 OK</code> — It's working</li>
+<li><code>Connection refused</code> — Service is down or blocked</li>
+<li><code>Connection timed out</code> — Network issue or firewall</li>
+</ul>
+<h3 id="check-dns-resolution">Check DNS Resolution</h3>
+<div class="language-bash highlight"><span class="filename">Verify DNS Works</span><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>nslookup<span class="w"> </span>api.example.com
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="c1"># or</span>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>dig<span class="w"> </span>api.example.com
+</span></code></pre></div>
+<h3 id="test-specific-port">Test Specific Port</h3>
+<div class="language-bash highlight"><span class="filename">Test Port Connectivity</span><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>nc<span class="w"> </span>-zv<span class="w"> </span>api.example.com<span class="w"> </span><span class="m">443</span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="c1"># Connection to api.example.com 443 port [tcp/https] succeeded!</span>
+</span></code></pre></div>
+<hr />
+<h2 id="checking-recent-deployments">Checking Recent Deployments</h2>
+<p><strong>The ask:</strong> "When was the last deploy? What changed?"</p>
+<h3 id="check-git-history">Check Git History</h3>
+<div class="language-bash highlight"><span class="filename">Recent Git Commits</span><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="nb">cd</span><span class="w"> </span>/var/www/app
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>git<span class="w"> </span>log<span class="w"> </span>--oneline<span class="w"> </span>-10
+</span></code></pre></div>
+<div class="language-bash highlight"><span class="filename">What Changed Recently</span><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>git<span class="w"> </span>log<span class="w"> </span>--since<span class="o">=</span><span class="s2">&quot;24 hours ago&quot;</span><span class="w"> </span>--oneline
+</span></code></pre></div>
+<h3 id="check-file-modification-times">Check File Modification Times</h3>
+<div class="language-bash highlight"><span class="filename">Recently Modified Files</span><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>find<span class="w"> </span>/var/www/app<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-mtime<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-20
+</span></code></pre></div>
+<h3 id="check-deployment-logs">Check Deployment Logs</h3>
+<div class="language-bash highlight"><span class="filename">Deployment Logs</span><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>ls<span class="w"> </span>-la<span class="w"> </span>/var/log/deploy/
+</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>tail<span class="w"> </span>-100<span class="w"> </span>/var/log/deploy/deploy.log
+</span></code></pre></div>
+<hr />
+<h2 id="verifying-a-fix-worked">Verifying a Fix Worked</h2>
+<p><strong>The ask:</strong> "Can you verify the fix worked?"</p>
+<h3 id="check-service-status">Check Service Status</h3>
+<div class="language-bash highlight"><span class="filename">Verify Service Running</span><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>systemctl<span class="w"> </span>status<span class="w"> </span>nginx
+</span></code></pre></div>
+<h3 id="check-logs-for-errors">Check Logs for Errors</h3>
+<div class="language-bash highlight"><span class="filename">Check for New Errors</span><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>tail<span class="w"> </span>-f<span class="w"> </span>/var/log/nginx/error.log
+</span></code></pre></div>
+<p>Wait a minute, trigger some traffic, see if errors appear.</p>
+<h3 id="test-the-endpoint">Test the Endpoint</h3>
+<div class="language-bash highlight"><span class="filename">Test Application</span><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://localhost/health<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-20
+</span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>curl<span class="w"> </span>-I<span class="w"> </span>https://app.example.com/api/status
+</span></code></pre></div>
+<h3 id="monitor-for-a-few-minutes">Monitor for a Few Minutes</h3>
+<div class="language-bash highlight"><span class="filename">Watch Logs After Fix</span><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>nginx<span class="w"> </span>-f
+</span></code></pre></div>
+<p>Watch for a few minutes. No errors? The fix probably worked.</p>
+<hr />
+<h2 id="task-quick-reference">Task Quick Reference</h2>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Check if service running</td>
+<td><code>systemctl status servicename</code></td>
+</tr>
+<tr>
+<td>Check listening ports</td>
+<td><code>ss -tlnp</code> or <code>netstat -tlnp</code></td>
+</tr>
+<tr>
+<td>Follow logs</td>
+<td><code>tail -f /var/log/app/error.log</code></td>
+</tr>
+<tr>
+<td>Find errors in logs</td>
+<td><code>grep -i error /var/log/app/*.log</code></td>
+</tr>
+<tr>
+<td>Check config file</td>
+<td><code>cat /etc/nginx/nginx.conf</code></td>
+</tr>
+<tr>
+<td>Find config setting</td>
+<td><code>grep -r "setting" /etc/nginx/</code></td>
+</tr>
+<tr>
+<td>Check CPU/memory</td>
+<td><code>top</code> or <code>htop</code></td>
+</tr>
+<tr>
+<td>Check disk space</td>
+<td><code>df -h</code></td>
+</tr>
+<tr>
+<td>Find large files</td>
+<td><code>du -sh /* \| sort -hr \| head</code></td>
+</tr>
+<tr>
+<td>Test connectivity</td>
+<td><code>ping</code>, <code>curl</code>, <code>nc -zv</code></td>
+</tr>
+<tr>
+<td>Recent deployments</td>
+<td><code>git log --oneline -10</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="practice-exercises">Practice Exercises</h2>
+<details class="question">
+<summary>Exercise 1: Check Whether a Service Is Healthy</summary>
+<p>Your team lead asks: "Is nginx running and actually accepting connections?" Check the service status AND verify it's listening on port 80.</p>
+<p><strong>Hint:</strong> You need two commands — <code>systemctl</code> and <code>ss</code>.</p>
+</details>
+<details class="tip">
+<summary>Solution</summary>
+<div class="language-bash highlight"><span class="filename">Check nginx Status and Port</span><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a>systemctl<span class="w"> </span>status<span class="w"> </span>nginx
+</span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>:80
+</span></code></pre></div>
+<p>You want to see <code>Active: active (running)</code> from the first command, and a <code>LISTEN</code> entry on port 80 from the second. If the service is running but not listening, something is wrong with its configuration.</p>
+</details>
+<details class="question">
+<summary>Exercise 2: Find What's Eating Disk Space</summary>
+<p><code>df -h</code> shows that <code>/var</code> is at 91% usage. Find the top 10 largest directories inside <code>/var</code>.</p>
+<p><strong>Hint:</strong> Use <code>du</code> with appropriate flags, then sort.</p>
+</details>
+<details class="tip">
+<summary>Solution</summary>
+<div class="language-bash highlight"><span class="filename">Find Large Directories in /var</span><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>du<span class="w"> </span>-sh<span class="w"> </span>/var/*<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-hr<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-10
+</span></code></pre></div>
+<p><code>/var/log</code> is the usual culprit on busy servers. From there, drill deeper:
+<div class="language-bash highlight"><span class="filename">Drill Into /var/log</span><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>du<span class="w"> </span>-sh<span class="w"> </span>/var/log/*<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-hr<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-10
+</span></code></pre></div></p>
+</details>
+<details class="question">
+<summary>Exercise 3: Verify a Fix Worked</summary>
+<p>After a colleague restarts a service, you're asked to confirm it's working. What's your verification process for nginx?</p>
+<p><strong>Hint:</strong> Three steps — service status, port listening, no new errors in logs.</p>
+</details>
+<details class="tip">
+<summary>Solution</summary>
+<div class="language-bash highlight"><span class="filename">Full nginx Health Check</span><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="c1"># 1. Service is running</span>
+</span><span id="__span-34-2"><a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a>systemctl<span class="w"> </span>status<span class="w"> </span>nginx
+</span><span id="__span-34-3"><a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a>
+</span><span id="__span-34-4"><a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a><span class="c1"># 2. Listening on expected ports</span>
+</span><span id="__span-34-5"><a id="__codelineno-34-5" name="__codelineno-34-5" href="#__codelineno-34-5"></a>ss<span class="w"> </span>-tlnp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>nginx
+</span><span id="__span-34-6"><a id="__codelineno-34-6" name="__codelineno-34-6" href="#__codelineno-34-6"></a>
+</span><span id="__span-34-7"><a id="__codelineno-34-7" name="__codelineno-34-7" href="#__codelineno-34-7"></a><span class="c1"># 3. No new errors in last 50 lines</span>
+</span><span id="__span-34-8"><a id="__codelineno-34-8" name="__codelineno-34-8" href="#__codelineno-34-8"></a>tail<span class="w"> </span>-50<span class="w"> </span>/var/log/nginx/error.log
+</span></code></pre></div>
+<p>Watch the logs for 30–60 seconds after the restart. A clean log with no new errors is a good sign.</p>
+</details>
+<h2 id="quick-recap">Quick Recap</h2>
+<p><strong>Service checks:</strong></p>
+<ol>
+<li><code>systemctl status</code> — Is it running?</li>
+<li><code>ss -tlnp</code> — Is it listening?</li>
+<li><code>tail -f</code> logs — Any errors?</li>
+</ol>
+<p><strong>Resource checks:</strong></p>
+<ol>
+<li><code>top</code> — CPU/memory overview</li>
+<li><code>df -h</code> — Disk space</li>
+<li><code>du -sh</code> — What's using space</li>
+</ol>
+<p><strong>Connectivity checks:</strong></p>
+<ol>
+<li><code>ping</code> — Basic reachability</li>
+<li><code>curl</code> — HTTP endpoints</li>
+<li><code>nc -zv</code> — Port connectivity</li>
+</ol>
+<hr />
+<h2 id="further-reading">Further Reading</h2>
+<h3 id="command-references">Command References</h3>
+<ul>
+<li><code>man systemctl</code> — Full systemctl documentation including all unit states and sub-commands</li>
+<li><code>man ss</code> — Socket statistics; replaces the deprecated <code>netstat</code> on modern systems</li>
+<li><code>man top</code> — Interactive process viewer; press <code>h</code> inside <code>top</code> for a keyboard shortcut reference</li>
+<li><code>man df</code> — Disk free space; <code>-i</code> shows inode usage (a different way a filesystem can "fill up")</li>
+<li><code>man du</code> — Disk usage; <code>--max-depth</code> controls how many levels deep to report</li>
+<li><code>man curl</code> — HTTP client with extensive options for testing endpoints and APIs</li>
+</ul>
+<h3 id="official-documentation">Official Documentation</h3>
+<ul>
+<li><a href="https://systemd.io/">systemd documentation</a> — Comprehensive systemd and systemctl reference</li>
+<li><a href="https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/9/html/configuring_basic_system_settings/managing-services-with-systemd_configuring-basic-system-settings">Red Hat: Managing Services with systemd</a> — Practical systemd service management guide</li>
+</ul>
+<h3 id="related-articles">Related Articles</h3>
+<ul>
+<li><a href="../reading_logs/">Reading Logs</a> — In-depth guide to log analysis; covers everything in the Tailing Logs section above and much more</li>
+<li><a href="../safe_exploration/">Safe Exploration</a> — Reminder of which commands are safe to run on production without permission</li>
+</ul>
+<h2 id="whats-next">What's Next?</h2>
+<p>You've learned what to do. Now let's cover what NOT to do. Head to <a href="../safety_guide/">The "Don't Do This" Guide</a> for production safety rules that will keep you out of trouble.</p>
+<div class="admonition tip">
+<p class="admonition-title">Write Down Your Findings</p>
+<p>When someone asks you to check something, report back with specifics:</p>
+<blockquote>
+<p>"Nginx is running (PID 1234, up for 5 days). It's listening on port 80 and 443. The last error in the logs was 2 hours ago and looks like a client timeout, not a server issue."</p>
+</blockquote>
+<p>Much better than "Yeah, it's fine."</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.annotate", "content.code.copy", "content.tabs.link", "content.code.highlight", "content.tooltips", "content.code.mermaid"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+    
+  </body>
+</html>
