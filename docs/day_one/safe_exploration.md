@@ -27,11 +27,11 @@ graph TD
     C --> D[Follow Logs<br/>tail -f]
     D --> E[Understand Server<br/>Confident & Safe]
 
-    style A fill:#2d3748,stroke:#4a5568,color:#fff
-    style E fill:#2f855a,stroke:#276749,color:#fff
-    style B fill:#2b6cb0,stroke:#2c5282,color:#fff
-    style C fill:#2b6cb0,stroke:#2c5282,color:#fff
-    style D fill:#2b6cb0,stroke:#2c5282,color:#fff
+    style A fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style B fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style C fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style D fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style E fill:#d69e2e,stroke:#cbd5e0,stroke-width:2px,color:#000
 ```
 
 ---
@@ -74,7 +74,7 @@ graph TD
 
 Before diving into a directory, peek at what's there:
 
-``` bash title="List Directory Contents"
+``` bash title="List Directory Contents" linenums="1"
 ls -la /var/log/
 ```
 
@@ -104,9 +104,11 @@ drwxr-xr-x 2 root root 4096 Jan 15 10:30 nginx
 
 See the structure without opening files:
 
-``` bash title="Show Directory Tree"
-tree /var/www/ -L 2
+``` bash title="Show Directory Tree" linenums="1"
+tree /var/www/ -L 2  # (1)!
 ```
+
+1. `-L 2` limits the output to 2 levels deep. Without a depth limit, `tree` recurses through every subdirectory — on a large application directory, this can dump thousands of lines.
 
 ```
 /var/www/
@@ -123,7 +125,7 @@ The `-L 2` limits depth to 2 levels (so you don't dump thousands of files).
 ??? tip "tree Not Installed?"
     Some minimal servers don't have `tree`. Use this alternative:
 
-    ``` bash title="Tree Alternative"
+    ``` bash title="Tree Alternative" linenums="1"
     find /var/www -maxdepth 2 -type d
     ```
 
@@ -133,7 +135,7 @@ The `-L 2` limits depth to 2 levels (so you don't dump thousands of files).
 
 ### Quick Peek at Small Files
 
-``` bash title="View Entire File"
+``` bash title="View Entire File" linenums="1"
 cat /etc/hostname
 # prod-web-01
 ```
@@ -144,7 +146,7 @@ Good for small files. Bad for large files (it dumps everything to your terminal)
 
 For anything more than a few lines, use `less`:
 
-``` bash title="Browse with less"
+``` bash title="Browse with less" linenums="1"
 less /var/log/syslog
 ```
 
@@ -173,11 +175,11 @@ Often you don't need to see the entire file—just the start to check format, or
     - Preview what a file contains without opening it all
     - Check documentation structure (README files, man pages)
 
-    ``` bash title="First 20 Lines"
+    ``` bash title="First 20 Lines" linenums="1"
     head -n 20 /var/log/nginx/access.log
     ```
 
-    ``` bash title="First 10 Lines (default)"
+    ``` bash title="First 10 Lines (default)" linenums="1"
     head /etc/hosts
     ```
 
@@ -190,15 +192,15 @@ Often you don't need to see the entire file—just the start to check format, or
     - Check if a process recently wrote to a file
     - Find the current state vs historical data
 
-    ``` bash title="Last 20 Lines"
+    ``` bash title="Last 20 Lines" linenums="1"
     tail -n 20 /var/log/nginx/access.log
     ```
 
-    ``` bash title="Last 50 Lines"
+    ``` bash title="Last 50 Lines" linenums="1"
     tail -n 50 /var/log/nginx/error.log
     ```
 
-    ``` bash title="Last 10 Lines (default)"
+    ``` bash title="Last 10 Lines (default)" linenums="1"
     tail /var/log/syslog
     ```
 
@@ -213,21 +215,23 @@ Often you don't need to see the entire file—just the start to check format, or
     - Check table structure and latest data without scrolling through everything
     - Common pattern: "Show me what the columns mean and the last few entries"
 
-    ``` bash title="Filesystem Headers + Last 3 Mounts"
-    df -h | { head -n 1; tail -n 3; }
+    ``` bash title="Filesystem Headers + Last 3 Mounts" linenums="1"
+    df -h | { head -n 1; tail -n 3; }  # (1)!
     # Filesystem      Size  Used Avail Use% Mounted on
     # /dev/sda5       100G   45G   50G  48% /data
     # /dev/sdb1       500G  320G  180G  64% /backups
     # tmpfs           7.8G     0  7.8G   0% /run/user/1000
     ```
 
+    1. `{ ; }` groups commands that both read from the same pipe. `head -n 1` consumes the header line; `tail -n 3` consumes the last 3 lines. Without the braces, you'd need to run `df -h` twice.
+
     **What you see:** The header row explaining the columns, then just the last 3 filesystem mounts—skipping everything in between.
 
-    ``` bash title="Process List Headers + Last 5 Processes"
+    ``` bash title="Process List Headers + Last 5 Processes" linenums="1"
     ps aux | { head -n 1; tail -n 5; }
     ```
 
-    ``` bash title="How It Works"
+    ``` bash title="How It Works" linenums="1"
     # The { } groups commands together
     # head -n 1 shows the header row
     # tail -n 3 shows the last 3 lines
@@ -242,7 +246,7 @@ This is incredibly useful for watching logs as they're being written:
 
 **Using `tail -f` (most common):**
 
-``` bash title="Watch Log Updates Live"
+``` bash title="Watch Log Updates Live" linenums="1"
 tail -f /var/log/nginx/access.log
 ```
 
@@ -252,7 +256,7 @@ New lines appear as they're written. Press `Ctrl+C` to stop.
 
 If you're already viewing a file in `less`, press `F` to enter follow mode (same as `tail -f`). Press `Ctrl+C` to stop following and return to normal `less` navigation.
 
-``` bash title="View File, Then Follow"
+``` bash title="View File, Then Follow" linenums="1"
 less /var/log/nginx/access.log
 # Press F to start following
 # Press Ctrl+C to stop following
@@ -284,7 +288,7 @@ Before running any command, ask yourself:
 
 === ":material-folder-open: What's in This Directory?"
 
-    ``` bash title="List Everything with Details"
+    ``` bash title="List Everything with Details" linenums="1"
     ls -la
     ```
 
@@ -298,7 +302,7 @@ Before running any command, ask yourself:
 
     Logs are almost always in `/var/log/`:
 
-    ``` bash title="Explore Log Directory"
+    ``` bash title="Explore Log Directory" linenums="1"
     ls -la /var/log/
     ```
 
@@ -313,29 +317,29 @@ Before running any command, ask yourself:
 
     **Quick peek at a file:**
 
-    ``` bash title="View a Small File"
+    ``` bash title="View a Small File" linenums="1"
     cat /etc/hostname
     ```
 
     **Browse a larger file:**
 
-    ``` bash title="Browse with less"
+    ``` bash title="Browse with less" linenums="1"
     less /var/log/syslog
     ```
 
     **See just the end (for logs):**
 
-    ``` bash title="Last 20 Lines"
+    ``` bash title="Last 20 Lines" linenums="1"
     tail -n 20 /var/log/syslog
     ```
 
 ---
 
-## Practice Exercises
+## Practice Problems
 
 Now that you know how to explore safely, try these hands-on exercises:
 
-??? question "Exercise 1: Explore a Directory"
+??? question "Problem 1: Explore a Directory"
     Navigate to `/var/log` and explore its structure without opening any files.
 
     1. List all files and directories with details
@@ -344,8 +348,8 @@ Now that you know how to explore safely, try these hands-on exercises:
 
     **Hint:** Use `ls -la` and optionally `tree`.
 
-    ??? tip "Solution"
-        ``` bash title="Explore /var/log"
+    ??? tip "Answer"
+        ``` bash title="Explore /var/log" linenums="1"
         # List everything with details
         ls -la /var/log
 
@@ -359,7 +363,7 @@ Now that you know how to explore safely, try these hands-on exercises:
         - Last modified dates (when was this last touched?)
         - Ownership (most owned by root or specific service accounts)
 
-??? question "Exercise 2: Read a Log File"
+??? question "Problem 2: Read a Log File"
     Look at the system log to see what's been happening on the server.
 
     1. View the last 20 lines of `/var/log/syslog` (or `/var/log/messages` on some systems)
@@ -367,8 +371,8 @@ Now that you know how to explore safely, try these hands-on exercises:
 
     **Hint:** Use `tail` with `-n 20` and `-f` flags.
 
-    ??? tip "Solution"
-        ``` bash title="View Recent System Logs"
+    ??? tip "Answer"
+        ``` bash title="View Recent System Logs" linenums="1"
         # See the last 20 lines
         tail -n 20 /var/log/syslog
 
@@ -381,7 +385,7 @@ Now that you know how to explore safely, try these hands-on exercises:
         - Service names (what's generating these messages)
         - Different message types (info, warning, error)
 
-??? question "Exercise 3: Explore Your Home Directory"
+??? question "Problem 3: Explore Your Home Directory"
     Get familiar with where your personal files live.
 
     1. List all files in your home directory (including hidden files)
@@ -390,8 +394,8 @@ Now that you know how to explore safely, try these hands-on exercises:
 
     **Hint:** Use `cd ~` to go home, then `ls -la` to list everything.
 
-    ??? tip "Solution"
-        ``` bash title="Explore Your Home"
+    ??? tip "Answer"
+        ``` bash title="Explore Your Home" linenums="1"
         # Go to your home directory
         cd ~
 

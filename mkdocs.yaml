@@ -1,11 +1,21 @@
 site_name: "Exploring Enterprise Linux"
 site_url: https://linux.bradpenney.io
+site_description: Enterprise Linux for developers and early-career professionals — from first SSH login to production system administration.
+site_author: Brad Penney
+
 extra:
   analytics:
     provider: google
     property: G-V01MJ4R3SQ
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/bradpenney
+    - icon: fontawesome/brands/linkedin
+      link: https://linkedin.com/in/bradpenney
+
 extra_css:
   - stylesheets/extra.css
+
 theme:
   name: material
   palette:
@@ -41,19 +51,34 @@ plugins:
   - meta
   - exclude:
       glob:
+        # New structure — all drafts
+        - "day_one/first_tasks.md"
+        - "essentials/*"
+        - "efficiency/*"
+        - "mastery/*"
+        # Old pre-overhaul directories — pending migration or deletion
+        - "administering_linux/*"
+        - "automation/*"
+        - "basic_toolset/*"
+        - "development/*"
+        - "essential_concepts/*"
+        - "getting_around/*"
         - "level_1/*"
         - "level_2/*"
         - "level_3/*"
         - "level_4/*"
         - "level_5/*"
         - "level_6/*"
+        - "scripting/*"
+        - "text_processing/*"
+        - "tuning/*"
   - social:
       cards: true
       cards_layout_options:
-        background_color: "#1a202c"  # Slate-900 (dark background)
-        color: "#cbd5e0"  # Light text for contrast
+        background_color: "#1a202c"
+        color: "#cbd5e0"
   - htmlproofer:
-      enabled: false  # Disabled during editorial review - re-enable when publishing
+      enabled: true
       validate_rendered_template: true
       validate_external_urls: false
       raise_error: true
@@ -84,65 +109,45 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - Day One - Getting Started:
+
+  - 🏥 Day One:
       - Overview: day_one/overview.md
       - Getting Access: day_one/getting_access.md
       - Orientation: day_one/orientation.md
-      - Permissions: day_one/permissions.md
+      - Understanding Permissions: day_one/permissions.md
       - Safe Exploration: day_one/safe_exploration.md
       - Reading Logs: day_one/reading_logs.md
+      - Finding Documentation: day_one/finding_docs.md
+      - The "Don't Do This" Guide: day_one/safety_guide.md
 
-  # EDITORIAL NOTE: Content below is commented out pending quality review
-  # Goal: Match cs.bradpenney.io standards before publishing
-  # Uncomment articles ONE AT A TIME after thorough editorial vetting
-  # See CLAUDE.md for quality standards and vetting checklist
+  # 📦 Essentials — The foundation every Linux professional must own cold
+  # - 📦 Essentials:
+  #     - Command Line Fundamentals: essentials/command_line_fundamentals.md
+  #     - Finding Files: essentials/finding_files.md
+  #     - Finding Help: essentials/finding_help.md
+  #     - Filesystem Hierarchy: essentials/filesystem_hierarchy.md
+  #     - File Permissions: essentials/file_permissions.md
+  #     - Users and Groups: essentials/users_and_groups.md
+  #     - Pipes and Redirection: essentials/pipes_and_redirection.md
+  #     - grep: essentials/grep.md
+  #     - Processes: essentials/processes.md
 
-  #
-  #     - Reading Logs: day_one/reading_logs.md
-  #     - Finding Documentation: day_one/finding_docs.md
-  #     - First Tasks: day_one/first_tasks.md
-  #     - Safety Guide: day_one/safety_guide.md
+  # ⚡ Efficiency — Daily-use tools for working Linux professionals
+  # - ⚡ Efficiency:
+  #     - Services with systemd: efficiency/systemd.md
+  #     - sed: efficiency/sed.md
+  #     - Bash Scripting Basics: efficiency/bash_scripting_basics.md
+  #     - Bash Scripting Patterns: efficiency/bash_scripting_patterns.md
+  #     - Package Management: efficiency/package_management.md
+  #     - Networking Basics: efficiency/networking_basics.md
+  #     - Shell Shortcuts and History: efficiency/shell_shortcuts.md
 
-  # - Level 1 - Everyday Navigation:
-  #     - Overview: level_1/overview.md
-  #     - Working Efficiently with Remote Systems: level_1/working_efficiently_with_remote_systems.md
-  #     - Using the Command Line: getting_around/using_the_command_line.md
-  #     - Finding Files: getting_around/finding_files.md
-  #     - Finding Help: getting_around/finding_help.md
-  #     - Generating the Manual: getting_around/generating_the_manual.md
-  #     # DRAFT CONTENT: level_1/_DRAFT_finding_and_filtering.md contains advanced exploration
-  #     # content removed from Day One (find, grep, ps, systemctl). Review and integrate when
-  #     # creating Level 1 finding/filtering articles.
-  # - Level 2 - Finding & Filtering:
-  #     - Overview: level_2/overview.md
-  #     - Pipes and Redirection: text_processing/pipes_and_redirection.md
-  #     - Grep: text_processing/grep.md
-  #     - Sed: text_processing/sed.md
-  # - Level 3 - Processes & Permissions:
-  #     - Overview: level_3/overview.md
-  #     - File Permissions: essential_concepts/file_permissions.md
-  # - Level 4 - System Management:
-  #     - Overview: level_4/overview.md
-  #     - File System Hierarchy: essential_concepts/filesystem_hierarchy.md
-  #     - Adding Storage: administering_linux/adding_storage.md
-  #     - Logical Volume Management Basics: administering_linux/lvm_basics.md
-  #     - Network File Share Server: administering_linux/network_file_share_server.md
-  #     - Accessing Network Storage: administering_linux/accessing_network_storage.md
-  # - Level 5 - Under the Hood:
-  #     - Overview: level_5/overview.md
-  #     - Systemd: tuning/systemd.md
-  #     - System Tuning: tuning/tuning.md
-  # - Level 6 - Special Topics:
-  #     - Overview: level_6/overview.md
-  #     - Shells: basic_toolset/shells.md
-  #     - Text Editors: basic_toolset/text_editors.md
-  #     - File Pagers: basic_toolset/file_pagers.md
-  #     - Shell History: basic_toolset/shell_history.md
-  #     - BASH Shortcuts: basic_toolset/BASH_shortcuts.md
-  #     - Hello World Script: scripting/hello_world.md
-  #     - If/Else Statements: automation/ifElseStatements.md
-  #     - Case Statements: automation/caseStatements.md
-  #     - Testing Parameters: automation/testingNumberOfParameters.md
-  #     - Development: development/development.md
-  #     - Introducing Podman: development/introducingPodman.md
-  #     - Containers as Services: development/rootless_containers_as_services.md
+  # 🎯 Mastery — Production-grade Linux for the serious professional
+  # - 🎯 Mastery:
+  #     - Storage and Filesystems: mastery/storage_and_filesystems.md
+  #     - Logical Volume Management: mastery/lvm.md
+  #     - Network File Shares: mastery/network_file_shares.md
+  #     - System Tuning: mastery/system_tuning.md
+  #     - Containers with Podman: mastery/containers.md
+  #     - Text Editors: mastery/text_editors.md
+  #     - Terminal Tools: mastery/terminal_tools.md

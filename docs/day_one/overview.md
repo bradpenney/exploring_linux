@@ -1,144 +1,68 @@
 ---
-title: Day One - Getting Started with Linux
-description: New to Linux? The Day One series takes you from nervous first login to confident navigation—covering access, orientation, permissions, and safe exploration.
+title: Day One - Linux for Developers
+description: Linux survival guide for developers — SSH, orientation, permissions, logs, documentation, and production safety rules. Get effective without becoming a sysadmin.
 ---
 
-# Day One: Getting Started with Linux
+# Day One: Linux for Developers
 
-!!! tip "Every Linux expert started exactly where you are. This is Day One."
+Your code runs in production — on servers, in containers, in Kubernetes clusters. Every pod
+runs on a Linux node. Every CI/CD runner is Linux underneath. The OS you're learning isn't
+a prerequisite for the real work — it *is* the environment the real work lives in.
 
-## Welcome to Linux
+Day One closes the gap between "I use it" and "I can work in it." No hand-holding, no
+sysadmin deep-dives. Just what you need to be effective.
 
-This is your first time working with a Linux system, and you're probably feeling one of two ways:
+## What You'll Be Able to Do
 
-- **Excited:** "I've heard Linux runs everything! Time to learn!"
-- **Nervous:** "I just got server access for work and have no idea what I'm doing..."
+By the end of Day One, you'll handle these situations without hesitation:
 
-**Both are valid. You're in the right place.**
+| Situation | Skill |
+|:----------|:------|
+| Someone hands you SSH credentials | Connect from any machine |
+| You're on an unfamiliar server | Orient yourself in under a minute |
+| You're not sure what you're allowed to do | Read and work within your permissions |
+| You want to explore without risk | Safe read-only reconnaissance |
+| Your application is behaving strangely | Find and read the relevant logs |
 
-This guide is for anyone starting their Linux journey—whether someone handed you SSH credentials to a production server, or you're setting up your own Linux environment to learn and experiment.
+## Two Starting Points
 
-## What You'll Learn
+=== ":material-server-network: You have server credentials"
 
-By the end of Day One, you'll have these essential Linux skills:
+    Someone gave you an IP address, a username, and either a password or an SSH key.
+    Maybe it's a CI/CD server, a staging environment, or a production system.
 
-| Skill | What You'll Master |
-|-------|-------------------|
-| **Getting Access** | Connect via SSH or set up your own Linux environment |
-| **Orientation** | Know where you are, what server, who you are |
-| **Permissions** | Understand your access level and use `sudo` safely |
-| **Safe Exploration** | Look around without breaking things |
-| **Reading Logs** | Use `tail`, `grep`, and `journalctl` effectively |
-| **Finding Help** | Know where to look when stuck |
-| **Avoiding Mistakes** | Common pitfalls that impact production |
+    Start with **[Getting Access](getting_access.md)** — we'll get you connected and
+    oriented on a system you've never seen before.
 
-## Two Paths, One Destination
+=== ":material-laptop: You're setting up your own environment"
 
-This guide acknowledges that people come to Linux from different starting points:
+    You want to learn and experiment without risk to anything real. WSL2 on Windows,
+    a VM in VirtualBox, or a cloud instance you control.
 
-=== ":material-server-network: SSH Access"
-
-    **You have server credentials.**
-
-    Someone gave you an IP address, username, and password. Maybe it's a production server, staging environment, or cloud instance. You need to connect and start working—safely.
-
-    **We'll cover:** Connecting via SSH, orienting yourself on an unfamiliar system, understanding what you can and cannot do, and staying in read-only mode until you're comfortable.
-
-=== ":material-laptop: Local Setup"
-
-    **You're setting up your own environment.**
-
-    You want to learn Linux but don't have a server. You're choosing between WSL2, VirtualBox, cloud providers, or a physical install. You want a safe playground to experiment.
-
-    **We'll cover:** Quick setup options with links to official guides, choosing what works for your situation, and validating your environment is ready.
-
-**Either way:** Once you've got access to a Linux terminal, you're on the same journey. The commands work the same, the concepts are identical, and you'll build the same foundational skills.
-
-## Who This Is For
-
-<div class="grid cards" markdown>
-
--   :material-account-check: **Perfect For**
-
-    ---
-
-    **Developers** — First-time server access
-
-    **Junior DevOps** — Starting your journey
-
-    **Students** — Learning for class or career
-
-    **Hobbyists** — Hands-on exploration
-
-    **Career Changers** — Moving to systems work
-
--   :material-shield-check: **You Don't Need**
-
-    ---
-
-    **Prior Experience** — We assume none
-
-    **CS Degree** — Concepts explained clearly
-
-    **Command Memorization** — We teach how to find help
-
-    **Fear** — Safety emphasized throughout
-
-</div>
+    Still start with **[Getting Access](getting_access.md)** — it covers local setup
+    options and gets you to a working Linux terminal either way.
 
 ## The Articles
 
-Work through these in order for the full Day One experience:
+Work through these in order:
 
-1. **[Getting Access to Linux](getting_access.md)** - Connect via SSH or set up your own environment
-2. **[First 60 Seconds: Orientation](orientation.md)** - Where am I? What is this server? Who am I?
-3. **[Understanding Your Permissions](permissions.md)** - What can I actually do here? Groups, `sudo`, and access levels
-4. **[Safe Exploration](safe_exploration.md)** - How to look around without breaking things
-5. **[Reading Logs Like a Pro](reading_logs.md)** - `tail`, `journalctl`, and `grep`
-6. **Finding Documentation** - Where's the team wiki? (coming soon)
-7. **Common First Tasks** - Checking status, finding configs (coming soon)
-8. **The "Don't Do This" Guide** - Safety rules for real systems (coming soon)
+1. **[Getting Access](getting_access.md)** — Connect via SSH or set up a local Linux environment
+2. **[Orientation](orientation.md)** — Where am I? What is this server? Who am I?
+3. **[Understanding Permissions](permissions.md)** — What can I do here, and what's off-limits?
+4. **[Safe Exploration](safe_exploration.md)** — How to look around without touching anything risky
+5. **[Reading Logs](reading_logs.md)** — `tail`, `journalctl`, and `grep` for debugging your application
+6. **[Finding Documentation](finding_docs.md)** — man pages, README files, git history, and what the server tells you about itself
+7. **[The "Don't Do This" Guide](safety_guide.md)** — Production safety rules that will keep you out of trouble
 
-!!! tip "Articles Publishing Soon"
-    Articles are being published as they're reviewed for quality. Start with Getting Access to get connected to a Linux system.
+## One Rule for Production Systems
 
-## The Philosophy
+You won't break anything by reading. Checking logs, listing processes, looking at files —
+these are all safe. The line is **writing**: modifying files, restarting services,
+changing configuration. Stay read-only until you understand a system.
 
-Throughout Day One, we emphasize **safety and confidence**. How you approach Linux depends on your environment:
-
-=== ":material-server: Production Systems"
-
-    **If you're working on a real server** (production, staging, team infrastructure):
-
-    - **You won't break production by looking at things.** Reading logs, checking processes, exploring files—these are safe operations.
-    - **We stay read-only until you know more.** No deleting files, no restarting services, no making changes until you understand the system.
-    - **It's okay to ask questions.** Everyone was new to this once. Your team would rather you ask than guess wrong.
-
-=== ":material-laptop: Personal Systems"
-
-    **If you're learning on your own** (VM, WSL2, personal server):
-
-    - **Breaking things is how you learn.** In a safe environment, mistakes are educational.
-    - **You can always rebuild.** VMs can be snapshotted and restored. WSL2 can be reset. Cloud instances can be deleted and recreated.
-    - **Experimentation is encouraged.** Try commands. See what happens. Learn by doing.
-
-## Our Teaching Approach
-
-Day One focuses on **practical, immediate needs**—the skills you need in your first hours and days working with Linux.
-
-- **The "Why"** — Understanding purpose, not just syntax
-- **Real Scenarios** — Situations you'll actually encounter
-- **Finding Answers** — How to help yourself when stuck
-- **Safety Habits** — Practices that serve you forever
-
-## What's Next?
-
-Once you're comfortable navigating a Linux system and reading logs, you're ready for **Level 1: Everyday Navigation**. That's where you'll level up your command-line skills with the tools you'll use hundreds of times a day.
+When in doubt, ask. Every experienced engineer on your team has made mistakes on production
+systems. They'd rather answer a question than clean up an incident.
 
 ---
 
-## Ready?
-
-Start with **[Getting Access to Linux](getting_access.md)** and we'll get you connected to a Linux system.
-
-Remember: The person who looks like a Linux wizard today? They had a Day One too. This is yours.
+Ready? Start with **[Getting Access](getting_access.md)**.

@@ -1,111 +1,54 @@
 ---
 title: Exploring Enterprise Linux
-description: Exploring Enterprise Linux teaches practical Linux skills with production safety in mind—from first server login to system administration.
+description: Enterprise Linux for developers and early-career professionals — from first SSH login to production system administration.
 ---
 <img src="images/exploring_linux.png" alt="Exploring Linux" class="img-responsive-right" width="300">
 
 # Exploring Enterprise Linux
 
-**From nervous SSH login to confident system administration.**
+Linux runs the infrastructure that matters — the servers, the pipelines, the containers,
+the cloud. Whether you need to work on it or want to master it, this site gets you there.
 
-A subsection of [BradPenney.io](https://bradpenney.io), this site teaches practical Linux skills for developers and system administrators. It emphasizes real-world scenarios, production safety, and the "why" behind every command.
+## Two Tracks, Two Goals
+
+This site serves two different people with two different relationships to Linux.
+
+### 🏥 Day One — For developers who need Linux for their work
+
+You're a serious engineer — C++, Rust, Go, Java — and Linux is where your work lives.
+You're not trying to become a sysadmin. You want to get connected, stay safe, not break
+anything, and get back to what you actually care about building.
+
+Day One gives you exactly what you need and nothing you don't.
+
+- [Overview](day_one/overview.md)
+- [Getting Access](day_one/getting_access.md) — SSH connection and local setup
+- [Orientation](day_one/orientation.md) — First 60 seconds on a new server
+- [Understanding Permissions](day_one/permissions.md) — What you can and can't do
+- [Safe Exploration](day_one/safe_exploration.md) — Look around without breaking things
+- [Reading Logs](day_one/reading_logs.md) — Debug your application with journalctl and grep
+- [Finding Documentation](day_one/finding_docs.md) — man pages, git history, and what the server tells you
+- [The "Don't Do This" Guide](day_one/safety_guide.md) — Production safety rules that keep you out of trouble
+
+### 📦⚡🎯 Essentials / Efficiency / Mastery — For the Linux professional
+
+You're building a career here. Junior sysadmin, junior DevOps, junior platform engineer.
+Linux isn't just a tool — it's the craft. You want to actually understand how it works,
+be the person your team relies on, and build toward senior responsibilities.
+
+The three tracks take you from core fundamentals to production-grade skills:
+
+**📦 Essentials** — The commands and concepts every Linux professional must own cold.
+File permissions, process management, pipes and redirection, grep. The foundation
+everything else is built on.
+
+**⚡ Efficiency** — The daily-use skills that separate professionals who get things done.
+systemd, shell scripting, package management, networking basics. What you'll use every day.
+
+**🎯 Mastery** — Production-grade Linux for serious professionals. Storage, LVM, containers,
+system tuning. The skills that take you from junior to someone who can own infrastructure.
 
 ---
 
-## Learning Path
-
-<div class="grid cards" markdown>
-
-- :material-login-variant: **[Day One - Getting Started](day_one/overview.md)**
-
-    ---
-
-    **[Getting Access](day_one/getting_access.md)** — SSH connection, local setup (WSL2, VirtualBox, Cloud)
-
-    **[Orientation](day_one/orientation.md)** — First 60 seconds on a new server, system reconnaissance
-
-    **[Understanding Your Permissions](day_one/permissions.md)** — Access levels, `sudo`, and file permission basics
-
-    **[Safe Exploration](day_one/safe_exploration.md)** — Read-only reconnaissance without breaking things
-
-    **[Reading Logs Like a Pro](day_one/reading_logs.md)** — `tail`, `grep`, and `journalctl` for production debugging
-
-    **Finding Documentation, First Tasks, Safety Guide** — *(coming soon)*
-
-- :material-console-line: **Level 1 - Everyday Navigation** *(Coming Soon)*
-
-    ---
-
-    **Moving Around** — `ls`, `cd`, `pwd`, directory navigation
-
-    **File Management** — `cp`, `mv`, `rm`, `mkdir`, creating and organizing
-
-    **Viewing Files** — `cat`, `less`, `head`, `tail`, reading file contents
-
-- :material-magnify: **Level 2 - Finding & Filtering** *(Coming Soon)*
-
-    ---
-
-    **Searching** — `find`, `locate`, searching the filesystem
-
-    **Text Processing** — `grep`, `awk`, `sed`, pattern matching
-
-    **Pipes & Redirection** — Combining commands, shaping output
-
-- :material-cog-outline: **Level 3 - Processes & Permissions** *(Coming Soon)*
-
-    ---
-
-    **Processes** — `ps`, `top`, `kill`, managing running programs
-
-    **Permissions** — `chmod`, `chown`, file and directory access control
-
-    **Users & Groups** — User management, sudo, access levels
-
-- :material-server: **Level 4 - System Management** *(Coming Soon)*
-
-    ---
-
-    **Services** — `systemd`, `systemctl`, `journalctl`, service management
-
-    **Networking** — IP configuration, DNS, SSH, firewall basics
-
-    **Storage** — Filesystems, mounting, LVM, disk management
-
-- :material-chip: **Level 5 - Under the Hood** *(Coming Soon)*
-
-    ---
-
-    **Boot Process** — GRUB, initramfs, systemd startup sequence
-
-    **Kernel & /proc** — Understanding `/proc`, `/sys`, kernel parameters
-
-    **Advanced Concepts** — Namespaces, cgroups, memory management
-
-- :material-tools: **Level 6 - Special Topics** *(Coming Soon)*
-
-    ---
-
-    **Shell Scripting** — Bash scripts, automation, best practices
-
-    **Containers** — Podman, Docker, rootless containers as services
-
-    **Advanced Tools** — `tmux`, text editors, dotfiles, cron jobs
-
-</div>
-
-## Philosophy
-
-This site teaches Linux with **production safety in mind**. Every article emphasizes:
-
-- **Real-world scenarios** you'll encounter on actual servers
-- **Safety-first approach** — when commands are dangerous and why
-- **Purpose-driven learning** — understanding the "why," not just memorizing syntax
-- **Progressive complexity** — from Day One orientation to system internals
-
-Whether you just received SSH credentials to your first production server or you're deepening your Linux expertise, this site meets you where you are.
-
-## Connect
-
-- Main site: [bradpenney.io](https://bradpenney.io)
-- Source code: [GitHub](https://github.com/bradpenney/exploring_linux)
+*New to Linux entirely? Start with [Day One: Getting Access](day_one/getting_access.md).*
+*Building a Linux career? The **Essentials** track is coming soon.*

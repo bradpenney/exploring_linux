@@ -20,47 +20,47 @@ Reading logs is probably the most important skill for debugging production syste
 
 ``` mermaid
 graph TD
-    A["🚨 Something Is Broken"] --> B["Find the Logs<br/>ls -la /var/log/"]
-    B --> C["View Recent Entries<br/>tail -100 logfile"]
-    C --> D["Search for Errors<br/>grep -i error logfile"]
-    D --> E{"Pattern Found?"}
-    E -->|Yes| F["Narrow the Time Window<br/>journalctl --since"]
-    E -->|No| G["Check Service Logs<br/>journalctl -u service"]
+    A["🚨 Something Is Broken"] --> B["Check Service Logs<br/>journalctl -u service"]
+    B --> C["Filter by Priority<br/>journalctl -p err"]
+    C --> D{"Pattern Found?"}
+    D -->|Yes| E["Narrow Time Window<br/>journalctl --since/--until"]
+    D -->|No| F["Check Flat File Logs<br/>tail /var/log/app/"]
+    F --> G["Search with grep<br/>grep -i error logfile"]
     G --> D
-    F --> H["✅ Root Cause Identified"]
+    E --> H["✅ Root Cause Identified"]
 
-    style A fill:#c92a2a,stroke:#ff6b6b,color:#fff
-    style H fill:#2f9e44,stroke:#51cf66,color:#fff
-    style B fill:#2b6cb0,stroke:#2c5282,color:#fff
-    style C fill:#2b6cb0,stroke:#2c5282,color:#fff
-    style D fill:#2b6cb0,stroke:#2c5282,color:#fff
-    style E fill:#d97706,stroke:#b45309,color:#fff
-    style F fill:#2b6cb0,stroke:#2c5282,color:#fff
-    style G fill:#2b6cb0,stroke:#2c5282,color:#fff
+    style A fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style B fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style C fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style D fill:#4a5568,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style E fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style F fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style G fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style H fill:#d69e2e,stroke:#cbd5e0,stroke-width:2px,color:#000
 ```
 
 ---
 
 ## Where Are the Logs?
 
-Most logs live in `/var/log/`:
+On modern enterprise Linux (RHEL 8+, Ubuntu 22.04+, Debian 12+), logs come from two sources — and knowing which to reach for first matters.
 
-``` bash title="List Log Files"
-ls -la /var/log/
-```
+**systemd-journald** collects logs from every service, the kernel, and the boot process into a structured binary journal. It's always running. `journalctl` is how you read it. For any system service issue, start here.
 
-**Common log files:**
+**Flat log files** in `/var/log/` are written by applications that manage their own logging — nginx, Apache, MySQL, and your own application code. These exist regardless of journald.
 
-| Log File | What It Contains |
-|----------|------------------|
-| `/var/log/syslog` or `/var/log/messages` | General system logs |
-| `/var/log/auth.log` or `/var/log/secure` | Authentication (logins, sudo) |
-| `/var/log/dmesg` | Kernel messages (hardware, boot) |
-| `/var/log/nginx/` | Nginx access and error logs |
-| `/var/log/apache2/` | Apache logs |
-| `/var/log/mysql/` | MySQL/MariaDB logs |
+!!! tip "Does /var/log/syslog exist on your server?"
+    On older systems, `rsyslog` bridges journald into `/var/log/syslog` or `/var/log/messages`. On many modern minimal installs, rsyslog isn't installed and those files simply don't exist. That's normal. Use `journalctl` for system events instead.
 
-**Application-specific logs** often live in:
+| You're investigating... | Start with |
+|------------------------|------------|
+| A system service (nginx, sshd, your app) | `journalctl -u servicename` |
+| Authentication failures | `journalctl -u sshd` |
+| Kernel / hardware events | `journalctl -k` |
+| App flat files (nginx access logs, custom logs) | `tail`, `grep` on `/var/log/appname/` |
+| Not sure where to start | `journalctl -p err --since "1 hour ago"` |
+
+**Application-specific flat file logs** often live in:
 
 - `/var/log/appname/`
 - `/opt/appname/logs/`
@@ -68,6 +68,77 @@ ls -la /var/log/
 - Wherever the app was configured to write them
 
 Ask your team: "Where do the application logs live?" Every app is different.
+
+---
+
+## journalctl — System and Service Logs
+
+On modern Linux, `journalctl` is your primary log tool. Every service managed by systemd sends its output to the journal automatically — no log file path to find, no permission hunting.
+
+!!! tip "Access Requirements"
+    On many systems, `journalctl` without `sudo` only shows logs for your own user. If you're getting empty output or "permission denied" errors, either run it with `sudo`, or ask your team to add you to the `systemd-journal` group — which grants read access to all system logs without needing full sudo.
+
+### Logs for a Specific Service
+
+This is where journalctl shines — no hunting for the right log file:
+
+``` bash title="Nginx Logs Only" linenums="1"
+journalctl -u nginx
+```
+
+``` bash title="MySQL Logs Only" linenums="1"
+journalctl -u mysql
+```
+
+``` bash title="SSH Logs Only" linenums="1"
+journalctl -u sshd
+```
+
+### View All Recent Logs
+
+``` bash title="Recent System Logs" linenums="1"
+journalctl -n 50
+```
+
+Shows the last 50 log entries from all services.
+
+### Follow Logs in Real-Time
+
+``` bash title="Follow All Logs" linenums="1"
+journalctl -f
+```
+
+Like `tail -f` but for all system logs at once. Add `-u servicename` to follow one service.
+
+### Show Only Errors and Warnings
+
+``` bash title="Errors and Above" linenums="1"
+journalctl -p err
+```
+
+Priority levels: `emerg`, `alert`, `crit`, `err`, `warning`, `notice`, `info`, `debug`
+
+### Logs Since a Specific Time
+
+``` bash title="Logs from the Last Hour" linenums="1"
+journalctl --since "1 hour ago"
+```
+
+``` bash title="Logs from Today" linenums="1"
+journalctl --since today
+```
+
+``` bash title="Logs from Specific Time Range" linenums="1"
+journalctl --since "2024-01-15 14:00" --until "2024-01-15 15:00"
+```
+
+### Combine Service, Time, and Priority
+
+``` bash title="Recent Nginx Errors" linenums="1"
+journalctl -u nginx --since "1 hour ago" -p err
+```
+
+This is usually the right starting point for any service problem: narrow by service, time, and severity in one command.
 
 ---
 
@@ -111,7 +182,7 @@ Before reaching for `tail` or `grep`, it helps to know what you're looking at. L
     - `4xx` codes — Client errors (404 not found, 401 unauthorized)
     - `5xx` codes — Server errors (500 internal error, 502 bad gateway)
 
-    ``` bash title="Find All 500 Errors"
+    ``` bash title="Find All 500 Errors" linenums="1"
     grep '" 500 ' /var/log/nginx/access.log
     ```
 
@@ -127,7 +198,9 @@ Before reaching for `tail` or `grep`, it helps to know what you're looking at. L
 
 ---
 
-## The Essential Log Commands
+## Flat File Log Commands
+
+For application logs that write directly to `/var/log/` — nginx access logs, database logs, custom application output — use these tools. They also work on any service where flat files exist alongside journald.
 
 === ":material-arrow-down: View Recent Entries"
 
@@ -135,11 +208,11 @@ Before reaching for `tail` or `grep`, it helps to know what you're looking at. L
 
     Most recent entries are at the bottom of a log file — start there:
 
-    ``` bash title="Last 20 Lines"
+    ``` bash title="Last 20 Lines" linenums="1"
     tail -20 /var/log/syslog
     ```
 
-    ``` bash title="Last 100 Lines (for more history)"
+    ``` bash title="Last 100 Lines (for more history)" linenums="1"
     tail -100 /var/log/nginx/error.log
     ```
 
@@ -151,7 +224,7 @@ Before reaching for `tail` or `grep`, it helps to know what you're looking at. L
 
     This is the killer feature — new log entries appear as they're written:
 
-    ``` bash title="Follow Log in Real-Time"
+    ``` bash title="Follow Log in Real-Time" linenums="1"
     tail -f /var/log/nginx/access.log
     ```
 
@@ -159,7 +232,7 @@ Before reaching for `tail` or `grep`, it helps to know what you're looking at. L
 
     **Follow multiple logs at once:**
 
-    ``` bash title="Watch Access and Error Logs Together"
+    ``` bash title="Watch Access and Error Logs Together" linenums="1"
     tail -f /var/log/nginx/access.log /var/log/nginx/error.log
     ```
 
@@ -169,7 +242,7 @@ Before reaching for `tail` or `grep`, it helps to know what you're looking at. L
 
     **When to use:** The log file is huge and you need to scroll around, search, or read it like a document.
 
-    ``` bash title="Open Log in Browser"
+    ``` bash title="Open Log in Browser" linenums="1"
     less /var/log/syslog
     ```
 
@@ -177,9 +250,11 @@ Before reaching for `tail` or `grep`, it helps to know what you're looking at. L
 
     | Key | Action |
     |-----|--------|
-    | `G` | Jump to end (most recent entries) |
+    | `Space` | Page down |
+    | `b` | Page up |
+    | `G` | **Jump to end (most recent entries)** |
     | `g` | Jump to beginning |
-    | `/error` | Search forward for "error" |
+    | `/pattern` | Search forward |
     | `n` | Next search match |
     | `N` | Previous search match |
     | `q` | Quit |
@@ -190,7 +265,7 @@ Before reaching for `tail` or `grep`, it helps to know what you're looking at. L
 
     **When to use:** You want to know when a log file was created, or check the log format before diving in.
 
-    ``` bash title="First 20 Lines"
+    ``` bash title="First 20 Lines" linenums="1"
     head -20 /var/log/syslog
     ```
 
@@ -217,7 +292,7 @@ Before reaching for `tail` or `grep`, it helps to know what you're looking at. L
 
 **When to use:** You want to see every line in a log file that mentions an error.
 
-``` bash title="Find Error Lines"
+``` bash title="Find Error Lines" linenums="1"
 grep -i "error" /var/log/syslog
 ```
 
@@ -227,13 +302,15 @@ grep -i "error" /var/log/syslog
 
 **When to use:** You found an error but need to understand what led up to it. Errors rarely happen in isolation.
 
-``` bash title="Show Context Around Errors"
-grep -i -C 3 "error" /var/log/nginx/error.log
+``` bash title="Show Context Around Errors" linenums="1"
+grep -i -C 3 "error" /var/log/nginx/error.log  # (1)!
 ```
+
+1. `-C 3` shows 3 lines of **C**ontext before AND after each match. Errors rarely happen in isolation — the surrounding lines show what the system was doing when it failed.
 
 `-C 3` shows 3 lines before AND after each match. Use `-B` and `-A` separately when you need asymmetric context:
 
-``` bash title="More History, Less After"
+``` bash title="More History, Less After" linenums="1"
 grep -i -B 5 -A 1 "error" /var/log/nginx/error.log
 ```
 
@@ -243,7 +320,7 @@ grep -i -B 5 -A 1 "error" /var/log/nginx/error.log
 
 **When to use:** The log file has been running for weeks and you only care about recent activity. Grepping a multi-gigabyte log is slow and buries current errors in historical noise.
 
-``` bash title="Search Only Recent Log Entries"
+``` bash title="Search Only Recent Log Entries" linenums="1"
 tail -500 /var/log/nginx/error.log | grep -i "error"
 ```
 
@@ -255,14 +332,14 @@ tail -500 /var/log/nginx/error.log | grep -i "error"
 
 First, check the timestamp format in your log — it varies between applications, and this is exactly where [checking the format first](#reading-common-log-formats) with `head` pays off:
 
-``` bash title="Check Timestamp Format First"
+``` bash title="Check Timestamp Format First" linenums="1"
 head -3 /var/log/syslog
 # Jan 15 14:23:45 prod-web-01 ...
 ```
 
 Then grep for entries in that window:
 
-``` bash title="Find Entries from Specific Time"
+``` bash title="Find Entries from Specific Time" linenums="1"
 grep "Jan 15 14:" /var/log/syslog
 ```
 
@@ -272,11 +349,11 @@ grep "Jan 15 14:" /var/log/syslog
 
 **When to use:** You're not sure which log file contains the error, or you want to sweep an entire log directory at once.
 
-``` bash title="Search All Logs in a Directory"
+``` bash title="Search All Logs in a Directory" linenums="1"
 grep -r -i "connection refused" /var/log/nginx/
 ```
 
-``` bash title="Search All System Logs"
+``` bash title="Search All System Logs" linenums="1"
 grep -r -i "out of memory" /var/log/
 ```
 
@@ -286,83 +363,12 @@ grep -r -i "out of memory" /var/log/
 
 **When to use:** You want to gauge the scale of a problem before diving into the details.
 
-``` bash title="Count Error Occurrences"
+``` bash title="Count Error Occurrences" linenums="1"
 grep -c "connection refused" /var/log/syslog
 # 47
 ```
 
 **Key insight:** Start with `-c` to understand severity. Three occurrences might be noise; 47 in the last hour is worth dropping everything for. Once you know the scale, remove the `-c` to read the actual lines.
-
----
-
-## journalctl - The Modern Log Tool
-
-On systems using systemd (most modern Linux), `journalctl` is incredibly powerful.
-
-!!! tip "Access Requirements"
-    On many systems, `journalctl` without `sudo` only shows logs for your own user. If you're getting empty output or "permission denied" errors, either run it with `sudo`, or ask your team to add you to the `systemd-journal` group — which grants read access to all system logs without needing full sudo.
-
-### View All Recent Logs
-
-``` bash title="Recent System Logs"
-journalctl -n 50
-```
-
-Shows the last 50 log entries from all services.
-
-### Follow Logs in Real-Time
-
-``` bash title="Follow All Logs"
-journalctl -f
-```
-
-Like `tail -f` but for all system logs at once.
-
-### View Logs for a Specific Service
-
-This is where journalctl shines:
-
-``` bash title="Nginx Logs Only"
-journalctl -u nginx
-```
-
-``` bash title="MySQL Logs Only"
-journalctl -u mysql
-```
-
-``` bash title="SSH Logs Only"
-journalctl -u sshd
-```
-
-### Logs Since a Specific Time
-
-``` bash title="Logs from the Last Hour"
-journalctl --since "1 hour ago"
-```
-
-``` bash title="Logs from Today"
-journalctl --since today
-```
-
-``` bash title="Logs from Specific Time Range"
-journalctl --since "2024-01-15 14:00" --until "2024-01-15 15:00"
-```
-
-### Show Only Errors and Warnings
-
-``` bash title="Errors and Above"
-journalctl -p err
-```
-
-Priority levels: `emerg`, `alert`, `crit`, `err`, `warning`, `notice`, `info`, `debug`
-
-### Combine Service and Time
-
-``` bash title="Recent Nginx Errors"
-journalctl -u nginx --since "1 hour ago" -p err
-```
-
-This command says: "Show me nginx errors from the last hour."
 
 ---
 
@@ -374,13 +380,13 @@ Pick the scenario that matches your situation:
 
     **Goal:** Find out what was happening on the server around a specific time.
 
-    ``` bash title="Investigate a Time Window"
+    ``` bash title="Investigate a Time Window" linenums="1"
     journalctl --since "14:25" --until "14:35"
     ```
 
     Or grep a log file directly if you know the format:
 
-    ``` bash title="Grep for Time Window in Syslog"
+    ``` bash title="Grep for Time Window in Syslog" linenums="1"
     grep "14:3" /var/log/syslog | less
     ```
 
@@ -390,7 +396,15 @@ Pick the scenario that matches your situation:
 
     **Goal:** Find which error is happening most often so you know where to start.
 
-    ``` bash title="Find Most Common Errors"
+    If your app is a systemd service:
+
+    ``` bash title="Find Most Common Errors (systemd service)" linenums="1"
+    journalctl -u myapp --since today -p err | sort | uniq -c | sort -rn | head -10
+    ```
+
+    If your app writes flat log files:
+
+    ``` bash title="Find Most Common Errors (flat log file)" linenums="1"
     grep -i "error" /var/log/app/error.log | sort | uniq -c | sort -rn | head -20
     ```
 
@@ -400,9 +414,11 @@ Pick the scenario that matches your situation:
 
     **Goal:** Find the very first occurrence of an error to establish a timeline.
 
-    ``` bash title="Find First Occurrence"
-    grep -m 1 "connection refused" /var/log/syslog
+    ``` bash title="Find First Occurrence" linenums="1"
+    grep -m 1 "connection refused" /var/log/syslog  # (1)!
     ```
+
+    1. `-m 1` stops after the first **m**atch. On a log file with hundreds of occurrences, this returns immediately with just the earliest entry — the timestamp that starts your timeline.
 
     `-m 1` stops after the first match — without it, `grep` would print every occurrence. Once you have a timestamp, you can correlate it with deployments, config changes, or traffic spikes.
 
@@ -410,11 +426,21 @@ Pick the scenario that matches your situation:
 
     **Goal:** Watch live to see if errors are still occurring right now.
 
-    ``` bash title="Watch for Specific Error in Real-Time"
-    tail -f /var/log/syslog | grep --line-buffered "error"
+    If your app is a systemd service, follow the journal directly:
+
+    ``` bash title="Watch Service Logs Live" linenums="1"
+    journalctl -u myapp -f
     ```
 
-    `--line-buffered` ensures matches appear immediately rather than waiting for a full buffer. If no new lines appear after reproducing the problem, you may be looking at the wrong log file.
+    For flat log files, filter the stream with grep:
+
+    ``` bash title="Watch for Specific Error in Real-Time" linenums="1"
+    tail -f /var/log/syslog | grep --line-buffered "error"  # (1)!
+    ```
+
+    1. `--line-buffered` flushes grep's output after every matching line instead of waiting to fill an internal buffer. Without it, matches may not appear for seconds — or at all — when output is piped.
+
+    Trigger the problem and watch. If no new lines appear, you may be looking at the wrong log source.
 
 ---
 
@@ -422,7 +448,7 @@ Pick the scenario that matches your situation:
 
 Some logs are owned by root or a restricted group and will return "Permission denied" when you try to read them directly. You have two options:
 
-``` bash title="View Protected Logs with Sudo"
+``` bash title="View Protected Logs with Sudo" linenums="1"
 sudo tail -100 /var/log/secure
 sudo journalctl -u sshd
 ```
@@ -435,51 +461,55 @@ Or, if you're in the `adm` group, you already have read access to most system lo
 
 ### Most Used Commands
 
-``` bash title="Log Reading Cheat Sheet"
-# Last 100 lines of a log
-tail -100 /var/log/syslog
-
-# Follow log in real-time
-tail -f /var/log/nginx/error.log
-
-# Search for errors
-grep -i "error" /var/log/syslog
-
-# Service logs (systemd)
+``` bash title="Log Reading Cheat Sheet" linenums="1"
+# Service logs — start here on modern systems
 journalctl -u nginx -n 100
 
-# Recent errors only
-journalctl --since "1 hour ago" -p err
-
-# Follow service logs
+# Follow service logs live
 journalctl -u nginx -f
+
+# Recent errors from any service
+journalctl -p err --since "1 hour ago"
+
+# Flat file logs — for app-specific files
+tail -100 /var/log/nginx/error.log
+tail -f /var/log/nginx/access.log
+
+# Search a flat file
+grep -i "error" /var/log/nginx/error.log
 ```
 
 ### Log Locations Cheat Sheet
 
 | What You're Looking For | Where to Look |
 |------------------------|---------------|
-| General system events | `/var/log/syslog` or `journalctl` |
-| Authentication/logins | `/var/log/auth.log` or `journalctl -u sshd` |
-| Web server | `/var/log/nginx/` or `/var/log/apache2/` |
-| Database | `/var/log/mysql/` or `journalctl -u mysql` |
+| General system events | `journalctl` |
+| Authentication/logins | `journalctl -u sshd` or `/var/log/auth.log` |
+| Web server | `journalctl -u nginx` or `/var/log/nginx/` |
+| Database | `journalctl -u mysql` or `/var/log/mysql/` |
 | Application | Ask your team! |
 
 ---
 
-## Practice Exercises
+## Practice Problems
 
-??? question "Exercise 1: Find Recent Authentication Failures"
-    You've been told that someone may be attempting to brute-force SSH logins. Check the last 200 lines of `/var/log/auth.log` and search for failed login attempts.
+??? question "Problem 1: Find Recent Authentication Failures"
+    You've been told that someone may be attempting to brute-force SSH logins. Find recent failed login attempts.
 
-    **Hint:** Pipe `tail` into `grep`. The word to search for is "Failed".
+    **Hint:** On modern systems, `sshd` logs to the journal. On older systems, check `/var/log/auth.log` or `/var/log/secure`.
 
-    ??? tip "Which log file?"
-        On **Debian/Ubuntu**, authentication events are in `/var/log/auth.log`. On **RHEL/CentOS/Fedora**, the same file is `/var/log/secure`. Either way, the `grep` command and output are identical.
+    ??? tip "Answer"
+        On modern systems, start with journalctl:
 
-    ??? tip "Solution"
-        ```bash title="Find Recent SSH Failures"
+        ```bash title="Find Recent SSH Failures (journalctl)" linenums="1"
+        journalctl -u sshd --since "1 hour ago" | grep "Failed"
+        ```
+
+        On older systems with flat log files:
+
+        ```bash title="Find Recent SSH Failures (flat log)" linenums="1"
         tail -200 /var/log/auth.log | grep "Failed"
+        # On RHEL/Fedora: tail -200 /var/log/secure | grep "Failed"
         ```
 
         You'll see lines like:
@@ -489,30 +519,30 @@ journalctl -u nginx -f
 
         Multiple failures from one IP address is a sign of a brute-force attempt. Report it to your security team.
 
-??? question "Exercise 2: Find the Most Frequent Errors Today"
+??? question "Problem 2: Find the Most Frequent Errors Today"
     The app has been logging errors all day. Use `journalctl` to get today's errors for the `nginx` service, then find which error message appears most often.
 
     **Hint:** Combine `journalctl`, `grep`, `sort`, `uniq -c`, and `sort -rn`.
 
-    ??? tip "Solution"
-        ```bash title="Most Common Nginx Errors Today"
+    ??? tip "Answer"
+        ```bash title="Most Common Nginx Errors Today" linenums="1"
         journalctl -u nginx --since today -p err | sort | uniq -c | sort -rn | head -10
         ```
 
         `uniq -c` counts consecutive identical lines. `sort -rn` orders by count descending. The most common error appears first — start there.
 
-??? question "Exercise 3: Investigate a Time Window"
+??? question "Problem 3: Investigate a Time Window"
     Your team lead says the app started throwing errors around 2:30pm. Use `journalctl` to show all system logs from 2:25pm to 2:40pm today.
 
     **Hint:** Use `--since` and `--until` with time strings.
 
-    ??? tip "Solution"
-        ```bash title="Investigate Time Window"
+    ??? tip "Answer"
+        ```bash title="Investigate Time Window" linenums="1"
         journalctl --since "14:25" --until "14:40"
         ```
 
         **Alternative** — grep a log file directly:
-        ```bash title="Grep Time Window in Syslog"
+        ```bash title="Grep Time Window in Syslog" linenums="1"
         grep "14:2[5-9]\|14:3" /var/log/syslog | less
         ```
 
@@ -522,15 +552,15 @@ journalctl -u nginx -f
 
 **Start with the basics:**
 
-1. `tail -f /var/log/app.log` — Watch in real-time
-2. `grep "error"` — Find the bad stuff
-3. `journalctl -u servicename` — Service-specific logs
+1. `journalctl -u servicename -f` — Follow a service's logs in real-time
+2. `journalctl -p err --since "1 hour ago"` — Find recent errors across all services
+3. `tail -f /var/log/app.log` + `grep` — For flat log files your app writes directly
 
 **Add context:**
 
 - Use `-B` and `-A` with grep for surrounding lines
-- Use `--since` with journalctl for time windows
-- Combine `tail` and `grep` for recent errors
+- Use `--since` and `--until` with journalctl for time windows
+- Filter journalctl by service (`-u`), priority (`-p`), and time together
 
 **Think like a detective:**
 
@@ -564,7 +594,4 @@ journalctl -u nginx -f
 
 ## What's Next?
 
-You can read logs like a pro. The next skill is knowing where to find the team wiki, runbooks, and who to ask when logs alone aren't enough. **Finding Documentation** is coming soon. In the meantime, head back to the [Day One Overview](overview.md) to review the full series.
-
-!!! tip "Logs Tell Stories"
-    Every log entry is a breadcrumb. Errors rarely happen in isolation — there's usually a chain of events. Learn to read that story, and debugging becomes much easier.
+You can read logs like a pro. Next: [Finding Documentation](finding_docs.md) — how to understand an unfamiliar server using `man` pages, README files, git history, and what the system itself tells you.

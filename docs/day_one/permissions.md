@@ -64,8 +64,8 @@ Understanding file permissions explains:
 
 Let's see this in action:
 
-``` bash title="Check Permissions on Common Locations"
-ls -ld /root
+``` bash title="Check Permissions on Common Locations" linenums="1"
+ls -ld /root  # (1)!
 # drwx------ 5 root root 4096 Jan 15 10:00 /root
 # Only root can access
 
@@ -77,6 +77,8 @@ ls -la /etc/shadow
 # -rw-r----- 1 root shadow 1234 Jan 15 10:00 /etc/shadow
 # Root can read/write, shadow group can read, others blocked
 ```
+
+1. `-d` lists the directory entry itself rather than its contents. Without it, `ls` would try to read what's *inside* `/root` — which would immediately fail with "Permission denied" for a regular user, telling you nothing useful.
 
 **For Day One:** You don't need to master all the details below. Just understand that those weird letter codes (`rwxr-xr-x`) control who can access what. Explore the tabs if you're curious.
 
@@ -92,7 +94,7 @@ ls -la /etc/shadow
 
     Check any file's permissions:
 
-    ``` bash title="View File Permissions"
+    ``` bash title="View File Permissions" linenums="1"
     ls -la /etc/hosts
     # -rw-r--r-- 1 root root 220 Jan 15 10:00 /etc/hosts
     ```
@@ -202,14 +204,14 @@ Use these commands to determine what access you have on the server:
 
     Your group memberships determine a lot about what you can do:
 
-    ``` bash title="List Your Groups"
+    ``` bash title="List Your Groups" linenums="1"
     groups
     # jsmith sudo docker developers
     ```
 
     Or with more detail:
 
-    ``` bash title="Full Group Information"
+    ``` bash title="Full Group Information" linenums="1"
     id
     # uid=1001(jsmith) gid=1001(jsmith) groups=1001(jsmith),27(sudo),998(docker),1002(developers)
     ```
@@ -233,7 +235,7 @@ Use these commands to determine what access you have on the server:
 
     **Check what `sudo` lets you do:**
 
-    ``` bash title="Check Sudo Permissions"
+    ``` bash title="Check Sudo Permissions" linenums="1"
     sudo -l
     ```
 
@@ -284,7 +286,7 @@ cat: /var/log/secure: Permission denied
 
 Now you can use what you learned about file permissions to understand why. Check the file's permissions:
 
-``` bash title="Check File Permissions"
+``` bash title="Check File Permissions" linenums="1"
 ls -la /etc/nginx/nginx.conf
 # -rw-r----- 1 root nginx 2488 Jan 10 15:30 /etc/nginx/nginx.conf
 ```
@@ -296,6 +298,31 @@ Reading the permission string: `-rw-r-----`
 - **Others (you):** no access (`---`)
 
 You're not root, and you're probably not in the nginx group. Linux checked the permissions and blocked you.
+
+### The Directory Execute Bit — A Common Gotcha
+
+There's one "Permission Denied" scenario that trips up almost every developer on their first week: **you have `r` permission on a file, but still can't read it.**
+
+``` bash title="The Confusing Case" linenums="1"
+ls -la /var/app/config/database.yml
+# -rw-r--r-- 1 root root 512 Jan 15 10:00 database.yml
+# Looks readable by everyone! But...
+
+cat /var/app/config/database.yml
+# cat: /var/app/config/database.yml: Permission denied
+```
+
+**Why?** Because to reach a file, Linux must let you pass through every directory in the path. The `x` (execute) bit on a directory doesn't mean "run it" — it means **"you may enter this directory"**.
+
+``` bash title="Check the Parent Directory" linenums="1"
+ls -ld /var/app/config/
+# drwx------ 2 appuser appuser 4096 Jan 15 10:00 config/
+# ^ Only the owner can enter this directory
+```
+
+You have `r` on the file, but you lack `x` on `/var/app/config/` — so Linux blocks you before it even gets to the file.
+
+**The fix:** You need execute permission on every directory in the path to the file, not just the file itself. This is why you often need to be added to a group rather than just granted access to one file.
 
 ### Your Options When Blocked
 
@@ -399,11 +426,11 @@ In most companies, getting elevated access follows a formal process:
 
 ---
 
-## Practice Exercises
+## Practice Problems
 
 Now that you understand permissions, try these hands-on exercises to build confidence:
 
-??? question "Exercise 1: Check Your Access Level"
+??? question "Problem 1: Check Your Access Level"
     Run the commands to determine your permission level on the server. Find out:
 
     1. What is your username?
@@ -412,8 +439,8 @@ Now that you understand permissions, try these hands-on exercises to build confi
 
     **Hint:** Use `whoami`, `groups`, `id`, and `sudo -l`.
 
-    ??? tip "Solution"
-        ``` bash title="Check Your Identity and Access"
+    ??? tip "Answer"
+        ``` bash title="Check Your Identity and Access" linenums="1"
         # Check your username
         whoami
 
@@ -433,10 +460,10 @@ Now that you understand permissions, try these hands-on exercises to build confi
         - Whether you see `sudo` or `wheel` in your groups
         - What the `sudo -l` command shows (full access, limited access, or no access)
 
-??? question "Exercise 2: Investigate a Permission Denied Error"
+??? question "Problem 2: Investigate a Permission Denied Error"
     Try to read a protected file (this is safe, it will just tell you "no"):
 
-    ``` bash title="Try Reading a Protected File"
+    ``` bash title="Try Reading a Protected File" linenums="1"
     cat /etc/shadow
     ```
 
@@ -449,8 +476,8 @@ Now that you understand permissions, try these hands-on exercises to build confi
 
     **Challenge:** Can you read it with `sudo` (if you have `sudo` access)?
 
-    ??? tip "Solution"
-        ``` bash title="Investigate the Permissions"
+    ??? tip "Answer"
+        ``` bash title="Investigate the Permissions" linenums="1"
         # Try to read (will fail)
         cat /etc/shadow
         # cat: /etc/shadow: Permission denied
@@ -469,7 +496,7 @@ Now that you understand permissions, try these hands-on exercises to build confi
 
         **With `sudo` (if available):**
 
-        ``` bash title="Read with Sudo"
+        ``` bash title="Read with Sudo" linenums="1"
         sudo cat /etc/shadow
         # root:$6$random_hash...:18000:0:99999:7:::
         ```
@@ -507,7 +534,7 @@ Once you're comfortable exploring safely, head to **[Reading Logs Like a Pro](re
 - `man sudo` - Complete `sudo` documentation with all options and configuration
 - `man id` - Display user and group identity information
 - `man groups` - Show group memberships
-- `man chmod` - Change file permissions (covered in depth in Level 3)
+- `man chmod` - Change file permissions (covered in depth in the Essentials track)
 - `man chown` - Change file ownership
 - `man ls` - List directory contents (the `-l` flag shows permissions)
 - `man find` - Search for files (the `-readable`, `-writable` flags filter by access)

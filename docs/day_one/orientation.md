@@ -34,12 +34,12 @@ graph TD
     D --> E[👥 Check Other Users]
     E --> F[✅ Ready to Explore]
 
-    style A fill:#2d3748,stroke:#4a5568,color:#fff
-    style F fill:#48bb78,stroke:#38a169,color:#fff
-    style B fill:#4299e1,stroke:#3182ce,color:#fff
-    style C fill:#4299e1,stroke:#3182ce,color:#fff
-    style D fill:#4299e1,stroke:#3182ce,color:#fff
-    style E fill:#4299e1,stroke:#3182ce,color:#fff
+    style A fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style B fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style C fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style D fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style E fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style F fill:#d69e2e,stroke:#cbd5e0,stroke-width:2px,color:#000
 ```
 
 Each step answers a critical question. Let's explore what you need to check.
@@ -56,7 +56,7 @@ Each step answers a critical question. Let's explore what you need to check.
 
     **Why it matters:** You need to know your privilege level before exploring. Do you have `sudo` access?
 
-    ``` bash title="Check Who You Are"
+    ``` bash title="Check Who You Are" linenums="1"
     whoami
     # jsmith
 
@@ -72,14 +72,16 @@ Each step answers a critical question. Let's explore what you need to check.
 
     **Why it matters:** Know what server you're on before making any changes. Production? Staging? Dev?
 
-    ``` bash title="What Server Is This?"
+    ``` bash title="What Server Is This?" linenums="1"
     hostname
     # prod-web-01
 
-    cat /etc/os-release | grep -E "^NAME=|^VERSION="
+    cat /etc/os-release | grep -E "^NAME=|^VERSION="  # (1)!
     # NAME="Red Hat Enterprise Linux"
     # VERSION="8.6 (Ootpa)"
     ```
+
+    1. `-E` enables extended regex. `^NAME=` matches lines that start with `NAME=` (the `^` anchors to the line start), and `|` is OR. Without `^`, you'd also match `PRETTY_NAME=` and `VERSION_ID=`, cluttering the output.
 
     **Key insight:** Hostnames reveal purpose: `prod-web-01` = production, `staging-db` = staging database. Know before you act.
 
@@ -89,7 +91,7 @@ Each step answers a critical question. Let's explore what you need to check.
 
     **Why it matters:** Don't run heavy operations on a struggling server. Check capacity before acting.
 
-    ``` bash title="System Health Snapshot"
+    ``` bash title="System Health Snapshot" linenums="1"
     free -h
     # Available: 10Gi (check this number!)
 
@@ -108,7 +110,7 @@ Each step answers a critical question. Let's explore what you need to check.
 
     **Why it matters:** If someone else is actively working, coordinate before making changes.
 
-    ``` bash title="Check Other Users"
+    ``` bash title="Check Other Users" linenums="1"
     w
     # Shows who's logged in and what they're doing
     ```
@@ -129,7 +131,7 @@ Different situations call for different orientation checks. Pick your scenario:
 
     You just need to know: Who am I, where am I, what server is this, and is it healthy?
 
-    ``` bash title="Quick Orientation (30 seconds)"
+    ``` bash title="Quick Orientation (30 seconds)" linenums="1"
     whoami              # Your username
     # jsmith
 
@@ -167,7 +169,7 @@ Different situations call for different orientation checks. Pick your scenario:
 
     Before you change anything, verify three things: correct server, no high load, no active users.
 
-    ``` bash title="Pre-Change Safety Check"
+    ``` bash title="Pre-Change Safety Check" linenums="1"
     hostname            # Confirm correct server
     # prod-web-01       ✓ Correct server
 
@@ -191,7 +193,7 @@ Different situations call for different orientation checks. Pick your scenario:
 
     Your manager or team lead wants to know if the server has capacity for new workloads.
 
-    ``` bash title="Resource Report Commands"
+    ``` bash title="Resource Report Commands" linenums="1"
     # CPU capacity
     nproc
     # 4                  ← 4 CPU cores available
@@ -202,7 +204,7 @@ Different situations call for different orientation checks. Pick your scenario:
     # Mem:           15Gi       4.2Gi       8.1Gi        10Gi    ← 10Gi available for new work
 
     # Disk space
-    df -h | grep -vE "tmpfs|devtmpfs"
+    df -h | grep -vE "tmpfs|devtmpfs"  # (1)!
     # /dev/sda1       100G   45G   55G  45% /              ← 55GB free (55%)
     # /dev/sdb1       500G  320G  180G  64% /data          ← 180GB free (36%)
 
@@ -219,6 +221,8 @@ Different situations call for different orientation checks. Pick your scenario:
     # 5.14.0-284.11.1.el9_2.x86_64      ← Kernel version
     ```
 
+    1. `-v` inverts the match — shows lines that do NOT match. `-E` enables extended regex for the `|` OR operator. Together: skip `tmpfs` and `devtmpfs`, which are virtual memory filesystems, not real disks.
+
     **What to report:**
 
     - **CPU:** 4 cores, currently at ~4% utilization (load 0.15)
@@ -233,7 +237,7 @@ Different situations call for different orientation checks. Pick your scenario:
 
     The server is sluggish or commands are taking forever. Check what's happening.
 
-    ``` bash title="Health Diagnostics"
+    ``` bash title="Health Diagnostics" linenums="1"
     # Check system load
     uptime
     # load average: 8.45, 7.23, 6.12    ← High load! (on 4 cores = 2× capacity)
@@ -301,9 +305,9 @@ You're still in reconnaissance mode. Keep exploring safely — head to **[Safe E
 
 ---
 
-## Practice Exercises
+## Practice Problems
 
-??? question "Exercise 1: Server Reconnaissance"
+??? question "Problem 1: Server Reconnaissance"
     Log into a server and gather the following information:
 
     - Username and groups
@@ -314,8 +318,8 @@ You're still in reconnaissance mode. Keep exploring safely — head to **[Safe E
 
     **Goal:** Complete this in under 60 seconds.
 
-    ??? tip "Solution"
-        ``` bash title="Quick Orientation Commands"
+    ??? tip "Answer"
+        ``` bash title="Quick Orientation Commands" linenums="1"
         whoami
         id
         hostname
@@ -326,7 +330,7 @@ You're still in reconnaissance mode. Keep exploring safely — head to **[Safe E
 
         **Tip:** Create a shell alias or script to run these commands automatically on login.
 
-??? question "Exercise 2: Interpret Load Average"
+??? question "Problem 2: Interpret Load Average"
     A server shows: `load average: 8.45, 7.23, 6.12`
 
     It has 4 CPU cores. Is this server:
@@ -338,7 +342,7 @@ You're still in reconnaissance mode. Keep exploring safely — head to **[Safe E
 
     **Hint:** Compare the load to the number of cores.
 
-    ??? tip "Solution"
+    ??? tip "Answer"
         **Getting busy / Critical**
 
         With 4 cores, a comfortable load is around 4.0. At 8.45, the server is handling twice its comfortable capacity. You should investigate what's consuming resources using `top` or `htop`.

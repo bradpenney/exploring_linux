@@ -29,9 +29,9 @@ Pick your scenario below, complete the setup, then meet us at the [validation ch
 
     Before you connect, make sure you have:
 
-    - **Hostname or IP address** - Where's the server? (`192.168.1.100` or `server.example.com`)
-    - **Username** - Who are you logging in as? (often your company username)
-    - **Password** - Your login password
+    - **Hostname or IP address** — `192.168.1.100` or `server.example.com`
+    - **Username** — your account name on the server
+    - **Password** — your login password
 
     ### Choose Your Platform
 
@@ -39,13 +39,13 @@ Pick your scenario below, complete the setup, then meet us at the [validation ch
 
         Good news: SSH comes pre-installed on every Linux distribution and macOS. Open your terminal and you're ready to go.
 
-        ``` bash title="SSH Connection Command"
+        ``` bash title="SSH Connection Command" linenums="1"
         ssh username@hostname
         ```
 
         Real example:
 
-        ``` bash title="Connecting to a Server"
+        ``` bash title="Connecting to a Server" linenums="1"
         ssh jsmith@192.168.1.100
         # or
         ssh jsmith@staging.example.com
@@ -53,14 +53,9 @@ Pick your scenario below, complete the setup, then meet us at the [validation ch
 
         **What happens next:**
 
-        1. First time connecting? You'll see a fingerprint warning (this is normal - type `yes`)
-        2. Enter your password when prompted
-        3. You're in! You should see the server's command prompt
-
-        ??? tip "Your Password Won't Show When You Type"
-            When Linux asks for your password, **nothing appears on screen** - no characters, no asterisks, nothing.
-
-            **Don't panic.** Your keyboard is working. Just type your password and press Enter. This is normal Linux behavior for security - it's not showing anything to prevent others from seeing how long your password is.
+        1. First time connecting? You'll see a fingerprint warning — type `yes`
+        2. Enter your password when prompted (nothing echoes to screen — that's normal)
+        3. You're in
 
         !!! tip "Server Requires SSH Keys?"
             If you're getting "Permission Denied (Publickey)" errors, see the Troubleshooting section below. SSH key setup will be covered in a future article.
@@ -75,13 +70,13 @@ Pick your scenario below, complete the setup, then meet us at the [validation ch
 
             Open Windows Terminal (or PowerShell) and use the same SSH commands:
 
-            ``` bash title="SSH from Windows Terminal"
+            ``` bash title="SSH from Windows Terminal" linenums="1"
             ssh username@hostname
             ```
 
             Real example:
 
-            ``` bash title="Connecting to a Server"
+            ``` bash title="Connecting to a Server" linenums="1"
             ssh jsmith@192.168.1.100
             # or
             ssh jsmith@staging.example.com
@@ -89,16 +84,11 @@ Pick your scenario below, complete the setup, then meet us at the [validation ch
 
             **What happens next:**
 
-            1. First time connecting? You'll see a fingerprint warning (type `yes`)
-            2. Enter your password when prompted
-            3. You're in! You should see the server's command prompt
+            1. First time connecting? You'll see a fingerprint warning — type `yes`
+            2. Enter your password when prompted (nothing echoes to screen — that's normal)
+            3. You're in
 
-            ??? tip "Your Password Won't Show When You Type"
-                When Linux asks for your password, **nothing appears on screen** - no characters, no asterisks, nothing.
-
-                **Don't panic.** Your keyboard is working. Just type your password and press Enter. This is normal Linux behavior for security - it's not showing anything to prevent others from seeing how long your password is.
-
-            That's it! Same syntax and behavior as Linux/Mac.
+            Same syntax and behavior as Linux/Mac.
 
         === "PuTTY"
 
@@ -115,11 +105,6 @@ Pick your scenario below, complete the setup, then meet us at the [validation ch
             5. Click "Open"
             6. Enter your username when prompted
             7. Enter your password when prompted
-
-            ??? tip "Your Password Won't Show When You Type"
-                When Linux asks for your password, **nothing appears on screen** - no characters, no asterisks, nothing.
-
-                **Don't panic.** Your keyboard is working. Just type your password and press Enter. This is normal Linux behavior for security - it's not showing anything to prevent others from seeing how long your password is.
 
             !!! tip "Server Requires SSH Keys?"
                 If you're getting "Permission Denied (Publickey)" errors, see the Troubleshooting section below. SSH key setup for PuTTY will be covered in a future article.
@@ -142,17 +127,17 @@ Pick your scenario below, complete the setup, then meet us at the [validation ch
     Are you sure you want to continue connecting (yes/no/[fingerprint])?
     ```
 
-    **Don't panic.** This is SSH asking "Is this really the server you meant to connect to?"
-
-    Type `yes` and press Enter. SSH will remember this server and won't ask again (unless the server's key changes, which could indicate a security issue).
+    SSH is asking you to verify the server's identity before trusting it — same concept as certificate pinning. Type `yes` to accept and store the fingerprint. SSH won't ask again unless the server's key changes (key rotation, rebuild, or rarely a MITM attempt worth investigating).
 
     ### SSH with a Specific Port
 
     Most SSH servers listen on port 22, but some use custom ports for security. If your server uses a different port:
 
-    ``` bash title="SSH on Custom Port"
-    ssh -p 2222 username@hostname
+    ``` bash title="SSH on Custom Port" linenums="1"
+    ssh -p 2222 username@hostname  # (1)!
     ```
+
+    1. `-p` sets the port number. Standard SSH uses port 22, but some servers use a non-standard port to reduce automated scanning. Your team will tell you if a custom port is required.
 
     ### Troubleshooting Common SSH Issues
 
@@ -170,7 +155,7 @@ Pick your scenario below, complete the setup, then meet us at the [validation ch
 
         **What to try:**
 
-        ``` bash title="Test Basic Connectivity"
+        ``` bash title="Test Basic Connectivity" linenums="1"
         ping hostname
         # or
         ping 192.168.1.100
@@ -229,11 +214,13 @@ Pick your scenario below, complete the setup, then meet us at the [validation ch
 
         If confirmed safe, remove the old fingerprint:
 
-        ``` bash title="Remove Old Fingerprint"
-        ssh-keygen -R hostname
+        ``` bash title="Remove Old Fingerprint" linenums="1"
+        ssh-keygen -R hostname  # (1)!
         # or
         ssh-keygen -R 192.168.1.100
         ```
+
+        1. `-R` removes the named host from `~/.ssh/known_hosts` — the file where SSH stores fingerprints it has previously accepted. Without clearing it, SSH will refuse the connection until the stale entry is gone.
 
         Then try connecting again. You'll see the fingerprint warning (as if it's your first connection).
 
@@ -360,7 +347,7 @@ Regardless of which path you took (SSH into a server or set up your own environm
 
 **Open your Linux terminal and run these commands:**
 
-``` bash title="Validation Test"
+``` bash title="Validation Test" linenums="1"
 whoami
 # jsmith
 
@@ -377,70 +364,36 @@ ls
 - `pwd` - Shows your current location in the filesystem (here: your home directory `/home/jsmith`). You start here when you log in.
 - `ls` - Lists what's in your current directory. An empty result is fine - it just means your home directory is empty.
 
-**If all three commands work, you're ready!**
-
-You have a working Linux environment. Time to learn what to do with it.
+**If all three run without errors, you're in and the environment is functional.**
 
 ---
 
-## Practice Exercises
+## Practice Problems
 
-Now that you're connected, let's reinforce what you've learned.
+??? question "Problem 1: Check Your SSH Environment"
+    You're connected. Run the following and interpret what each tells you about the server:
 
-??? question "Exercise 1: Test Your Connection"
-    Practice connecting to your Linux environment using the method you chose.
+    ``` bash title="Environment Snapshot" linenums="1"
+    whoami && id && hostname && uptime
+    ```
 
-    **Goal:** Successfully connect and run `whoami` to verify you're logged in.
+    What's your privilege level? Are you in `sudo` or `wheel`? What's the server's load?
 
-    **For SSH users:** Try connecting, then disconnecting, then reconnecting to build familiarity.
+    ??? tip "Answer"
+        `whoami` gives your username. `id` shows all your group memberships — look for `sudo` or `wheel` to know if you have elevated privileges. `hostname` confirms which server you're on (critical on shared infrastructure). `uptime` shows how long the server has been running and the load average — you'll learn how to interpret load in the next article.
 
-    ??? tip "Solution"
-        **SSH users:**
+??? question "Problem 2: Find Hidden SSH Configuration"
+    Run `ls -la ~` and look at what's in your home directory. Is there an `.ssh` directory? What's in it?
 
-        ``` bash title="Connect to Your Server"
-        ssh username@hostname
-        # Enter your password when prompted
+    ??? tip "Answer"
+        ``` bash title="Inspect SSH Directory" linenums="1"
+        ls -la ~
+        ls -la ~/.ssh 2>/dev/null || echo "No .ssh directory yet"  # (1)!
         ```
 
-        Once connected:
+        1. `2>/dev/null` suppresses the error if `.ssh` doesn't exist yet. `||` runs the `echo` only when the preceding command fails — a standard shell pattern for providing a fallback when a path may not exist.
 
-        ``` bash title="Verify You're Logged In"
-        whoami
-        # Should show your username
-        ```
-
-        **Local setup users:**
-
-        Just open your terminal (WSL, VirtualBox terminal, etc.) and run:
-
-        ``` bash title="Verify Your Environment"
-        whoami
-        # Should show your username
-        ```
-
-??? question "Exercise 2: Understand Your Environment"
-    Run the validation commands and interpret what each one tells you about your system.
-
-    **Tasks:**
-
-    1. Run `whoami` - What username are you using?
-    2. Run `pwd` - Where in the filesystem are you?
-    3. Run `ls -la` - What hidden files are in your home directory?
-
-    ??? tip "Solution"
-        ``` bash title="Explore Your Environment"
-        whoami
-        # Shows your current username
-
-        pwd
-        # Shows your current working directory (usually /home/yourusername)
-
-        ls -la
-        # Lists ALL files including hidden ones (starting with .)
-        # You might see .bashrc, .profile, .ssh directory
-        ```
-
-        **What you learned:** The `-la` flags mean "long format" and "all files (including hidden)". Hidden files in Linux start with a dot.
+        If `.ssh` exists, it may contain `authorized_keys` (public keys allowed to log in as you), `known_hosts` (servers you've connected to), and `config` (connection shortcuts). If you're on a fresh account, it may be empty or absent — it gets created when you first use key-based auth.
 
 ---
 
@@ -475,7 +428,5 @@ The next articles in Day One will also cover:
 - **[Safe Exploration](safe_exploration.md)** - How to look around without breaking things
 - **[Reading Logs Like a Pro](reading_logs.md)** - Using `tail`, `grep`, and `journalctl` to understand what the system is telling you
 
-For now, try the Practice Exercises above to build familiarity with your new Linux environment.
+For now, try the Practice Problems above to build familiarity with your new Linux environment.
 
-!!! tip "Bookmark This Page"
-    If you're using SSH or cloud instances, you might need to reconnect frequently. Bookmark this page so you can quickly reference connection commands.
