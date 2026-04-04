@@ -1,6 +1,6 @@
 ---
 title: Exploring Enterprise Linux
-description: Enterprise Linux for developers and early-career professionals — from first SSH login to production system administration.
+description: Enterprise Linux from first SSH login to production mastery — built for developers who need Linux to work, and IT professionals who need to own it.
 ---
 <img src="images/exploring_linux.png" alt="Exploring Linux" class="img-responsive-right" width="300">
 
@@ -15,9 +15,9 @@ This site serves two different people with two different relationships to Linux.
 
 ### 🏥 Day One — For developers who need Linux for their work
 
-You're a serious engineer — C++, Rust, Go, Java — and Linux is where your work lives.
-You're not trying to become a sysadmin. You want to get connected, stay safe, not break
-anything, and get back to what you actually care about building.
+You write software — backend, frontend, data, whatever — and Linux is where it runs.
+You're not trying to become a sysadmin. You need to get connected, stay safe, not break
+anything, and get back to building.
 
 Day One gives you exactly what you need and nothing you don't.
 
@@ -30,25 +30,36 @@ Day One gives you exactly what you need and nothing you don't.
 - [Finding Documentation](day_one/finding_docs.md) — man pages, git history, and what the server tells you
 - [The "Don't Do This" Guide](day_one/safety_guide.md) — Production safety rules that keep you out of trouble
 
-### 📦⚡🎯 Essentials / Efficiency / Mastery — For the Linux professional
+### 📦⚡🎯 Essentials / Efficiency / Mastery — For IT professionals getting serious about Linux
 
-You're building a career here. Junior sysadmin, junior DevOps, junior platform engineer.
-Linux isn't just a tool — it's the craft. You want to actually understand how it works,
-be the person your team relies on, and build toward senior responsibilities.
+You're a sysadmin, platform engineer, or SRE — or you're moving into one of those roles.
+Maybe you've been doing Windows administration for years. Maybe you've been handed
+infrastructure that runs on Linux and need to own it properly. Either way, you know IT.
+You need to know Linux.
 
-The three tracks take you from core fundamentals to production-grade skills:
+The three tracks take you from command-line fundamentals to production-grade expertise:
 
 **📦 Essentials** — The commands and concepts every Linux professional must own cold.
-File permissions, process management, pipes and redirection, grep. The foundation
-everything else is built on.
+The filesystem layout, permissions model, user management, process control, pipes and
+redirection. The foundation everything else is built on.
 
-**⚡ Efficiency** — The daily-use skills that separate professionals who get things done.
-systemd, shell scripting, package management, networking basics. What you'll use every day.
+- [Command Line Fundamentals](essentials/command_line_fundamentals.md) — Tab completion, history tricks, and command chaining
+- [Filesystem Hierarchy](essentials/filesystem_hierarchy.md) — Where everything lives and why
+- [Finding Files](essentials/finding_files.md) — find, locate, and which
+- [Finding Help](essentials/finding_help.md) — man pages, tldr, and online resources
+- [File Permissions](essentials/file_permissions.md) — chmod, chown, umask, SUID, SGID, sticky bit
+- [Users and Groups](essentials/users_and_groups.md) — useradd, usermod, service accounts
+- [Pipes and Redirection](essentials/pipes_and_redirection.md) — Build data pipelines, redirect streams
+- [grep](essentials/grep.md) — Pattern matching, regex, and log analysis
+- [Processes](essentials/processes.md) — ps, top, signals, job control
 
-**🎯 Mastery** — Production-grade Linux for serious professionals. Storage, LVM, containers,
-system tuning. The skills that take you from junior to someone who can own infrastructure.
+**⚡ Efficiency** — The daily-use tools that separate professionals who get things done:
+systemd, shell scripting, package management, networking. *(Coming soon)*
+
+**🎯 Mastery** — Production-grade Linux for engineers who own infrastructure: storage,
+LVM, containers, system hardening, performance tuning. *(Coming soon)*
 
 ---
 
-*New to Linux entirely? Start with [Day One: Getting Access](day_one/getting_access.md).*
-*Building a Linux career? The **Essentials** track is coming soon.*
+*New to Linux entirely? Start with [Day One: Overview](day_one/overview.md).*
+*Coming from Windows or another IT background? Jump to [Essentials](essentials/command_line_fundamentals.md).*

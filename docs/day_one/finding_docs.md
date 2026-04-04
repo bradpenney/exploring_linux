@@ -78,6 +78,22 @@ man 5 nginx           # nginx config directives (if installed)
 
 **Key insight:** When you find a config file you don't understand, `man 5 configfilename` is usually the fastest path to understanding every option in it.
 
+??? tip "What if man 5 returns nothing?"
+    Some packages don't install man pages (minimal installs, containers). If `man 5 nginx` returns "No manual entry," try:
+
+    ``` bash title="Fallback When Man Page Isn't There"
+    # Read the config file itself — it's often heavily commented
+    less /etc/nginx/nginx.conf
+
+    # Check for docs bundled with the package
+    find /usr/share/doc -name "*nginx*" -type d
+
+    # Look online — the application's own documentation is usually more complete anyway
+    # nginx: https://nginx.org/en/docs/
+    ```
+
+    For production services, the vendor's official documentation is often better than the man page regardless.
+
 ### --help — Quick Reference
 
 For a fast summary without opening a pager:

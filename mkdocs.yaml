@@ -53,7 +53,6 @@ plugins:
       glob:
         # New structure — all drafts
         - "day_one/first_tasks.md"
-        - "essentials/*"
         - "efficiency/*"
         - "mastery/*"
         # Old pre-overhaul directories — pending migration or deletion
@@ -120,17 +119,16 @@ nav:
       - Finding Documentation: day_one/finding_docs.md
       - The "Don't Do This" Guide: day_one/safety_guide.md
 
-  # 📦 Essentials — The foundation every Linux professional must own cold
-  # - 📦 Essentials:
-  #     - Command Line Fundamentals: essentials/command_line_fundamentals.md
-  #     - Finding Files: essentials/finding_files.md
-  #     - Finding Help: essentials/finding_help.md
-  #     - Filesystem Hierarchy: essentials/filesystem_hierarchy.md
-  #     - File Permissions: essentials/file_permissions.md
-  #     - Users and Groups: essentials/users_and_groups.md
-  #     - Pipes and Redirection: essentials/pipes_and_redirection.md
-  #     - grep: essentials/grep.md
-  #     - Processes: essentials/processes.md
+  - 📦 Essentials:
+      - Command Line Fundamentals: essentials/command_line_fundamentals.md
+      - Filesystem Hierarchy: essentials/filesystem_hierarchy.md
+      - Finding Files: essentials/finding_files.md
+      - Finding Help: essentials/finding_help.md
+      - File Permissions: essentials/file_permissions.md
+      - Users and Groups: essentials/users_and_groups.md
+      - Pipes and Redirection: essentials/pipes_and_redirection.md
+      - grep: essentials/grep.md
+      - Processes: essentials/processes.md
 
   # ⚡ Efficiency — Daily-use tools for working Linux professionals
   # - ⚡ Efficiency:

@@ -459,4 +459,6 @@ Congratulations! You now know how to:
 
 **What's next?**
 
-The **Essentials** track covers the tools Linux professionals use every day — filesystem layout, file permissions, grep, pipes, and more. Head back to the [Day One overview](overview.md) in the meantime.
+If you're a developer who just needed to work safely on Linux, you're done — come back when you need more.
+
+If you're an IT professional who wants to actually own Linux — sysadmin, platform engineer, SRE — the **[Essentials](../essentials/command_line_fundamentals.md)** track is where the real work starts: filesystem layout, permissions management, user accounts, process control, pipes, and grep. Built for IT professionals, not beginners.
