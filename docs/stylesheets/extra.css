@@ -31,6 +31,11 @@
   grid-template-columns: 1fr !important;
 }
 
+/* Two-column override for pages without code blocks in cards (e.g. index) */
+.md-typeset .grid.cards.two-col {
+  grid-template-columns: repeat(2, 1fr) !important;
+}
+
 /* Force dark text in Mermaid diagram nodes for better contrast on colored backgrounds */
 .mermaid .node rect,
 .mermaid .node circle,

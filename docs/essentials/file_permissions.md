@@ -92,7 +92,7 @@ chmod u+x,g-w,o= deploy.sh
 chmod +x deploy.sh          # equivalent to chmod a+x
 ```
 
-**When to use symbolic:** When you want to add or remove a specific bit without disturbing the rest. Surgical, readable, less error-prone.
+**When to use symbolic:** When you want to add or remove a specific bit without disturbing the rest. `chmod +x` for shell scripts is one of the most common uses — see [Your First Bash Script](bash_first_script.md) for how this fits into the scripting workflow.
 
 ### Octal Notation
 

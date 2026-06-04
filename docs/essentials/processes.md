@@ -588,6 +588,8 @@ For long-running tasks, consider `tmux` or `screen` for persistent terminal sess
 
 ## What's Next?
 
-You've completed the Essentials track — the foundation every Linux professional must own. You can navigate the command line efficiently, find anything on any system, read and manage permissions, understand the filesystem layout, manage users and groups, build data pipelines, search text with precision, and control running processes.
+You've covered four of the five Essentials categories. The commands from the command line, users and access, text pipelines, and process management are now in your toolkit.
 
-The next track, **Efficiency**, covers the tools that experienced Linux professionals use daily: systemd for service management, sed for text transformation, bash scripting for automation, and package management for keeping systems current.
+The final Essentials category is **Bash Scripting** — where all of those commands become repeatable automation. Start with [Your First Bash Script](bash_first_script.md).
+
+After completing Essentials, the **Efficiency** track covers the daily-use tools that experienced Linux professionals reach for: systemd for service management, `sed` for text transformation, and package management for keeping systems current.

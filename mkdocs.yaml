@@ -120,32 +120,77 @@ nav:
       - The "Don't Do This" Guide: day_one/safety_guide.md
 
   - 📦 Essentials:
-      - Command Line Fundamentals: essentials/command_line_fundamentals.md
-      - Filesystem Hierarchy: essentials/filesystem_hierarchy.md
-      - Finding Files: essentials/finding_files.md
-      - Finding Help: essentials/finding_help.md
-      - File Permissions: essentials/file_permissions.md
-      - Users and Groups: essentials/users_and_groups.md
-      - Pipes and Redirection: essentials/pipes_and_redirection.md
-      - grep: essentials/grep.md
-      - Processes: essentials/processes.md
+      - Overview: essentials/overview.md
+      - The Command Line:
+          - Overview: essentials/command_line_overview.md
+          - Command Line Fundamentals: essentials/command_line_fundamentals.md
+          - Filesystem Hierarchy: essentials/filesystem_hierarchy.md
+          - Finding Files: essentials/finding_files.md
+          - Finding Help: essentials/finding_help.md
+      - Users & Access:
+          - Overview: essentials/users_access_overview.md
+          - File Permissions: essentials/file_permissions.md
+          - Users and Groups: essentials/users_and_groups.md
+      - Text & Pipelines:
+          - Overview: essentials/text_pipelines_overview.md
+          - Pipes and Redirection: essentials/pipes_and_redirection.md
+          - grep: essentials/grep.md
+      - System:
+          - Overview: essentials/system_overview.md
+          - Processes: essentials/processes.md
+      - Bash Scripting:
+          - Overview: essentials/bash_scripting.md
+          - Your First Bash Script: essentials/bash_first_script.md
+          - Variables and Quoting: essentials/bash_variables.md
+          - Arguments and Exit Codes: essentials/bash_arguments.md
+          - Conditionals: essentials/bash_conditionals.md
+          - Loops: essentials/bash_loops.md
+          - Functions: essentials/bash_functions.md
 
   # ⚡ Efficiency — Daily-use tools for working Linux professionals
   # - ⚡ Efficiency:
-  #     - Services with systemd: efficiency/systemd.md
-  #     - sed: efficiency/sed.md
-  #     - Bash Scripting Basics: efficiency/bash_scripting_basics.md
-  #     - Bash Scripting Patterns: efficiency/bash_scripting_patterns.md
-  #     - Package Management: efficiency/package_management.md
-  #     - Networking Basics: efficiency/networking_basics.md
-  #     - Shell Shortcuts and History: efficiency/shell_shortcuts.md
+  #     - The Command Line:
+  #         - Overview: efficiency/command_line_overview.md
+  #         - Shell Shortcuts and History: efficiency/shell_shortcuts.md
+  #     - Users & Access:
+  #         - Overview: efficiency/users_access_overview.md
+  #     - Text & Pipelines:
+  #         - Overview: efficiency/text_pipelines_overview.md
+  #         - sed: efficiency/sed.md
+  #     - System:
+  #         - Overview: efficiency/system_overview.md
+  #         - Services with systemd: efficiency/systemd.md
+  #         - Package Management: efficiency/package_management.md
+  #         - Networking Basics: efficiency/networking_basics.md
+  #     - Bash Scripting:
+  #         - Overview: efficiency/bash_scripting.md
+  #         - Writing Safe Scripts: efficiency/bash_safe_scripts.md
+  #         - Parsing Arguments with getopts: efficiency/bash_getopts.md
+  #         - Trap and Cleanup Handlers: efficiency/bash_trap.md
+  #         - Logging Patterns: efficiency/bash_logging.md
+  #         - Parsing Command Output: efficiency/bash_parsing.md
+  #         - Bash Arrays: efficiency/bash_arrays.md
 
   # 🎯 Mastery — Production-grade Linux for the serious professional
   # - 🎯 Mastery:
-  #     - Storage and Filesystems: mastery/storage_and_filesystems.md
-  #     - Logical Volume Management: mastery/lvm.md
-  #     - Network File Shares: mastery/network_file_shares.md
-  #     - System Tuning: mastery/system_tuning.md
-  #     - Containers with Podman: mastery/containers.md
-  #     - Text Editors: mastery/text_editors.md
-  #     - Terminal Tools: mastery/terminal_tools.md
+  #     - The Command Line:
+  #         - Overview: mastery/command_line_overview.md
+  #     - Users & Access:
+  #         - Overview: mastery/users_access_overview.md
+  #     - Text & Pipelines:
+  #         - Overview: mastery/text_pipelines_overview.md
+  #     - System:
+  #         - Overview: mastery/system_overview.md
+  #         - Storage and Filesystems: mastery/storage_and_filesystems.md
+  #         - Logical Volume Management: mastery/lvm.md
+  #         - Network File Shares: mastery/network_file_shares.md
+  #         - System Tuning: mastery/system_tuning.md
+  #         - Containers with Podman: mastery/containers.md
+  #     - Bash Scripting:
+  #         - Overview: mastery/bash_scripting.md
+  #         - Associative Arrays: mastery/bash_associative_arrays.md
+  #         - Signal Handling: mastery/bash_signals.md
+  #         - Locking Scripts: mastery/bash_locking.md
+  #         - Bash and systemd: mastery/bash_systemd.md
+  #         - Bash Security: mastery/bash_security.md
+  #         - When to Stop Using Bash: mastery/bash_to_python.md
