@@ -258,6 +258,8 @@ require_command jq
 
 1. `$(dirname "$0")` resolves to the directory containing the running script — a reliable way to find sibling files without hardcoding absolute paths.
 
+When this pattern grows to multiple sourced libraries shared across repos, that's usually the signal to cross over. The `main()`/library structure maps directly to Python modules — see [My Bash Script Is Getting Out of Hand](https://python.bradpenney.io/day_one/wrapping_bash/).
+
 ---
 
 ## Practice Exercises
@@ -360,6 +362,10 @@ require_command jq
 
 - [GNU Bash Manual: Shell Functions](https://www.gnu.org/software/bash/manual/bash.html#Shell-Functions)
 - [GNU Bash Manual: The local builtin](https://www.gnu.org/software/bash/manual/bash.html#index-local)
+
+### Exploring Python
+
+- [My Bash Script Is Getting Out of Hand](https://python.bradpenney.io/day_one/wrapping_bash/) — When functions, sourced libraries, and argument handling outgrow Bash: the migration path to Python with proper module structure
 
 ---
 

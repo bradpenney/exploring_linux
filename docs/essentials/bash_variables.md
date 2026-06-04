@@ -297,6 +297,10 @@ log_dir="${LOG_DIR-/var/log/myapp}"   # (2)!
 - [GNU Bash Manual: Shell Parameters](https://www.gnu.org/software/bash/manual/bash.html#Shell-Parameters) — all special variables
 - [GNU Bash Manual: Command Substitution](https://www.gnu.org/software/bash/manual/bash.html#Command-Substitution)
 
+### Exploring Python
+
+- [Environment Variables and Secrets](https://python.bradpenney.io/essentials/env_and_secrets/) — Managing `os.environ`, `.env` files, and secrets safely in Python scripts: what the Python side looks like once your config needs grow past `$VAR`
+
 ---
 
 ## What's Next?

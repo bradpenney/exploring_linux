@@ -245,6 +245,8 @@ fi
     1. Removes the first two arguments. What was `$3` is now `$1`.
     2. `"$@"` now contains only the caller-supplied options, forwarded intact.
 
+When your interface grows to flag-style arguments — `--environment production`, `--dry-run`, `--help` — that's the natural handoff point. Python's `click` library handles flags, validation, and `--help` generation in a way `$1`/`$@` patterns can't scale to. See [My Bash Script Is Getting Out of Hand](https://python.bradpenney.io/day_one/wrapping_bash/).
+
 ---
 
 ## Practice Exercises
@@ -335,6 +337,10 @@ fi
 
 - [GNU Bash Manual: Special Parameters](https://www.gnu.org/software/bash/manual/bash.html#Special-Parameters)
 - [GNU Bash Manual: Exit Status](https://www.gnu.org/software/bash/manual/bash.html#Exit-Status)
+
+### Exploring Python
+
+- [My Bash Script Is Getting Out of Hand](https://python.bradpenney.io/day_one/wrapping_bash/) — When `$1`/`$@` handling grows unwieldy: migrating argument-heavy scripts to Python with proper parsing and `--help` output
 
 ---
 

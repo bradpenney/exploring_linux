@@ -350,6 +350,10 @@ fi
 - [GNU Bash Manual: Conditional Constructs](https://www.gnu.org/software/bash/manual/bash.html#Conditional-Constructs)
 - [GNU Bash Manual: Bash Conditional Expressions](https://www.gnu.org/software/bash/manual/bash.html#Bash-Conditional-Expressions)
 
+### Exploring Python
+
+- [Is It Still Up?](https://python.bradpenney.io/day_one/health_check/) — When `if [[ ]]` checks grow into full health-check loops with retries and structured failure reporting: the Python approach to service monitoring
+
 ---
 
 ## What's Next?

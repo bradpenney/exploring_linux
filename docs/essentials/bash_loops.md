@@ -316,6 +316,11 @@ The patterns below draw on commands covered in other Essentials articles — [`g
 - [GNU Bash Manual: Looping Constructs](https://www.gnu.org/software/bash/manual/bash.html#Looping-Constructs)
 - [GNU Bash Manual: Process Substitution](https://www.gnu.org/software/bash/manual/bash.html#Process-Substitution)
 
+### Exploring Python
+
+- [What Just Broke?](https://python.bradpenney.io/day_one/parsing_logs/) — When `while IFS= read -r` hits its limit: structured log parsing in Python with pattern matching and output you can actually act on
+- [Run This Everywhere](https://python.bradpenney.io/day_one/run_everywhere/) — When your loop-over-hosts script needs parallelism or structured error handling across the fleet
+
 ---
 
 ## What's Next?

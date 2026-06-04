@@ -229,6 +229,10 @@ Where a script lives determines who can run it and how easily:
 - [GNU Bash Manual](https://www.gnu.org/software/bash/manual/bash.html) — the authoritative Bash reference
 - [Filesystem Hierarchy Standard](https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html) — official spec for where things go on Linux
 
+### Exploring Python
+
+- [Why Python (Not Just Bash)](https://python.bradpenney.io/day_one/why_python/) — When your script grows into something bigger: the signals that mean Python is the right next step
+
 ---
 
 ## What's Next?
