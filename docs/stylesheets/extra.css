@@ -56,6 +56,13 @@
   width: auto;
 }
 
+/* Restore full width for line-numbered code blocks — MkDocs renders these as <table> internally */
+.md-typeset .highlight table {
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
 .md-typeset .md-typeset__scrollwrap,
 .md-typeset .md-typeset__table {
   display: flex;

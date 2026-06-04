@@ -118,12 +118,13 @@ done < "/path/to/file.txt"    # (2)!
 
 ### Reading Command Output
 
-When the input is a command rather than a file, use process substitution to feed it to the loop:
+When the input is a live command rather than a file, use process substitution to feed it to the loop:
 
 ``` bash title="Read Command Output Line by Line" linenums="1"
-while IFS= read -r server; do
-    echo "Checking: ${server}"
-done < <(grep -v "^#" servers.txt)   # (1)!
+while IFS= read -r pod; do
+    echo "Restarting: ${pod}"
+    kubectl delete "${pod}"
+done < <(kubectl get pods --field-selector=status.phase=Failed -o name)   # (1)!
 ```
 
 1. `< <(command)` is **process substitution** — it runs the command and presents its output as a file-like stream. Unlike piping to `while` (which runs the loop in a subshell), this keeps any variables you set inside the loop visible in the parent shell.
