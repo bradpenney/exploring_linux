@@ -1,4 +1,5 @@
 ---
+date: "2025-11-21 16:34"
 title: Finding Documentation on a Linux Server
 description: Find documentation on an unfamiliar Linux server — man pages, README files, package docs, git history, and what the server itself tells you.
 ---

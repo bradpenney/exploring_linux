@@ -1,4 +1,5 @@
 ---
+date: "2025-11-21 16:34"
 title: First 60 Seconds - Linux Server Orientation
 description: Just logged in? Learn what the prompt tells you, how to identify the server you're on, and which safe read-only commands reveal everything you need to know.
 ---

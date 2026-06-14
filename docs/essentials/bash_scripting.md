@@ -1,4 +1,5 @@
 ---
+date: "2026-06-03 21:58"
 title: "Bash Scripting Essentials — First Script to Functions"
 description: "A six-article bash scripting series for IT professionals. From your first shebang line to reusable functions — variables, arguments, conditionals, loops."
 ---

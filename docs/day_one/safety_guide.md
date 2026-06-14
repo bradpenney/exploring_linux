@@ -1,4 +1,5 @@
 ---
+date: "2025-11-21 16:34"
 title: The Linux Production Safety Guide
 description: Learn what NOT to do on a production Linux server. The rules exist because someone broke something. Understand dangerous commands and how to avoid disasters.
 ---

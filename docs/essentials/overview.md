@@ -1,4 +1,5 @@
 ---
+date: "2026-06-03 21:58"
 title: "Essentials — Linux for IT Professionals"
 description: "The Linux commands and concepts every sysadmin and platform engineer must own. Five categories from command line fundamentals to Bash scripting automation."
 ---

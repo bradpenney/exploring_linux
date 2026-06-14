@@ -1,4 +1,5 @@
 ---
+date: "2026-06-03 21:58"
 title: "Bash Loops — for, while, and Iterating Command Output"
 description: "Master Bash loops for automation. Covers for loops over lists and files, while loops with command output, break and continue, and practical loop patterns."
 ---

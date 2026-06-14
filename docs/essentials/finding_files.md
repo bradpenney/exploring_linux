@@ -1,4 +1,5 @@
 ---
+date: "2025-08-26 08:59"
 title: Finding Files in Linux - find, locate, and which
 description: Master Linux file discovery with find, locate, and which — learn to locate configs, logs, binaries, and large files on any system you encounter.
 ---

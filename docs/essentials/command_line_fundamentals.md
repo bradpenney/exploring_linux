@@ -1,4 +1,5 @@
 ---
+date: "2025-08-13 21:28"
 title: Command Line Fundamentals - Master the Linux Shell
 description: Master Linux command syntax, tab completion, history tricks, and command chaining — the fundamentals that separate Linux beginners from professionals.
 ---

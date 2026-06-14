@@ -1,4 +1,5 @@
 ---
+date: "2026-06-03 21:58"
 title: "Users and Access in Linux — Essentials Overview"
 description: "Master Linux's permission model. Two articles covering file permissions and user/group management — the foundation of every access control decision on Linux."
 ---

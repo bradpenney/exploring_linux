@@ -1,4 +1,5 @@
 ---
+date: "2026-06-03 21:58"
 title: "Linux System Management — Processes Essentials"
 description: "Every command you run spawns a process. This section starts with processes — how to see them, manage them, and understand what they're doing on your system."
 ---

@@ -1,4 +1,5 @@
 ---
+date: "2026-04-04 18:47"
 title: Users and Groups in Linux - User Account Management
 description: Master Linux user and group management — useradd, usermod, groupadd, service accounts, and the /etc/passwd and /etc/group files every sysadmin reads.
 ---

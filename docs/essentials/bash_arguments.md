@@ -1,4 +1,5 @@
 ---
+date: "2026-06-03 21:58"
 title: "Bash Arguments and Exit Codes — $1, $@, and $?"
 description: "Handle script arguments and exit codes in Bash. Learn $1, $@, $#, $?, and how to return meaningful exit codes that other scripts and tools can act on."
 ---

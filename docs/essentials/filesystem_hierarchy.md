@@ -1,4 +1,5 @@
 ---
+date: "2025-08-13 21:28"
 title: Linux Filesystem Hierarchy - Where Everything Lives
 description: Understand the Linux filesystem hierarchy — where configuration, logs, binaries, and application data live, and why. The mental map every sysadmin needs.
 ---

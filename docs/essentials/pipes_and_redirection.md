@@ -1,4 +1,5 @@
 ---
+date: "2026-02-03 21:52"
 title: Pipes and Redirection in Linux - Building Command Pipelines
 description: Master Linux pipes and redirection — combine commands into powerful pipelines, redirect output to files, and manage stdin, stdout, and stderr like a pro.
 ---

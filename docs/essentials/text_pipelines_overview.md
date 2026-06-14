@@ -1,4 +1,5 @@
 ---
+date: "2026-06-03 21:58"
 title: "Text Processing and Pipelines — Essentials Overview"
 description: "Learn how Linux handles text. Two articles covering pipes, redirection, and grep — the tools you reach for every time you investigate a Linux system."
 ---

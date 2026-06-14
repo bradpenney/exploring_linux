@@ -1,4 +1,5 @@
 ---
+date: "2025-11-21 16:34"
 title: Reading Linux Logs Like a Pro
 description: Learn to debug production Linux systems by reading log files. Master tail, grep, and journalctl to find errors, track issues, and diagnose problems fast.
 ---

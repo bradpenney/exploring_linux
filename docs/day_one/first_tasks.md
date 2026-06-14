@@ -1,4 +1,5 @@
 ---
+date: "2025-11-21 16:34"
 title: Common First Tasks on a Linux Server
 description: "Walk through the real tasks you'll be asked to do on Day One: checking service status, reading logs, inspecting configs, and verifying system health."
 ---

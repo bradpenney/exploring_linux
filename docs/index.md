@@ -1,4 +1,5 @@
 ---
+date: "2025-07-21 21:44"
 title: Exploring Enterprise Linux
 description: Enterprise Linux from first SSH login to production mastery — built for developers who need Linux to work, and IT professionals who need to own it.
 ---

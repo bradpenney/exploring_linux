@@ -1,4 +1,5 @@
 ---
+date: "2026-06-03 21:58"
 title: "Bash Variables and Quoting — Avoiding Common Pitfalls"
 description: "Master Bash variables and quoting rules. Learn when to use double vs single quotes, command substitution, and how quoting bugs silently break your scripts."
 ---

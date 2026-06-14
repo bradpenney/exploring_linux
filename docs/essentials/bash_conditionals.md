@@ -1,4 +1,5 @@
 ---
+date: "2026-06-03 21:58"
 title: "Bash Conditionals — if/elif and Test Operators"
 description: "Write Bash conditionals that work reliably. Covers if/elif/else, the [[ ]] operator, common file and string tests, and patterns that avoid subtle bugs."
 ---

@@ -1,4 +1,5 @@
 ---
+date: "2025-08-25 13:01"
 title: File Permissions in Linux - chmod, chown, and umask
 description: Learn to manage Linux file permissions — chmod, chown, umask, SUID, SGID, and sticky bit — the skills every sysadmin and DevOps engineer needs.
 ---

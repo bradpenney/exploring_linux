@@ -1,4 +1,5 @@
 ---
+date: "2025-07-22 07:44"
 title: Finding Help in Linux - man Pages, tldr, and Documentation
 description: Learn to find help in Linux fast — man pages, --help flags, tldr, apropos, and the online resources every sysadmin keeps bookmarked.
 ---

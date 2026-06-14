@@ -1,4 +1,5 @@
 ---
+date: "2026-06-03 21:58"
 title: "Your First Bash Script — From Shebang to Executable"
 description: "Write your first Bash script with confidence. Covers the shebang line, script structure, making scripts executable, and where to store them for team use."
 ---

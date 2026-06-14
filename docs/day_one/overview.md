@@ -1,4 +1,5 @@
 ---
+date: "2026-02-03 21:52"
 title: Day One - Linux for Developers
 description: Linux survival guide for developers — SSH, orientation, permissions, logs, documentation, and production safety rules. Get effective without becoming a sysadmin.
 ---

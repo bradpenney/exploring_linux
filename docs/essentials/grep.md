@@ -1,4 +1,5 @@
 ---
+date: "2026-02-03 21:52"
 title: grep - Linux Text Search and Pattern Matching
 description: Master grep for Linux — regular expressions, recursive search, context flags, and the real-world patterns every sysadmin uses for log analysis and system investigation.
 ---

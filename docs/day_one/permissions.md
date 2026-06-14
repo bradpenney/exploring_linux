@@ -1,4 +1,5 @@
 ---
+date: "2025-11-21 16:34"
 title: Understanding Your Linux Permissions
 description: Learn to check your Linux privilege level before touching anything. Understand regular users, sudo access, and root on enterprise production servers.
 ---

@@ -1,4 +1,5 @@
 ---
+date: "2026-06-03 21:58"
 title: "The Linux Command Line — Essentials Overview"
 description: "Orient yourself in the Linux command line. Four articles covering navigation, the filesystem structure, finding files, and getting help when you're stuck."
 ---

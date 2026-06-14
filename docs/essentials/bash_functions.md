@@ -1,4 +1,5 @@
 ---
+date: "2026-06-03 21:58"
 title: "Bash Functions — Reusable Blocks for Better Scripts"
 description: "Organise Bash scripts with functions. Learn to define, call, and scope functions with local variables, return values via exit codes, and reuse patterns."
 ---

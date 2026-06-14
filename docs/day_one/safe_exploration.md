@@ -1,4 +1,5 @@
 ---
+date: "2025-11-21 16:34"
 title: Safe Exploration of a Linux Server
 description: Explore a Linux server without breaking anything. Learn which commands are safe, how to navigate the filesystem confidently, and what to avoid in production.
 ---
