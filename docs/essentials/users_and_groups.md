@@ -123,20 +123,18 @@ You rarely read this directly. The `passwd`, `chage`, and `usermod` commands man
 ### Creating Users
 
 ``` bash title="useradd — Create a User Account"
-# Basic user with home directory
-useradd -m -s /bin/bash jsmith
-
-# With comment (full name) and specific UID
-useradd -m -s /bin/bash -c "John Smith" -u 1050 jsmith
-
-# Create a service account (no home dir, no login shell)
-useradd -r -s /usr/sbin/nologin -c "My Application Service" myapp
-
-# Set password immediately
-passwd jsmith
+useradd -m -s /bin/bash jsmith                                     # (1)!
+useradd -m -s /bin/bash -c "John Smith" -u 1050 jsmith             # (2)!
+useradd -r -s /usr/sbin/nologin -c "My Application Service" myapp   # (3)!
+passwd jsmith                                                      # (4)!
 # New password: [enter password]
 # Retype new password: [confirm]
 ```
+
+1. Basic user with a home directory.
+2. With a comment (full name) and a specific UID.
+3. A service account — no home directory, no login shell.
+4. Set the password immediately.
 
 | Flag | Meaning |
 |------|---------|
@@ -153,29 +151,22 @@ passwd jsmith
 ### Modifying Users
 
 ``` bash title="usermod — Modify an Existing User"
-# Add user to a supplementary group
-usermod -aG developers jsmith     # (1)!
-
-# Add to multiple groups
-usermod -aG developers,docker jsmith
-
-# Change the login shell
-usermod -s /bin/zsh jsmith
-
-# Change the home directory (moves files with -m)
-usermod -d /opt/jsmith -m jsmith
-
-# Lock an account (disable login)
-usermod -L jsmith
-
-# Unlock an account
-usermod -U jsmith
-
-# Set account expiry date
-usermod -e 2026-12-31 jsmith
+usermod -aG developers jsmith         # (1)!
+usermod -aG developers,docker jsmith  # (2)!
+usermod -s /bin/zsh jsmith            # (3)!
+usermod -d /opt/jsmith -m jsmith      # (4)!
+usermod -L jsmith                     # (5)!
+usermod -U jsmith                     # (6)!
+usermod -e 2026-12-31 jsmith          # (7)!
 ```
 
-1. **The `-a` flag is critical.** Without `-a`, `usermod -G developers jsmith` *replaces* all supplementary groups with just `developers`, removing the user from every other group. With `-a` (append), it adds to the existing groups. Forgetting `-a` is a common mistake that causes production access issues.
+1. Add a user to a supplementary group. **The `-a` (append) flag is critical** — without it, `usermod -G developers jsmith` *replaces* all supplementary groups with just `developers`, removing the user from every other group. Forgetting `-a` is a common cause of production access incidents.
+2. Add to multiple groups at once.
+3. Change the login shell.
+4. Change the home directory (`-m` moves the existing files).
+5. Lock an account (disable login).
+6. Unlock an account.
+7. Set an account expiry date.
 
 !!! warning "Never Forget -a When Adding to Groups"
     `usermod -G developers jsmith` without `-a` removes `jsmith` from ALL other groups (sudo, docker, etc.) and sets `developers` as the only supplementary group. This can immediately break access and is a common cause of "why does X no longer work?" incidents.
@@ -185,15 +176,14 @@ usermod -e 2026-12-31 jsmith
 ### Deleting Users
 
 ``` bash title="userdel — Remove a User Account"
-# Remove the user (keep home directory)
-userdel jsmith
-
-# Remove the user AND their home directory
-userdel -r jsmith
-
-# Find files owned by the user before deleting
-find / -user jsmith 2>/dev/null | head -20
+userdel jsmith                              # (1)!
+userdel -r jsmith                           # (2)!
+find / -user jsmith 2>/dev/null | head -20  # (3)!
 ```
+
+1. Remove the user (keep their home directory).
+2. Remove the user **and** their home directory.
+3. Find files owned by the user before deleting — orphaned files show a bare UID afterward.
 
 Before deleting, check what files the user owns — especially in shared directories. After deletion, those files show as orphaned (UID only, no username) in `ls -l`.
 
@@ -202,49 +192,47 @@ Before deleting, check what files the user owns — especially in shared directo
 ## Managing Groups
 
 ``` bash title="Group Management Commands"
-# Create a new group
-groupadd developers
-
-# Create with specific GID
-groupadd -g 1050 developers
-
-# Add a user to a group (same as usermod -aG)
-usermod -aG developers jsmith
-
-# Remove a user from a group
-gpasswd -d jsmith developers
-
-# Delete a group
-groupdel developers
-
-# Check group membership
-groups jsmith
+groupadd developers              # (1)!
+groupadd -g 1050 developers      # (2)!
+usermod -aG developers jsmith    # (3)!
+gpasswd -d jsmith developers     # (4)!
+groupdel developers              # (5)!
+groups jsmith                    # (6)!
 # jsmith : jsmith developers sudo docker
 
-id jsmith
+id jsmith                        # (7)!
 # uid=1001(jsmith) gid=1001(jsmith) groups=1001(jsmith),1002(developers),27(sudo),998(docker)
 ```
+
+1. Create a new group.
+2. Create with a specific GID.
+3. Add a user to a group (same as `usermod -aG`).
+4. Remove a user from a group.
+5. Delete a group.
+6. Check group membership.
+7. The fuller view — numeric IDs alongside every group.
 
 ---
 
 ## Switching Users
 
 ``` bash title="Switching User Context"
-# Switch to another user (requires their password)
-su - jsmith          # the hyphen loads jsmith's environment (PATH, etc.)
-su jsmith            # switch without loading environment (usually not what you want)
-
-# Run a single command as another user
-su - jsmith -c "ls -la ~"
-
-# Switch to root (requires root password or sudo)
-su -
-sudo su -            # if you have sudo access
-
-# Run a command as another user with sudo
-sudo -u www-data cat /var/www/html/index.html
-sudo -u postgres psql -c "SELECT version();"
+su - jsmith                                      # (1)!
+su jsmith                                        # (2)!
+su - jsmith -c "ls -la ~"                        # (3)!
+su -                                             # (4)!
+sudo su -                                        # (5)!
+sudo -u www-data cat /var/www/html/index.html    # (6)!
+sudo -u postgres psql -c "SELECT version();"     # (7)!
 ```
+
+1. Switch to another user (requires their password). The hyphen loads jsmith's environment — `PATH`, variables, working directory.
+2. Switch *without* loading their environment — usually not what you want.
+3. Run a single command as another user.
+4. Switch to root (requires the root password, or sudo).
+5. Become root via sudo, if you have sudo access.
+6. Run a command as another user with sudo.
+7. Another `sudo -u` example — run `psql` as the postgres user.
 
 **`su -` vs `su`:** Always use `su -` (with the dash). Without it, you switch user but keep your current environment — your `PATH`, variables, and working directory. With `-`, you get a proper login shell that sources the user's environment, which is almost always what you actually need.
 
@@ -272,23 +260,27 @@ graph TD
 The web server can only access what it needs. A compromise gives the attacker `www-data` privileges, not root.
 
 ``` bash title="Creating a Service Account"
-# Create application service account
 useradd \
-  -r \                          # system account (UID < 1000)
-  -s /usr/sbin/nologin \        # no interactive login
-  -d /opt/myapp \               # home directory = app directory
-  -c "My Application Service" \ # description
+  -r \                          # (1)!
+  -s /usr/sbin/nologin \        # (2)!
+  -d /opt/myapp \               # (3)!
+  -c "My Application Service" \ # (4)!
   myapp
 
-# Create the application directory owned by the service account
-mkdir -p /opt/myapp
+mkdir -p /opt/myapp             # (5)!
 chown myapp:myapp /opt/myapp
 chmod 750 /opt/myapp
 
-# Verify: the account can't be logged into
-su - myapp
+su - myapp                      # (6)!
 # This account is currently not available.
 ```
+
+1. System account — UID in the system range (< 1000).
+2. No interactive login.
+3. Home directory = the application directory.
+4. Description / comment.
+5. Create the application directory, owned by the service account.
+6. Verify the account can't be logged into.
 
 **Key service account conventions:**
 
@@ -306,93 +298,92 @@ su - myapp
     A new developer needs access to: login, read application logs, use Docker.
 
     ``` bash title="Onboard a New Developer"
-    # Create account
-    useradd -m -s /bin/bash -c "Jane Developer" jdev
-
-    # Set initial password (they'll change it on first login)
-    passwd jdev
-
-    # Add to relevant groups
-    usermod -aG developers jdev    # team group
-    usermod -aG docker jdev        # Docker access
-    usermod -aG adm jdev           # read most log files
-
-    # Force password change on first login
-    chage -d 0 jdev
-
-    # Verify
-    id jdev
+    useradd -m -s /bin/bash -c "Jane Developer" jdev   # (1)!
+    passwd jdev                                        # (2)!
+    usermod -aG developers jdev                        # (3)!
+    usermod -aG docker jdev                            # (4)!
+    usermod -aG adm jdev                               # (5)!
+    chage -d 0 jdev                                    # (6)!
+    id jdev                                            # (7)!
     # uid=1002(jdev) gid=1002(jdev) groups=1002(jdev),1002(developers),998(docker),4(adm)
     ```
+
+    1. Create the account.
+    2. Set an initial password — they'll change it on first login.
+    3. Add to the team group.
+    4. Grant Docker access.
+    5. Let them read most log files (the `adm` group).
+    6. Force a password change on first login.
+    7. Verify.
 
 === "Offboarding a User"
 
     Developer leaving. Disable access immediately, audit their files, remove account later.
 
     ``` bash title="Offboard a Developer"
-    # Lock account immediately (disable login without deleting)
-    usermod -L jsmith
-    passwd -l jsmith    # also lock the password
-
-    # Check what's running as this user
-    ps -u jsmith
-
-    # Find files they own (review before deletion)
-    find /home /opt /var -user jsmith 2>/dev/null | head -30
-
-    # After review period, remove account and home directory
-    userdel -r jsmith
-
-    # Files now show UID only — reassign or remove
-    find / -nouser 2>/dev/null | head -10
+    usermod -L jsmith                                          # (1)!
+    passwd -l jsmith                                           # (2)!
+    ps -u jsmith                                               # (3)!
+    find /home /opt /var -user jsmith 2>/dev/null | head -30   # (4)!
+    userdel -r jsmith                                          # (5)!
+    find / -nouser 2>/dev/null | head -10                      # (6)!
     ```
+
+    1. Lock the account immediately — disables login without deleting.
+    2. Also lock the password.
+    3. Check what's currently running as this user.
+    4. Find files they own — review before deletion.
+    5. After the review period, remove the account and home directory.
+    6. Orphaned files now show a UID only — reassign or remove them.
 
 === "Deploying an Application Service"
 
     New application needs to run as its own user with access to specific directories.
 
     ``` bash title="Set Up Application Service Account"
-    # Create service account
-    useradd -r -s /usr/sbin/nologin -c "Payment Service" payment-svc
+    useradd -r -s /usr/sbin/nologin -c "Payment Service" payment-svc   # (1)!
 
-    # Create required directories
-    mkdir -p /opt/payment/{app,config,logs}
+    mkdir -p /opt/payment/{app,config,logs}   # (2)!
 
-    # Set ownership
-    chown -R payment-svc:payment-svc /opt/payment/
+    chown -R payment-svc:payment-svc /opt/payment/   # (3)!
 
-    # Config directory: service can read, others nothing
-    chmod 750 /opt/payment/config/
+    chmod 750 /opt/payment/config/   # (4)!
 
-    # Logs directory: service can write
-    chmod 755 /opt/payment/logs/
+    chmod 755 /opt/payment/logs/   # (5)!
 
-    # Verify the service can't log in interactively
-    su - payment-svc
+    su - payment-svc   # (6)!
     # This account is currently not available.
     ```
+
+    1. Create the service account.
+    2. Create the required directories.
+    3. Set ownership.
+    4. Config directory: service can read, others nothing.
+    5. Logs directory: service can write.
+    6. Verify the service can't log in interactively.
 
 === "Auditing User Access"
 
     Security audit or incident response: find out who has access to what.
 
     ``` bash title="User Access Audit"
-    # List all user accounts that can log in
-    grep -v "nologin\|/bin/false" /etc/passwd | cut -d: -f1,3,7
+    grep -v "nologin\|/bin/false" /etc/passwd | cut -d: -f1,3,7   # (1)!
 
-    # List members of the sudo/wheel group
-    getent group sudo
+    getent group sudo    # (2)!
     getent group wheel
 
-    # Find all accounts with UID 0 (root-equivalent)
-    awk -F: '$3 == 0 {print $1}' /etc/passwd
+    awk -F: '$3 == 0 {print $1}' /etc/passwd   # (3)!
 
-    # List users who have logged in recently
-    last | head -20
+    last | head -20   # (4)!
 
-    # Check account aging information
-    chage -l jsmith
+    chage -l jsmith   # (5)!
     ```
+
+    1. List all user accounts that can log in.
+    2. List members of the sudo/wheel group.
+    3. Find all accounts with UID 0 (root-equivalent).
+    4. List users who have logged in recently.
+    5. Check account aging information.
 
 ---
 
@@ -447,24 +438,20 @@ su - myapp
 
     ??? tip "Solution"
         ``` bash title="Create Alice's Account"
-        # Create the group if it doesn't exist
-        groupadd developers 2>/dev/null || true
-
-        # Create Alice's account
-        useradd -m -s /bin/bash -c "Alice Developer" alice
-
-        # Set a temporary password
-        passwd alice
-
-        # Add to developers group
-        usermod -aG developers alice
-
-        # Force password change on first login
-        chage -d 0 alice
-
-        # Verify
-        id alice
+        groupadd developers 2>/dev/null || true             # (1)!
+        useradd -m -s /bin/bash -c "Alice Developer" alice   # (2)!
+        passwd alice                                        # (3)!
+        usermod -aG developers alice                        # (4)!
+        chage -d 0 alice                                    # (5)!
+        id alice                                            # (6)!
         ```
+
+        1. Create the group if it doesn't already exist.
+        2. Create Alice's account.
+        3. Set a temporary password.
+        4. Add to the developers group.
+        5. Force a password change on first login.
+        6. Verify.
 
 ??? question "Exercise 2: Create a Service Account"
     Create a service account for an application called `webapp`:
@@ -475,20 +462,19 @@ su - myapp
 
     ??? tip "Solution"
         ``` bash title="Create webapp Service Account"
-        useradd -r -s /usr/sbin/nologin -d /opt/webapp -c "Web Application Service" webapp
-
-        # Create the home directory (useradd -r doesn't create it by default)
-        mkdir -p /opt/webapp
+        useradd -r -s /usr/sbin/nologin -d /opt/webapp -c "Web Application Service" webapp   # (1)!
+        mkdir -p /opt/webapp                  # (2)!
         chown webapp:webapp /opt/webapp
-
-        # Verify it can't log in
-        su - webapp
+        su - webapp                           # (3)!
         # This account is currently not available.
-
-        # Check the entry in /etc/passwd
-        grep webapp /etc/passwd
+        grep webapp /etc/passwd               # (4)!
         # webapp:x:985:985:Web Application Service:/opt/webapp:/usr/sbin/nologin
         ```
+
+        1. Create the system service account — no login shell, home at `/opt/webapp`.
+        2. Create the home directory — `useradd -r` doesn't create it by default.
+        3. Verify it can't log in.
+        4. Check the entry in `/etc/passwd`.
 
 ??? question "Exercise 3: The usermod -aG Gotcha"
     User `bob` is in these groups: `bob`, `developers`, `docker`.

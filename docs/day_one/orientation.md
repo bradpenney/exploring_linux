@@ -112,9 +112,10 @@ Each step answers a critical question. Let's explore what you need to check.
     **Why it matters:** If someone else is actively working, coordinate before making changes.
 
     ``` bash title="Check Other Users" linenums="1"
-    w
-    # Shows who's logged in and what they're doing
+    w   # (1)!
     ```
+
+    1. Shows who's logged in and what they're doing.
 
     **Key insight:** See someone with `IDLE` time of 0-5 minutes? They're actively working. Coordinate changes with them.
 
@@ -133,18 +134,23 @@ Different situations call for different orientation checks. Pick your scenario:
     You just need to know: Who am I, where am I, what server is this, and is it healthy?
 
     ``` bash title="Quick Orientation (30 seconds)" linenums="1"
-    whoami              # Your username
+    whoami              # (1)!
     # jsmith
 
-    pwd                 # Where am I in the filesystem?
+    pwd                 # (2)!
     # /home/jsmith
 
-    hostname            # Server name
+    hostname            # (3)!
     # prod-web-01
 
-    uptime              # Is it healthy?
+    uptime              # (4)!
     # 14:23:01 up 47 days, 3:12, 2 users, load average: 0.15, 0.10, 0.08
     ```
+
+    1. Your username.
+    2. Where am I in the filesystem?
+    3. Server name.
+    4. Is it healthy?
 
     **What you learned:**
 
@@ -171,16 +177,20 @@ Different situations call for different orientation checks. Pick your scenario:
     Before you change anything, verify three things: correct server, no high load, no active users.
 
     ``` bash title="Pre-Change Safety Check" linenums="1"
-    hostname            # Confirm correct server
+    hostname            # (1)!
     # prod-web-01       ✓ Correct server
 
-    w                   # Who else is here?
+    w                   # (2)!
     # jsmith   pts/0    14:20    0.00s  -bash
     # admin    pts/1    09:45   4:30m   -bash    ← Someone idle (safe)
 
-    uptime              # Is it busy?
+    uptime              # (3)!
     # load average: 0.15, 0.10, 0.08    ← Low load (safe to proceed)
     ```
+
+    1. Confirm correct server.
+    2. Who else is here?
+    3. Is it busy?
 
     **Decision time:**
 

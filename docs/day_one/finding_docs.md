@@ -69,13 +69,17 @@ Without specifying a section, `man` gives you section 1. If you want to understa
 
 ``` bash title="Read Config File Formats" linenums="1"
 man 5 sshd_config     # (1)!
-man 5 fstab           # Filesystem table format
-man 5 crontab         # Cron job format
-man 5 sudoers         # sudo config format
-man 5 nginx           # nginx config directives (if installed)
+man 5 fstab           # (2)!
+man 5 crontab         # (3)!
+man 5 sudoers         # (4)!
+man 5 nginx           # (5)!
 ```
 
 1. The `5` is the manual section number — section 5 covers **file formats and conventions**. Without specifying it, `man sshd_config` may not find the page at all, since section 1 (commands) is the default.
+2. Filesystem table format.
+3. Cron job format.
+4. sudo config format.
+5. nginx config directives (if installed).
 
 **Key insight:** When you find a config file you don't understand, `man 5 configfilename` is usually the fastest path to understanding every option in it.
 
@@ -83,15 +87,16 @@ man 5 nginx           # nginx config directives (if installed)
     Some packages don't install man pages (minimal installs, containers). If `man 5 nginx` returns "No manual entry," try:
 
     ``` bash title="Fallback When Man Page Isn't There"
-    # Read the config file itself — it's often heavily commented
-    less /etc/nginx/nginx.conf
+    less /etc/nginx/nginx.conf   # (1)!
 
-    # Check for docs bundled with the package
-    find /usr/share/doc -name "*nginx*" -type d
+    find /usr/share/doc -name "*nginx*" -type d   # (2)!
 
-    # Look online — the application's own documentation is usually more complete anyway
+    # Or look online — the app's own docs are usually more complete:
     # nginx: https://nginx.org/en/docs/
     ```
+
+    1. Read the config file itself — it's often heavily commented.
+    2. Check for docs bundled with the package.
 
     For production services, the vendor's official documentation is often better than the man page regardless.
 
@@ -322,10 +327,11 @@ Five commits and you know this application has had connection pool issues, timeo
 
 ``` bash title="Understand a Specific File" linenums="1"
 git log --oneline -- config/database.yml    # (1)!
-git blame config/database.yml | head -20   # Who last changed each line
+git blame config/database.yml | head -20   # (2)!
 ```
 
 1. `--` explicitly separates git options from the file path. Without it, git may misinterpret the path as a branch name. `--oneline` condenses each commit to a single line: hash + subject.
+2. Who last changed each line.
 
 `git blame` output shows you the commit hash, author, date, and content of each line:
 
@@ -381,7 +387,7 @@ grep -r "timeout\|pool" /etc/payments-api/
 ``` bash title="Documentation Hunt" linenums="1"
 # Built-in command help
 man nginx
-man 5 sshd_config          # Config file format (section 5)
+man 5 sshd_config          # (1)!
 nginx --help
 
 # System state
@@ -407,6 +413,8 @@ ls /etc/servicename/
 grep -r "keyword" /etc/servicename/
 ```
 
+1. Config file format (section 5).
+
 ---
 
 ## Practice Problems
@@ -416,16 +424,25 @@ grep -r "keyword" /etc/servicename/
 
     ??? tip "Answer"
         ``` bash title="Investigate nginx" linenums="1"
-        nginx -v                       # Version
-        nginx --help                   # Available flags
-        man nginx                      # Full manual
-        man 5 nginx                    # Config format (if available)
-        systemctl cat nginx            # Service unit file — how it's configured to run
-        ls /etc/nginx/                 # Config structure
-        cat /etc/nginx/nginx.conf      # Active config
-        ls /usr/share/doc/nginx/       # Package docs directory
+        nginx -v                       # (1)!
+        nginx --help                   # (2)!
+        man nginx                      # (3)!
+        man 5 nginx                    # (4)!
+        systemctl cat nginx            # (5)!
+        ls /etc/nginx/                 # (6)!
+        cat /etc/nginx/nginx.conf      # (7)!
+        ls /usr/share/doc/nginx/       # (8)!
         cat /usr/share/doc/nginx/README.Debian 2>/dev/null || cat /usr/share/doc/nginx/README
         ```
+
+        1. Version.
+        2. Available flags.
+        3. Full manual.
+        4. Config format (if available).
+        5. Service unit file — how it's configured to run.
+        6. Config structure.
+        7. Active config.
+        8. Package docs directory.
 
         Start with `systemctl cat nginx` — it tells you the binary path, the user it runs as, and where its config lives. From there you can find everything else. The package README tells you about distribution-specific changes that may explain why this installation behaves differently from the official documentation.
 
@@ -434,14 +451,22 @@ grep -r "keyword" /etc/servicename/
 
     ??? tip "Answer"
         ``` bash title="Understand a Deployed Application" linenums="1"
-        ls -la /opt/webapp/                                         # What's here
-        cat /opt/webapp/README.md 2>/dev/null                       # Intent and overview
-        find /opt/webapp -type d -name "docs" 2>/dev/null           # Docs directory
-        find /opt/webapp -name "deploy*" -o -name "Makefile" 2>/dev/null  # Deploy scripts
-        systemctl list-units --type=service | grep webapp           # Is it a service?
-        systemctl cat webapp 2>/dev/null                            # How does it run?
-        cd /opt/webapp && git log --oneline -15 2>/dev/null         # Recent changes
+        ls -la /opt/webapp/                                         # (1)!
+        cat /opt/webapp/README.md 2>/dev/null                       # (2)!
+        find /opt/webapp -type d -name "docs" 2>/dev/null           # (3)!
+        find /opt/webapp -name "deploy*" -o -name "Makefile" 2>/dev/null  # (4)!
+        systemctl list-units --type=service | grep webapp           # (5)!
+        systemctl cat webapp 2>/dev/null                            # (6)!
+        cd /opt/webapp && git log --oneline -15 2>/dev/null         # (7)!
         ```
+
+        1. What's here.
+        2. Intent and overview.
+        3. Docs directory.
+        4. Deploy scripts.
+        5. Is it a service?
+        6. How does it run?
+        7. Recent changes.
 
         The README tells you intent. The deploy scripts tell you the operational reality. `git log` tells you what the team has been changing recently — which often surfaces active problems or in-progress work. Between these three sources you can build a solid picture of any application without talking to anyone.
 

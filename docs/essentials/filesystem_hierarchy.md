@@ -110,12 +110,18 @@ ls /
     **Why it matters:** This is where you make changes. Every service's configuration file lives here. Edit something in `/etc/` and it survives reboots — this is persistent, on-disk configuration.
 
     ``` bash title="What Lives in /etc"
-    ls /etc/nginx/         # nginx configuration
-    ls /etc/ssh/           # SSH server configuration
-    cat /etc/hosts         # hostname to IP mappings
-    cat /etc/fstab         # filesystem mount configuration
-    cat /etc/os-release    # distribution identity
+    ls /etc/nginx/         # (1)!
+    ls /etc/ssh/           # (2)!
+    cat /etc/hosts         # (3)!
+    cat /etc/fstab         # (4)!
+    cat /etc/os-release    # (5)!
     ```
+
+    1. nginx configuration.
+    2. SSH server configuration.
+    3. hostname to IP mappings.
+    4. filesystem mount configuration.
+    5. distribution identity.
 
     **Key insight:** When something isn't working, `/etc/` is where you look for misconfiguration. When you need to change behavior, `/etc/` is where you make the change.
 
@@ -126,11 +132,16 @@ ls /
     **Why it matters:** Anything that changes during normal operation lives here. Logs, application state, package manager databases, mail spools. It's designed to grow over time.
 
     ``` bash title="What Lives in /var"
-    ls /var/log/           # system and application logs
-    ls /var/lib/           # application state databases
-    ls /var/cache/         # cached package data
-    ls /var/spool/         # queued jobs (mail, print, cron)
+    ls /var/log/           # (1)!
+    ls /var/lib/           # (2)!
+    ls /var/cache/         # (3)!
+    ls /var/spool/         # (4)!
     ```
+
+    1. system and application logs.
+    2. application state databases.
+    3. cached package data.
+    4. queued jobs (mail, print, cron).
 
     **Key insight:** `/var/log/` is your first stop when diagnosing problems. Disk space issues are almost always caused by `/var` growing unchecked — logs or databases.
 
@@ -141,12 +152,18 @@ ls /
     **Why it matters:** The vast majority of executables, libraries, and documentation for installed packages lives here. It's meant to be read-only during normal operation — software goes in, the system reads it.
 
     ``` bash title="What Lives in /usr"
-    ls /usr/bin/           # executables for all users (ls, grep, cat...)
-    ls /usr/sbin/          # system admin executables (sshd, nginx, iptables...)
-    ls /usr/lib/           # shared libraries
-    ls /usr/local/bin/     # locally installed executables (your scripts, custom tools)
-    ls /usr/share/         # architecture-independent data, man pages
+    ls /usr/bin/           # (1)!
+    ls /usr/sbin/          # (2)!
+    ls /usr/lib/           # (3)!
+    ls /usr/local/bin/     # (4)!
+    ls /usr/share/         # (5)!
     ```
+
+    1. executables for all users (`ls`, `grep`, `cat`...).
+    2. system admin executables (`sshd`, `nginx`, `iptables`...).
+    3. shared libraries.
+    4. locally installed executables (your scripts, custom tools).
+    5. architecture-independent data, man pages.
 
     **Key insight:** If you install a tool from the package manager, its binary goes in `/usr/bin/`. If you compile something yourself or install it manually, put it in `/usr/local/bin/` — that directory won't be touched by system updates.
 
@@ -157,13 +174,19 @@ ls /
     **Why it matters:** Every user gets a home directory. It's where personal files, shell configuration (`.bashrc`, `.ssh/`), and user-specific data live.
 
     ``` bash title="User Home Directories"
-    ls /home/              # one directory per regular user
-    ls /home/jsmith/       # jsmith's files
-    ls /root/              # root user's home (separate from /home)
+    ls /home/              # (1)!
+    ls /home/jsmith/       # (2)!
+    ls /root/              # (3)!
 
-    echo $HOME             # your home directory
-    cd ~                   # shortcut to go home
+    echo $HOME             # (4)!
+    cd ~                   # (5)!
     ```
+
+    1. one directory per regular user.
+    2. jsmith's files.
+    3. root user's home (separate from `/home`).
+    4. your home directory.
+    5. shortcut to go home.
 
     **Key insight:** `/root` is the root user's home, not `/home/root`. It's intentionally separate. SSH keys live at `~/.ssh/authorized_keys` — finding these matters when you're debugging auth issues.
 
@@ -178,9 +201,11 @@ ls /
     **Why it matters:** Applications that don't follow the FHS layout — vendor software, self-contained apps, things not installed via the package manager — typically land here.
 
     ``` bash title="What Lives in /opt"
-    ls /opt/               # list installed third-party apps
+    ls /opt/               # (1)!
     # gitlab/   java/   splunk/   myapp/
     ```
+
+    1. list installed third-party apps.
 
     **Key insight:** `/opt` is self-contained. Each application gets its own subdirectory with everything it needs. This makes it easy to install, upgrade, and remove without touching the rest of the system.
 
@@ -207,8 +232,10 @@ ls /
     **Why it matters:** Data served by the system — web server document roots, FTP content. Not every distribution uses this consistently, but it's worth knowing.
 
     ``` bash title="What Lives in /srv"
-    ls /srv/               # often: http/, ftp/, or empty
+    ls /srv/               # (1)!
     ```
+
+    1. often: `http/`, `ftp/`, or empty.
 
     **Key insight:** Some web servers default to `/var/www/html/` instead. Check the web server config in `/etc/nginx/` or `/etc/httpd/` to find where the document root actually is.
 
@@ -219,12 +246,13 @@ ls /
     **Why it matters:** Temporary and removable filesystems get mounted here. `/mnt` is for manually mounted filesystems (NFS shares, extra disks). `/media` is typically for auto-mounted removable media.
 
     ``` bash title="Checking Mounted Filesystems"
-    mount | grep -v "^cgroup\|^sys\|^proc\|^dev"
-    # Filters virtual mounts, shows real mounted filesystems
+    mount | grep -v "^cgroup\|^sys\|^proc\|^dev"   # (1)!
 
-    df -h
-    # Shows disk usage for all mounted filesystems
+    df -h   # (2)!
     ```
+
+    1. Filters virtual mounts, shows real mounted filesystems.
+    2. Shows disk usage for all mounted filesystems.
 
 </div>
 
@@ -246,15 +274,22 @@ Not everything under `/` is on your hard drive. Several directories are **virtua
 | `/tmp` | Usually tmpfs | Temporary files — cleared on reboot (sometimes cleared on each boot) |
 
 ``` bash title="Reading from Virtual Filesystems (Safe)"
-cat /proc/cpuinfo          # CPU model, cores, flags
-cat /proc/meminfo          # detailed memory statistics
-cat /proc/version          # kernel version string
+cat /proc/cpuinfo          # (1)!
+cat /proc/meminfo          # (2)!
+cat /proc/version          # (3)!
 
-ls /proc/1234/             # everything about process with PID 1234
-cat /proc/1234/cmdline     # what command started that process
+ls /proc/1234/             # (4)!
+cat /proc/1234/cmdline     # (5)!
 
-ls /sys/class/net/         # network interfaces
+ls /sys/class/net/         # (6)!
 ```
+
+1. CPU model, cores, flags.
+2. detailed memory statistics.
+3. kernel version string.
+4. everything about process with PID 1234.
+5. what command started that process.
+6. network interfaces.
 
 **The `/proc` trick:** Every running process has a directory at `/proc/PID/`. If you know a process's PID, you can read its open files (`/proc/PID/fd/`), environment variables (`/proc/PID/environ`), and more — all without any special tools.
 
@@ -286,19 +321,27 @@ ls -la / | grep "\->"
 
     ``` bash title="Finding Configuration"
     # Service configuration
-    ls /etc/nginx/              # nginx
-    ls /etc/ssh/                # SSH server
-    ls /etc/systemd/system/     # systemd unit overrides
+    ls /etc/nginx/              # (1)!
+    ls /etc/ssh/                # (2)!
+    ls /etc/systemd/system/     # (3)!
 
     # System-wide configuration
-    cat /etc/hosts              # hostname resolution
-    cat /etc/fstab              # disk mounts
-    cat /etc/environment        # system-wide environment variables
-    cat /etc/profile            # login shell profile (all users)
+    cat /etc/hosts              # (4)!
+    cat /etc/fstab              # (5)!
+    cat /etc/environment        # (6)!
+    cat /etc/profile            # (7)!
 
     # Find a config file when you don't know the name
     find /etc -name "*.conf" -type f | grep nginx
     ```
+
+    1. nginx.
+    2. SSH server.
+    3. systemd unit overrides.
+    4. hostname resolution.
+    5. disk mounts.
+    6. system-wide environment variables.
+    7. login shell profile (all users).
 
     **Pattern:** Start with `ls /etc/` and look for a directory named after the service you're investigating.
 
@@ -307,16 +350,24 @@ ls -la / | grep "\->"
     **Always check /var/log first.**
 
     ``` bash title="Finding Logs"
-    ls /var/log/                # everything logs
-    ls /var/log/nginx/          # nginx access and error logs
-    ls /var/log/postgresql/     # PostgreSQL logs
+    ls /var/log/                # (1)!
+    ls /var/log/nginx/          # (2)!
+    ls /var/log/postgresql/     # (3)!
 
     # Most important logs
-    tail -f /var/log/messages       # general system messages (RHEL/CentOS)
-    tail -f /var/log/syslog         # general system messages (Debian/Ubuntu)
-    journalctl -f                   # systemd journal (all modern systems)
-    journalctl -u nginx.service     # logs for a specific service
+    tail -f /var/log/messages       # (4)!
+    tail -f /var/log/syslog         # (5)!
+    journalctl -f                   # (6)!
+    journalctl -u nginx.service     # (7)!
     ```
+
+    1. everything logs.
+    2. nginx access and error logs.
+    3. PostgreSQL logs.
+    4. general system messages (RHEL/CentOS).
+    5. general system messages (Debian/Ubuntu).
+    6. systemd journal (all modern systems).
+    7. logs for a specific service.
 
     **Pattern:** If you know the service name, look in `/var/log/<servicename>/`. If nothing's there, use `journalctl -u <servicename>`.
 
@@ -351,16 +402,21 @@ ls -la / | grep "\->"
 
     ``` bash title="Finding Application Data"
     # Package-managed services store state here
-    ls /var/lib/postgresql/     # PostgreSQL data directory
-    ls /var/lib/docker/         # Docker container storage
-    ls /var/lib/rpm/            # RPM package database
+    ls /var/lib/postgresql/     # (1)!
+    ls /var/lib/docker/         # (2)!
+    ls /var/lib/rpm/            # (3)!
 
     # Vendor/self-installed applications
-    ls /opt/myapp/              # self-contained third-party app
+    ls /opt/myapp/              # (4)!
 
     # Check the service's config for where it stores data
     grep -i "data.dir\|datadir\|data_directory" /etc/postgresql/*/main/postgresql.conf
     ```
+
+    1. PostgreSQL data directory.
+    2. Docker container storage.
+    3. RPM package database.
+    4. self-contained third-party app.
 
     **Pattern:** For package-manager-installed services, start with `/var/lib/<servicename>/`. For everything else, check `/opt/` and look at the service's config in `/etc/` to find the data directory setting.
 

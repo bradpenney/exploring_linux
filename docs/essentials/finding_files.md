@@ -86,15 +86,20 @@ graph TD
     # /etc/nginx/nginx.conf
     # /usr/share/doc/nginx/examples/nginx.conf
 
-    locate -i readme   # -i makes it case-insensitive
+    locate -i readme   # (1)!
     ```
+
+    1. `-i` makes it case-insensitive.
 
     **Key insight:** `locate` can be stale — it won't find files created since the last database update. Run `sudo updatedb` to refresh it. On many systems this runs nightly via cron, but on new servers or fresh installs it may never have run.
 
     ``` bash title="Update locate Database"
-    sudo updatedb       # refresh the database
-    locate myapp.conf   # now it will find newly created files
+    sudo updatedb       # (1)!
+    locate myapp.conf   # (2)!
     ```
+
+    1. refresh the database.
+    2. now it will find newly created files.
 
 -   :material-file-search: **find — Flexible Filesystem Search**
 
@@ -106,15 +111,15 @@ graph TD
     find /etc -name "nginx.conf"
     # /etc/nginx/nginx.conf
 
-    find /var/log -name "*.log" -type f
-    # finds only files (not dirs) named *.log under /var/log
+    find /var/log -name "*.log" -type f   # (1)!
 
-    find / -name "hosts" 2>/dev/null    # (1)!
+    find / -name "hosts" 2>/dev/null    # (2)!
     # /etc/hosts
     # /var/lib/docker/containers/.../hosts
     ```
 
-    1. `2>/dev/null` silences "Permission denied" errors for directories you can't read. The `2>` redirects stderr (file descriptor 2) to `/dev/null` (the discard device), keeping stdout clean.
+    1. finds only files (not dirs) named `*.log` under `/var/log`.
+    2. `2>/dev/null` silences "Permission denied" errors for directories you can't read. The `2>` redirects stderr (file descriptor 2) to `/dev/null` (the discard device), keeping stdout clean.
 
     **Key insight:** `find` is the right tool for scripts. `locate` is fast but can return stale results. In automation, always use `find`.
 
@@ -150,64 +155,88 @@ Once you internalize the common filters, you'll reach for `find` constantly.
 ### Filtering by Name
 
 ``` bash title="Name-Based Searches"
-find /etc -name "*.conf"            # files ending in .conf
-find /etc -name "nginx*"            # files starting with nginx
-find /etc -iname "Nginx.conf"       # -iname is case-insensitive
-find / -name "authorized_keys" 2>/dev/null   # find SSH auth keys anywhere
+find /etc -name "*.conf"            # (1)!
+find /etc -name "nginx*"            # (2)!
+find /etc -iname "Nginx.conf"       # (3)!
+find / -name "authorized_keys" 2>/dev/null   # (4)!
 ```
+
+1. files ending in `.conf`.
+2. files starting with `nginx`.
+3. `-iname` is case-insensitive.
+4. find SSH auth keys anywhere.
 
 ### Filtering by Type
 
 ``` bash title="Type-Based Searches"
-find /var/log -type f       # files only (not directories)
-find /etc -type d           # directories only
-find /usr/bin -type l       # symbolic links only
+find /var/log -type f       # (1)!
+find /etc -type d           # (2)!
+find /usr/bin -type l       # (3)!
 ```
+
+1. files only (not directories).
+2. directories only.
+3. symbolic links only.
 
 ### Filtering by Size
 
 ``` bash title="Size-Based Searches"
-find / -type f -size +100M 2>/dev/null     # files larger than 100MB
-find /var -type f -size +10M 2>/dev/null   # files in /var larger than 10MB
-find /tmp -type f -size -1k                # files smaller than 1KB
+find / -type f -size +100M 2>/dev/null     # (1)!
+find /var -type f -size +10M 2>/dev/null   # (2)!
+find /tmp -type f -size -1k                # (3)!
 ```
+
+1. files larger than 100MB.
+2. files in `/var` larger than 10MB.
+3. files smaller than 1KB.
 
 Size units: `c` (bytes), `k` (kilobytes), `M` (megabytes), `G` (gigabytes). Prefix with `+` for "greater than", `-` for "less than".
 
 ### Filtering by Age
 
 ``` bash title="Age-Based Searches"
-find /var/log -name "*.log" -mtime -7      # modified in the last 7 days
-find /tmp -type f -mtime +30               # not modified in 30+ days
-find /etc -newer /etc/hosts                # modified more recently than /etc/hosts
-find /var/log -name "*.log" -mmin -60      # modified in the last 60 minutes
+find /var/log -name "*.log" -mtime -7      # (1)!
+find /tmp -type f -mtime +30               # (2)!
+find /etc -newer /etc/hosts                # (3)!
+find /var/log -name "*.log" -mmin -60      # (4)!
 ```
+
+1. modified in the last 7 days.
+2. not modified in 30+ days.
+3. modified more recently than `/etc/hosts`.
+4. modified in the last 60 minutes.
 
 `-mtime` counts in days. `-mmin` counts in minutes. `+N` means "older than N", `-N` means "newer than N" (confusingly, but consistently).
 
 ### Filtering by Owner and Permissions
 
 ``` bash title="Owner and Permission Searches"
-find /home -user jsmith             # files owned by jsmith
-find /var/www -group www-data       # files owned by www-data group
-find / -perm -4000 2>/dev/null      # SUID files (potential security concern)
-find / -perm -002 2>/dev/null       # world-writable files
+find /home -user jsmith             # (1)!
+find /var/www -group www-data       # (2)!
+find / -perm -4000 2>/dev/null      # (3)!
+find / -perm -002 2>/dev/null       # (4)!
 ```
+
+1. files owned by jsmith.
+2. files owned by www-data group.
+3. SUID files (potential security concern).
+4. world-writable files.
 
 ### Combining Filters
 
 Filters combine with implicit AND by default. Use `-o` for OR and `!` for NOT:
 
 ``` bash title="Combining Filters"
-# Files in /var/log, larger than 10MB, modified in the last week
-find /var/log -type f -size +10M -mtime -7
+find /var/log -type f -size +10M -mtime -7   # (1)!
 
-# Config files OR certificate files in /etc
-find /etc -name "*.conf" -o -name "*.crt"
+find /etc -name "*.conf" -o -name "*.crt"   # (2)!
 
-# Files in /tmp not owned by root
-find /tmp -type f ! -user root
+find /tmp -type f ! -user root   # (3)!
 ```
+
+1. Files in `/var/log`, larger than 10MB, modified in the last week.
+2. Config files OR certificate files in `/etc`.
+3. Files in `/tmp` not owned by root.
 
 ---
 
@@ -218,44 +247,45 @@ Finding files is only half the job. Often you need to do something with them.
 ### -exec: Run a Command on Each Result
 
 ``` bash title="Using -exec"
-# View every .conf file found
 find /etc -name "*.conf" -exec cat {} \;    # (1)!
 
-# Check permissions on found files
-find /var/www -type f -exec ls -lh {} \;
+find /var/www -type f -exec ls -lh {} \;   # (2)!
 
-# Delete files older than 30 days in /tmp
-find /tmp -type f -mtime +30 -exec rm {} \;
+find /tmp -type f -mtime +30 -exec rm {} \;   # (3)!
 ```
 
-1. `{}` is replaced by the filename for each result. The `\;` ends the `-exec` expression. The backslash escapes the semicolon from shell interpretation.
+1. View every `.conf` file found. `{}` is replaced by the filename for each result; `\;` ends the `-exec` expression (the backslash escapes the semicolon from shell interpretation).
+2. Check permissions on found files.
+3. Delete files older than 30 days in `/tmp`.
 
 **Efficiency note:** `-exec command {} \;` runs the command once per file. For large result sets, use `+` instead — it passes all results at once:
 
 ``` bash title="-exec with + (More Efficient)"
-# Runs: ls -lh file1 file2 file3 ...  (one invocation)
-find /etc -name "*.conf" -exec ls -lh {} +
+find /etc -name "*.conf" -exec ls -lh {} +   # (1)!
 ```
+
+1. Runs `ls -lh file1 file2 file3 ...` as a single invocation.
 
 ### xargs: Pipe Results to Another Command
 
 `xargs` takes input from stdin and passes it as arguments to a command:
 
 ``` bash title="Using xargs"
-find /etc -name "*.conf" | xargs grep "listen"
-# searches all .conf files for "listen"
+find /etc -name "*.conf" | xargs grep "listen"   # (1)!
 
-find /var/log -name "*.log" -mtime +30 | xargs ls -lh
-# list details of all old log files
+find /var/log -name "*.log" -mtime +30 | xargs ls -lh   # (2)!
 ```
+
+1. searches all `.conf` files for "listen".
+2. list details of all old log files.
 
 **Handling filenames with spaces:** The default behavior breaks on spaces. Use `-print0` and `xargs -0` for safety:
 
 ``` bash title="Safe xargs with Spaces in Filenames"
-find /home -type f -name "*.txt" -print0 | xargs -0 grep "password"
-# -print0 uses null bytes as delimiters instead of newlines
-# xargs -0 reads null-delimited input
+find /home -type f -name "*.txt" -print0 | xargs -0 grep "password"   # (1)!
 ```
+
+1. `-print0` uses null bytes as delimiters instead of newlines; `xargs -0` reads that null-delimited input.
 
 This is a best practice in scripts. For interactive use, the simple pipe is usually fine.
 
@@ -287,15 +317,16 @@ This is a best practice in scripts. For interactive use, the simple pipe is usua
     Disk is full. Need to find what's consuming space fast.
 
     ``` bash title="Finding Large Files"
-    # Files over 100MB anywhere on the filesystem
-    find / -type f -size +100M 2>/dev/null | xargs ls -lh | sort -k5 -hr
+    find / -type f -size +100M 2>/dev/null | xargs ls -lh | sort -k5 -hr   # (1)!
 
-    # In /var specifically (where most growth happens)
-    find /var -type f -size +50M 2>/dev/null
+    find /var -type f -size +50M 2>/dev/null   # (2)!
 
-    # Recently modified large files (a growing problem)
-    find /var -type f -size +10M -mtime -1 2>/dev/null
+    find /var -type f -size +10M -mtime -1 2>/dev/null   # (3)!
     ```
+
+    1. Files over 100MB anywhere on the filesystem.
+    2. In `/var` specifically (where most growth happens).
+    3. Recently modified large files (a growing problem).
 
     **Pattern:** Combine `du -sh /var/* | sort -hr | head -10` (from the [Filesystem Hierarchy](filesystem_hierarchy.md) article) to find which directory is growing, then drill in with `find -size`.
 
@@ -304,15 +335,16 @@ This is a best practice in scripts. For interactive use, the simple pipe is usua
     Something broke recently. You want to know what changed.
 
     ``` bash title="Finding Recent Changes"
-    # Files changed in the last 24 hours in /etc
-    find /etc -type f -mtime -1
+    find /etc -type f -mtime -1   # (1)!
 
-    # Files changed in the last hour across key dirs
-    find /etc /var/lib /opt -type f -mmin -60 2>/dev/null
+    find /etc /var/lib /opt -type f -mmin -60 2>/dev/null   # (2)!
 
-    # Files newer than a reference file (useful after incidents)
-    find /etc -newer /etc/hosts -type f    # changed after /etc/hosts was last modified
+    find /etc -newer /etc/hosts -type f    # (3)!
     ```
+
+    1. Files changed in the last 24 hours in `/etc`.
+    2. Files changed in the last hour across key dirs.
+    3. Files newer than a reference file (useful after incidents) — changed after `/etc/hosts` was last modified.
 
     **Pattern:** Set a reference point first — `touch /tmp/checkpoint` — then later run `find / -newer /tmp/checkpoint` to see everything that changed since.
 
@@ -321,15 +353,16 @@ This is a best practice in scripts. For interactive use, the simple pipe is usua
     Auditing user files, or tracking down orphaned files after a user was removed.
 
     ``` bash title="Finding Files by Owner"
-    # All files owned by a specific user
-    find /home /var /opt -user jsmith 2>/dev/null
+    find /home /var /opt -user jsmith 2>/dev/null   # (1)!
 
-    # Files with no valid owner (user was deleted)
-    find / -nouser 2>/dev/null | head -20
+    find / -nouser 2>/dev/null | head -20   # (2)!
 
-    # Files owned by root in a directory that shouldn't have them
-    find /home -user root -type f 2>/dev/null
+    find /home -user root -type f 2>/dev/null   # (3)!
     ```
+
+    1. All files owned by a specific user.
+    2. Files with no valid owner (user was deleted).
+    3. Files owned by root in a directory that shouldn't have them.
 
 ---
 
@@ -423,12 +456,13 @@ This is a best practice in scripts. For interactive use, the simple pipe is usua
 
     ??? tip "Solution"
         ``` bash title="Finding Files by Deleted User"
-        # If the username still resolves (user in /etc/passwd but shell removed)
-        find /home /var /opt -user olddev 2>/dev/null
+        find /home /var /opt -user olddev 2>/dev/null   # (1)!
 
-        # If the user was fully deleted, their files show a numeric UID
-        find /home /var /opt -nouser 2>/dev/null
+        find /home /var /opt -nouser 2>/dev/null   # (2)!
         ```
+
+        1. If the username still resolves (user in `/etc/passwd` but shell removed).
+        2. If the user was fully deleted, their files show a numeric UID.
 
         Files owned by a deleted user appear as a numeric UID in `ls -l` output (e.g., `1042` instead of `olddev`). `-nouser` catches these orphaned files.
 

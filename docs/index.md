@@ -4,6 +4,8 @@ title: Exploring Enterprise Linux
 description: Enterprise Linux from first SSH login to production mastery — built for developers who need Linux to work, and IT professionals who need to own it.
 ---
 
+<img src="images/exploring_linux_dark.png" alt="Exploring Linux" class="img-responsive-right" width="300">
+
 # Exploring Enterprise Linux
 
 Linux runs the infrastructure that matters — the servers, the pipelines, the containers, the cloud. This site takes you from first login to production confidence, at whatever level you need.

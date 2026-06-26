@@ -196,10 +196,10 @@ Where a script lives determines who can run it and how easily:
         mkdir -p ~/bin
         cp whoami-full.sh ~/bin/whoami-full
         chmod +x ~/bin/whoami-full
-        # Ensure ~/bin is in PATH — add to ~/.bashrc if not already there:
-        # export PATH="$HOME/bin:$PATH"
-        whoami-full
+        whoami-full            # (1)!
         ```
+
+        1. This only resolves by name if `~/bin` is on your `PATH`. If it isn't, add `export PATH="$HOME/bin:$PATH"` to `~/.bashrc` and open a new shell first.
 
 ---
 

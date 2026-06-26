@@ -73,11 +73,16 @@ Development → Staging → Production
 `rm` doesn't move files to trash. It destroys them. Forever.
 
 ``` bash title="DANGEROUS - DO NOT RUN" linenums="1"
-rm -rf /                    # Deletes EVERYTHING
-rm -rf /*                   # Also deletes EVERYTHING
-rm -rf /home/*              # Deletes all user data
-rm -rf ./*                  # Deletes everything in current directory
+rm -rf /                    # (1)!
+rm -rf /*                   # (2)!
+rm -rf /home/*              # (3)!
+rm -rf ./*                  # (4)!
 ```
+
+1. Deletes EVERYTHING.
+2. Also deletes EVERYTHING.
+3. Deletes all user data.
+4. Deletes everything in the current directory.
 
 !!! danger "The -rf Flags"
     - `-r` = Recursive (delete directories and contents)
@@ -88,26 +93,28 @@ rm -rf ./*                  # Deletes everything in current directory
 **Safer alternatives:**
 
 ``` bash title="Safer Deletion" linenums="1"
-# Check what you're about to delete first
-ls /path/to/delete
+ls /path/to/delete   # (1)!
 
-# Remove without -f so you get prompts
-rm -ri /path/to/delete  # (1)!
+rm -ri /path/to/delete  # (2)!
 
-# Use trash-cli if available
-trash-put /path/to/delete
+trash-put /path/to/delete   # (3)!
 ```
 
-1. `-r` still recurses into directories, but dropping `-f` and adding `-i` makes `rm` **i**nteractive — it prompts before deleting each file. Slower, but it catches mistakes before they happen.
+1. Check what you're about to delete first.
+2. `-r` still recurses into directories, but dropping `-f` and adding `-i` makes `rm` **i**nteractive — it prompts before deleting each file. Slower, but it catches mistakes before they happen.
+3. Use `trash-cli` if available — moves to a trash folder instead of destroying.
 
 ---
 
 ### chmod 777 - The Security Disaster
 
 ``` bash title="DANGEROUS - DO NOT RUN" linenums="1"
-chmod 777 /var/www/app        # Anyone can read/write/execute
-chmod -R 777 /                # Security nightmare
+chmod 777 /var/www/app        # (1)!
+chmod -R 777 /                # (2)!
 ```
+
+1. Anyone can read/write/execute.
+2. Security nightmare.
 
 `777` means: owner, group, AND everyone else can read, write, and execute.
 
@@ -120,15 +127,16 @@ chmod -R 777 /                # Security nightmare
 **What to do instead:**
 
 ``` bash title="Proper Permissions" linenums="1"
-# Make file readable by owner and group
-chmod 640 /path/to/file
+chmod 640 /path/to/file   # (1)!
 
-# Make directory accessible
-chmod 750 /path/to/directory
+chmod 750 /path/to/directory   # (2)!
 
-# If you're not sure, ask what permissions should be
-ls -la /path/to/file
+ls -la /path/to/file   # (3)!
 ```
+
+1. Make file readable by owner and group.
+2. Make directory accessible.
+3. If you're not sure, check current permissions and ask what they should be.
 
 ---
 
@@ -158,9 +166,12 @@ These commands cause **downtime**. Even "restart" has a brief interruption.
 - Use `reload` instead of `restart` when possible (zero-downtime config reload)
 
 ``` bash title="Reload vs Restart" linenums="1"
-sudo systemctl reload nginx  # Reloads config without dropping connections
-sudo systemctl restart nginx # Full restart, connections dropped
+sudo systemctl reload nginx  # (1)!
+sudo systemctl restart nginx # (2)!
 ```
+
+1. Reloads config without dropping connections.
+2. Full restart, connections dropped.
 
 ---
 
@@ -169,8 +180,10 @@ sudo systemctl restart nginx # Full restart, connections dropped
 ``` bash title="DANGEROUS - DO NOT RUN" linenums="1"
 echo "something" > /etc/hosts
 cat something > /etc/passwd
-> /var/log/syslog  # Truncates the log file
+> /var/log/syslog  # (1)!
 ```
+
+1. Truncates the log file.
 
 The `>` operator **overwrites** files. The `>>` operator appends. One wrong character and you've destroyed a critical system file.
 
@@ -184,15 +197,16 @@ The `>` operator **overwrites** files. The `>>` operator appends. One wrong char
 **Safer approach:**
 
 ``` bash title="Safer File Editing" linenums="1"
-# Make a backup first
-sudo cp /etc/hosts /etc/hosts.backup
+sudo cp /etc/hosts /etc/hosts.backup   # (1)!
 
-# Edit safely — sudoedit opens a temp copy in your preferred editor
-sudoedit /etc/hosts
+sudoedit /etc/hosts   # (2)!
 
-# Verify the change
-cat /etc/hosts
+cat /etc/hosts   # (3)!
 ```
+
+1. Make a backup first.
+2. Edit safely — `sudoedit` opens a temp copy in your preferred editor.
+3. Verify the change.
 
 ---
 
@@ -201,8 +215,10 @@ cat /etc/hosts
 `dd` is powerful and dangerous. It writes raw data to devices.
 
 ``` bash title="WILL DESTROY YOUR DISK" linenums="1"
-sudo dd if=/dev/zero of=/dev/sda  # Wipes the primary disk
+sudo dd if=/dev/zero of=/dev/sda  # (1)!
 ```
+
+1. Wipes the primary disk.
 
 If you see `dd` in a command, be extremely careful about the `of=` target. A wrong target destroys data instantly with no confirmation.
 
@@ -241,18 +257,21 @@ sudo -e /etc/nginx/nginx.conf
 **Set your preferred editor** (add to your `~/.bashrc` or `~/.zshrc`):
 
 ``` bash title="Set Your Editor" linenums="1"
-export EDITOR=nano   # or vim, micro, etc.
+export EDITOR=nano   # (1)!
 ```
+
+1. Or `vim`, `micro`, etc. — whichever editor you prefer.
 
 **After editing, test and reload:**
 
 ``` bash title="Test and Reload" linenums="1"
-# Test the config
-sudo nginx -t
+sudo nginx -t   # (1)!
 
-# Only reload if test passes
-sudo systemctl reload nginx
+sudo systemctl reload nginx   # (2)!
 ```
+
+1. Test the config.
+2. Only reload if the test passes.
 
 ### Running Scripts Without Reading Them
 
@@ -313,15 +332,16 @@ If any answer is "no", **stop and get help**.
 
     ??? tip "Answer"
         ```bash title="Safe Config Inspection Workflow" linenums="1"
-        # 1. Make a backup (even before read-only inspection, if you might edit later)
-        sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup
+        sudo cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.backup   # (1)!
 
-        # 2. Read the config (safe, read-only)
-        grep "worker_processes" /etc/nginx/nginx.conf
+        grep "worker_processes" /etc/nginx/nginx.conf   # (2)!
 
-        # 3. Validate current syntax (before touching anything)
-        sudo nginx -t
+        sudo nginx -t   # (3)!
         ```
+
+        1. Make a backup (even before read-only inspection, if you might edit later).
+        2. Read the config (safe, read-only).
+        3. Validate current syntax (before touching anything).
 
         If you did edit and broke something:
         ```bash title="Restore from Backup" linenums="1"

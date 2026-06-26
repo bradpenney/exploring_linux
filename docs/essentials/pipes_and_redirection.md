@@ -64,19 +64,25 @@ Redirection changes where a stream goes — from the terminal to a file, or from
     **Why it matters:** Capture command output to a file for logging, later processing, or sharing with others.
 
     ``` bash title="Redirect stdout to a File"
-    ls -lh /var/log/ > filelist.txt     # create/overwrite
+    ls -lh /var/log/ > filelist.txt   # (1)!
     df -h > disk-report.txt
     ```
+
+    1. Create or overwrite the file.
 
     !!! warning "> Overwrites Without Warning"
         `>` will silently overwrite an existing file. There's no confirmation. If `report.txt` existed, it's gone.
 
         To protect against this in interactive sessions:
         ``` bash title="Prevent Overwrite with noclobber"
-        set -o noclobber    # add to ~/.bashrc
-        ls > existing.txt   # now fails with "cannot overwrite existing file"
-        ls >| existing.txt  # force overwrite when noclobber is set
+        set -o noclobber    # (1)!
+        ls > existing.txt   # (2)!
+        ls >| existing.txt  # (3)!
         ```
+
+        1. Add this to `~/.bashrc`.
+        2. Now fails with "cannot overwrite existing file".
+        3. Force the overwrite when noclobber is set.
 
 -   :material-arrow-right-box: **Append Redirection (>>)**
 
@@ -86,14 +92,16 @@ Redirection changes where a stream goes — from the terminal to a file, or from
 
     ``` bash title="Append to a File"
     echo "Deployment started at $(date)" >> deploy.log
-    df -h >> disk-history.txt   # build a history over time
+    df -h >> disk-history.txt   # (1)!
 
-    # Running multiple commands and collecting all output
-    echo "=== $(date) ===" >> report.txt
+    echo "=== $(date) ===" >> report.txt   # (2)!
     uptime >> report.txt
     free -h >> report.txt
     df -h >> report.txt
     ```
+
+    1. Build a history over time.
+    2. Run multiple commands and collect all their output into one report.
 
 -   :material-arrow-left: **Input Redirection (<)**
 
@@ -102,10 +110,14 @@ Redirection changes where a stream goes — from the terminal to a file, or from
     **Why it matters:** Feed a file into a command's stdin instead of typing. Less common in interactive use, but appears in scripts.
 
     ``` bash title="Redirect File to stdin"
-    sort < names.txt          # sort the contents of names.txt
-    wc -l < access.log        # count lines in access.log
-    mysql -u root -p mydb < schema.sql   # feed SQL to mysql
+    sort < names.txt                     # (1)!
+    wc -l < access.log                   # (2)!
+    mysql -u root -p mydb < schema.sql   # (3)!
     ```
+
+    1. Sort the contents of `names.txt`.
+    2. Count lines in `access.log`.
+    3. Feed SQL to `mysql`.
 
 -   :material-alert: **stderr Redirection (2>)**
 
@@ -114,48 +126,46 @@ Redirection changes where a stream goes — from the terminal to a file, or from
     **Why it matters:** Error messages and normal output are separate streams. When you redirect with `>`, errors still print to the terminal. Use `2>` to capture them separately.
 
     ``` bash title="Redirect stderr"
-    find / -name "hosts" 2>/dev/null      # discard errors, keep results
-    find / -name "hosts" 2>errors.txt     # save errors to file
-    command > output.txt 2> errors.txt    # separate stdout and stderr
-    command > all.txt 2>&1               # (1)! combine both to one file
+    find / -name "hosts" 2>/dev/null      # (1)!
+    find / -name "hosts" 2>errors.txt     # (2)!
+    command > output.txt 2> errors.txt    # (3)!
+    command > all.txt 2>&1                # (4)!
     ```
 
-    1. `2>&1` redirects stderr (2) to wherever stdout (1) is currently going. Order matters: `> all.txt 2>&1` works; `2>&1 > all.txt` does not (the latter redirects stderr to the terminal, then redirects stdout to the file).
+    1. Discard errors, keep results.
+    2. Save errors to a file.
+    3. Separate stdout and stderr into different files.
+    4. `2>&1` redirects stderr (2) to wherever stdout (1) is currently going. Order matters: `> all.txt 2>&1` works; `2>&1 > all.txt` does not (the latter redirects stderr to the terminal, then redirects stdout to the file).
 
 </div>
 
 ### Combining Redirections
 
 ``` bash title="Multiple Redirections in Practice"
-# Capture output to file AND show it on screen simultaneously
-# (tee reads stdin and writes to both stdout and a file)
-find /var/log -name "*.log" | tee found-logs.txt
-
-# Run a long job, save output, discard errors
-./long-running-script.sh > results.txt 2>/dev/null
-
-# Save both stdout and stderr to the same file
-./deployment.sh > deploy.log 2>&1
-
-# Save stderr to one file, stdout to another
-./script.sh > output.log 2> errors.log
+find /var/log -name "*.log" | tee found-logs.txt    # (1)!
+./long-running-script.sh > results.txt 2>/dev/null  # (2)!
+./deployment.sh > deploy.log 2>&1                    # (3)!
+./script.sh > output.log 2> errors.log               # (4)!
 ```
+
+1. Capture output to a file **and** show it on screen at once — `tee` reads stdin and writes to both stdout and a file.
+2. Run a long job, save the output, discard errors.
+3. Save both stdout and stderr to the same file.
+4. Save stderr to one file, stdout to another.
 
 ### Here Documents and Here Strings
 
 For feeding multi-line input to commands:
 
 ``` bash title="Here Documents"
-# Feed multiple lines to a command
-cat << EOF > /etc/myapp/config.conf
+cat << EOF > /etc/myapp/config.conf   # (1)!
 [database]
 host = db-prod-01
 port = 5432
 name = myapp_db
 EOF
 
-# Common for creating config files in scripts
-sudo tee /etc/nginx/sites-available/myapp << EOF
+sudo tee /etc/nginx/sites-available/myapp << EOF   # (2)!
 server {
     listen 80;
     server_name myapp.example.com;
@@ -164,13 +174,16 @@ server {
 EOF
 ```
 
-``` bash title="Here String (<<<)"
-# Feed a single string to stdin
-grep "pattern" <<< "string to search in"
+1. Feed multiple lines to a command — everything up to the `EOF` marker becomes stdin.
+2. Common pattern for generating config files in scripts.
 
-# Practical: feed a variable to a command expecting stdin
-base64 <<< "encode this text"
+``` bash title="Here String (<<<)"
+grep "pattern" <<< "string to search in"   # (1)!
+base64 <<< "encode this text"               # (2)!
 ```
+
+1. Feed a single string to stdin.
+2. Practical use — feed a variable to a command that expects stdin.
 
 ---
 
@@ -179,38 +192,32 @@ base64 <<< "encode this text"
 A **pipe** (`|`) takes the stdout of the left command and feeds it as stdin to the right command. No intermediate file, no waiting — it's streaming.
 
 ``` bash title="Your First Pipeline"
-ls -lh /var/log/ | less
-# ls outputs the directory listing
-# | sends it to less
-# less lets you scroll through it
+ls -lh /var/log/ | less   # (1)!
 ```
+
+1. `ls` produces the directory listing, the pipe (`|`) sends it to `less`, and `less` lets you scroll through it.
 
 ### Building Pipelines
 
 Pipelines chain as many commands as you need:
 
 ``` bash title="Growing a Pipeline"
-# Start simple
-cat /var/log/nginx/access.log
-
-# Filter to 500 errors only
-cat /var/log/nginx/access.log | grep " 500 "
-
-# Extract just the IP addresses
-cat /var/log/nginx/access.log | grep " 500 " | awk '{print $1}'
-
-# Sort them
-cat /var/log/nginx/access.log | grep " 500 " | awk '{print $1}' | sort
-
-# Count occurrences of each IP
-cat /var/log/nginx/access.log | grep " 500 " | awk '{print $1}' | sort | uniq -c
-
-# Sort by count, most first
-cat /var/log/nginx/access.log | grep " 500 " | awk '{print $1}' | sort | uniq -c | sort -nr
-
-# Show only the top 10
-cat /var/log/nginx/access.log | grep " 500 " | awk '{print $1}' | sort | uniq -c | sort -nr | head -10
+cat /var/log/nginx/access.log # (1)!
+cat /var/log/nginx/access.log | grep " 500 " # (2)!
+cat /var/log/nginx/access.log | grep " 500 " | awk '{print $1}' # (3)!
+cat /var/log/nginx/access.log | grep " 500 " | awk '{print $1}' | sort # (4)!
+cat /var/log/nginx/access.log | grep " 500 " | awk '{print $1}' | sort | uniq -c # (5)!
+cat /var/log/nginx/access.log | grep " 500 " | awk '{print $1}' | sort | uniq -c | sort -nr # (6)!
+cat /var/log/nginx/access.log | grep " 500 " | awk '{print $1}' | sort | uniq -c | sort -nr | head -10 # (7)!
 ```
+
+1. Start simple — dump the whole access log.
+2. Filter to 500 errors only.
+3. Extract just the IP addresses.
+4. Sort them.
+5. Count occurrences of each IP.
+6. Sort by count, most first.
+7. Show only the top 10.
 
 This is how investigation pipelines get built — one stage at a time, checking the output at each step.
 
@@ -229,8 +236,10 @@ These commands exist primarily to work within pipelines:
     ``` bash title="grep in Pipelines"
     journalctl | grep "Failed"
     ps aux | grep nginx
-    cat /etc/passwd | grep -v "nologin"    # exclude service accounts
+    cat /etc/passwd | grep -v "nologin"    # (1)!
     ```
+
+    1. Exclude service accounts.
 
 -   :material-sort: **sort — Sort Lines**
 
@@ -239,11 +248,16 @@ These commands exist primarily to work within pipelines:
     Sort lines alphabetically or numerically.
 
     ``` bash title="sort in Pipelines"
-    cat names.txt | sort              # alphabetical
-    du -sh /var/* | sort -hr          # human-readable, largest first
-    cat numbers.txt | sort -n         # numeric sort
-    cat file.txt | sort -u            # sort and remove duplicates
+    cat names.txt | sort              # (1)!
+    du -sh /var/* | sort -hr          # (2)!
+    cat numbers.txt | sort -n         # (3)!
+    cat file.txt | sort -u            # (4)!
     ```
+
+    1. Alphabetical.
+    2. Human-readable sizes, largest first.
+    3. Numeric sort.
+    4. Sort and remove duplicates.
 
 -   :material-counter: **uniq — Remove Duplicates / Count**
 
@@ -252,10 +266,14 @@ These commands exist primarily to work within pipelines:
     Remove consecutive duplicate lines, or count their occurrences. Works best after `sort`.
 
     ``` bash title="uniq in Pipelines"
-    cat file.txt | sort | uniq               # unique lines only
-    cat file.txt | sort | uniq -c            # count occurrences
-    cat file.txt | sort | uniq -d            # only lines that appear more than once
+    cat file.txt | sort | uniq               # (1)!
+    cat file.txt | sort | uniq -c            # (2)!
+    cat file.txt | sort | uniq -d            # (3)!
     ```
+
+    1. Unique lines only.
+    2. Count occurrences.
+    3. Only lines that appear more than once.
 
 -   :material-calculator: **wc — Count**
 
@@ -264,10 +282,14 @@ These commands exist primarily to work within pipelines:
     Count lines, words, or characters.
 
     ``` bash title="wc in Pipelines"
-    ls /etc | wc -l                     # how many files in /etc?
-    cat access.log | grep "404" | wc -l  # how many 404 errors?
-    cat file.txt | wc -c                 # how many bytes?
+    ls /etc | wc -l                      # (1)!
+    cat access.log | grep "404" | wc -l  # (2)!
+    cat file.txt | wc -c                 # (3)!
     ```
+
+    1. How many files in `/etc`?
+    2. How many 404 errors?
+    3. How many bytes?
 
 </div>
 
@@ -280,10 +302,14 @@ These commands exist primarily to work within pipelines:
     Extract specific columns from structured text. The most powerful field processor in the pipeline toolkit.
 
     ``` bash title="awk in Pipelines"
-    ps aux | awk '{print $1, $2}'         # print user and PID columns
-    df -h | awk '{print $1, $5}'          # filesystem and usage %
-    cat /etc/passwd | awk -F: '{print $1, $3}'  # username and UID
+    ps aux | awk '{print $1, $2}'                # (1)!
+    df -h | awk '{print $1, $5}'                 # (2)!
+    cat /etc/passwd | awk -F: '{print $1, $3}'   # (3)!
     ```
+
+    1. Print the user and PID columns.
+    2. Filesystem and usage %.
+    3. Username and UID.
 
 -   :material-scissors-cutting: **cut — Extract Columns**
 
@@ -292,10 +318,14 @@ These commands exist primarily to work within pipelines:
     Extract specific columns or character positions from fixed-format output.
 
     ``` bash title="cut in Pipelines"
-    cat /etc/passwd | cut -d: -f1         # extract first field (username)
-    cat /etc/passwd | cut -d: -f1,3       # username and UID
-    ls -l | cut -c1-10                    # first 10 characters of each line
+    cat /etc/passwd | cut -d: -f1     # (1)!
+    cat /etc/passwd | cut -d: -f1,3   # (2)!
+    ls -l | cut -c1-10                # (3)!
     ```
+
+    1. Extract the first field (username).
+    2. Username and UID.
+    3. First 10 characters of each line.
 
 -   :material-magnify: **tee — Split Output**
 
@@ -304,12 +334,12 @@ These commands exist primarily to work within pipelines:
     Write to a file AND pass through to the next pipe. Essential when you want to save intermediate results.
 
     ``` bash title="tee in Pipelines"
-    find /var/log -name "*.log" | tee found-logs.txt | wc -l
-    # saves the file list AND prints the count
-
-    command | tee output.txt | grep "ERROR"
-    # saves everything to output.txt, passes only errors downstream
+    find /var/log -name "*.log" | tee found-logs.txt | wc -l   # (1)!
+    command | tee output.txt | grep "ERROR"                    # (2)!
     ```
+
+    1. Saves the file list AND prints the count.
+    2. Saves everything to `output.txt`, passes only errors downstream.
 
 -   :material-arrow-up-down: **head / tail — Limit Output**
 
@@ -318,10 +348,14 @@ These commands exist primarily to work within pipelines:
     Take only the first or last N lines. Ubiquitous at the end of pipelines.
 
     ``` bash title="head and tail in Pipelines"
-    ps aux | sort -k3 -nr | head -5      # top 5 CPU consumers
-    ls -lt /var/log/ | head -10          # 10 most recently modified logs
-    cat access.log | tail -100           # last 100 lines
+    ps aux | sort -k3 -nr | head -5      # (1)!
+    ls -lt /var/log/ | head -10          # (2)!
+    cat access.log | tail -100           # (3)!
     ```
+
+    1. Top 5 CPU consumers.
+    2. 10 most recently modified logs.
+    3. Last 100 lines.
 
 </div>
 
@@ -330,16 +364,20 @@ These commands exist primarily to work within pipelines:
 A critical detail: **pipes only carry stdout**. stderr bypasses the pipe and goes directly to the terminal.
 
 ``` bash title="Stderr Bypasses Pipes"
-find / -name "*.conf" | wc -l
-# Errors print to screen; only successful results go to wc
+find / -name "*.conf" | wc -l   # (1)!
 ```
+
+1. Errors print to the screen; only successful results go to `wc`.
 
 To include stderr in a pipeline:
 
 ``` bash title="Including stderr in Pipelines"
-find / -name "*.conf" 2>&1 | wc -l    # count everything including error lines
-find / -name "*.conf" 2>/dev/null | wc -l   # suppress errors, count only results
+find / -name "*.conf" 2>&1 | wc -l          # (1)!
+find / -name "*.conf" 2>/dev/null | wc -l   # (2)!
 ```
+
+1. Count everything, including error lines.
+2. Suppress errors, count only results.
 
 ---
 
@@ -350,75 +388,79 @@ find / -name "*.conf" 2>/dev/null | wc -l   # suppress errors, count only result
     Find the most common errors in the past hour:
 
     ``` bash title="Log Analysis Pipeline"
-    # What IP addresses are causing the most 404s?
     grep " 404 " /var/log/nginx/access.log \
       | awk '{print $1}' \
       | sort | uniq -c \
       | sort -nr \
-      | head -10
+      | head -10                              # (1)!
 
-    # How many errors per hour in the last day?
     journalctl --since "24 hours ago" --until now \
       | grep -i "error" \
       | awk '{print $1, $2, substr($3,1,2)}' \
-      | sort | uniq -c
+      | sort | uniq -c                        # (2)!
     ```
+
+    1. What IP addresses are causing the most 404s?
+    2. How many errors per hour in the last day?
 
 === "Process Investigation"
 
     Find what's consuming resources:
 
     ``` bash title="Process Investigation Pipeline"
-    # Top 5 memory consumers (human-readable)
-    ps aux --sort=-%mem | head -6
+    ps aux --sort=-%mem | head -6   # (1)!
 
-    # All processes owned by www-data
-    ps aux | grep "^www-data"
+    ps aux | grep "^www-data"       # (2)!
 
-    # Find processes listening on a port
-    ss -tlnp | grep ":8080"
+    ss -tlnp | grep ":8080"         # (3)!
 
-    # How many connections per state?
-    ss -s | grep "TCP:"
+    ss -s | grep "TCP:"             # (4)!
     ```
+
+    1. Top 5 memory consumers (human-readable).
+    2. All processes owned by `www-data`.
+    3. Find processes listening on a port.
+    4. How many connections per state?
 
 === "Disk Space Investigation"
 
     Find what's eating disk:
 
     ``` bash title="Disk Analysis Pipeline"
-    # Largest directories in /var
-    du -sh /var/* 2>/dev/null | sort -hr | head -10
+    du -sh /var/* 2>/dev/null | sort -hr | head -10   # (1)!
 
-    # Largest files anywhere on the system
     find / -type f -size +100M 2>/dev/null \
       | xargs ls -lh 2>/dev/null \
       | sort -k5 -hr \
-      | head -10
+      | head -10                                      # (2)!
 
-    # Which log files grew today?
     find /var/log -name "*.log" -newer /var/log -type f \
       | xargs ls -lh 2>/dev/null \
-      | sort -k5 -hr
+      | sort -k5 -hr                                   # (3)!
     ```
+
+    1. Largest directories in `/var`.
+    2. Largest files anywhere on the system.
+    3. Which log files grew today?
 
 === "Config File Work"
 
     Process configuration files:
 
     ``` bash title="Config Processing Pipeline"
-    # Find all uncommented settings in a config file
-    grep -v "^#" /etc/ssh/sshd_config | grep -v "^$"
+    grep -v "^#" /etc/ssh/sshd_config | grep -v "^$"   # (1)!
 
-    # Find all unique setting names
     grep -v "^#" /etc/ssh/sshd_config \
       | grep -v "^$" \
       | awk '{print $1}' \
-      | sort -u
+      | sort -u                                         # (2)!
 
-    # Check if a setting is enabled
-    grep -v "^#" /etc/ssh/sshd_config | grep "PermitRootLogin"
+    grep -v "^#" /etc/ssh/sshd_config | grep "PermitRootLogin"   # (3)!
     ```
+
+    1. Find all uncommented settings in a config file.
+    2. Find all unique setting names.
+    3. Check if a setting is enabled.
 
 ---
 
@@ -505,9 +547,10 @@ find / -name "*.conf" 2>/dev/null | wc -l   # suppress errors, count only result
         find / -name "sshd_config" 2>/dev/null > /tmp/found.txt
         wc -l < /tmp/found.txt
 
-        # Or in one pipeline:
-        find / -name "sshd_config" 2>/dev/null | tee /tmp/found.txt | wc -l
+        find / -name "sshd_config" 2>/dev/null | tee /tmp/found.txt | wc -l   # (1)!
         ```
+
+        1. Or do it in one pipeline — `tee` saves the results while `wc -l` counts them.
 
 ---
 

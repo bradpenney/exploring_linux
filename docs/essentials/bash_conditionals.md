@@ -25,13 +25,17 @@ The syntax is straightforward. What matters more is the pattern: in real scripts
 
 ``` bash title="Basic if Structure" linenums="1"
 if [[ condition ]]; then
-    # runs if condition is true
+    command            # (1)!
 elif [[ other_condition ]]; then
-    # runs if first condition was false and this is true
+    command            # (2)!
 else
-    # runs if no condition was true
+    command            # (3)!
 fi
 ```
+
+1. Runs if `condition` is true.
+2. Runs if the first condition was false and this one is true.
+3. Runs if no condition was true.
 
 `fi` closes every `if`. The `then` keyword requires either a `;` before it on the same line, or a newline — both are valid, the single-line form is more common in scripts.
 

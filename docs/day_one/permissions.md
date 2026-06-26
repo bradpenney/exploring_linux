@@ -442,18 +442,19 @@ Now that you understand permissions, try these hands-on exercises to build confi
 
     ??? tip "Answer"
         ``` bash title="Check Your Identity and Access" linenums="1"
-        # Check your username
-        whoami
+        whoami    # (1)!
 
-        # Check your groups
-        groups
+        groups    # (2)!
 
-        # Get detailed ID information
-        id
+        id        # (3)!
 
-        # Check sudo privileges
-        sudo -l
+        sudo -l   # (4)!
         ```
+
+        1. Check your username.
+        2. Check your groups.
+        3. Get detailed ID information.
+        4. Check sudo privileges.
 
         **What to note:**
 
@@ -479,14 +480,15 @@ Now that you understand permissions, try these hands-on exercises to build confi
 
     ??? tip "Answer"
         ``` bash title="Investigate the Permissions" linenums="1"
-        # Try to read (will fail)
-        cat /etc/shadow
+        cat /etc/shadow   # (1)!
         # cat: /etc/shadow: Permission denied
 
-        # Check why
-        ls -la /etc/shadow
+        ls -la /etc/shadow   # (2)!
         # -rw-r----- 1 root shadow 1234 Jan 15 10:00 /etc/shadow
         ```
+
+        1. Try to read (will fail).
+        2. Check why.
 
         **Analysis:**
 

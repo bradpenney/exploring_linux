@@ -463,22 +463,24 @@ Or, if you're in the `adm` group, you already have read access to most system lo
 ### Most Used Commands
 
 ``` bash title="Log Reading Cheat Sheet" linenums="1"
-# Service logs — start here on modern systems
-journalctl -u nginx -n 100
+journalctl -u nginx -n 100   # (1)!
 
-# Follow service logs live
-journalctl -u nginx -f
+journalctl -u nginx -f   # (2)!
 
-# Recent errors from any service
-journalctl -p err --since "1 hour ago"
+journalctl -p err --since "1 hour ago"   # (3)!
 
-# Flat file logs — for app-specific files
-tail -100 /var/log/nginx/error.log
-tail -f /var/log/nginx/access.log
+tail -100 /var/log/nginx/error.log   # (4)!
+tail -f /var/log/nginx/access.log    # (5)!
 
-# Search a flat file
-grep -i "error" /var/log/nginx/error.log
+grep -i "error" /var/log/nginx/error.log   # (6)!
 ```
+
+1. Service logs — start here on modern systems.
+2. Follow service logs live.
+3. Recent errors from any service.
+4. Flat file logs — read recent app-specific entries.
+5. Follow a flat log file live.
+6. Search a flat file.
 
 ### Log Locations Cheat Sheet
 
@@ -509,9 +511,10 @@ grep -i "error" /var/log/nginx/error.log
         On older systems with flat log files:
 
         ```bash title="Find Recent SSH Failures (flat log)" linenums="1"
-        tail -200 /var/log/auth.log | grep "Failed"
-        # On RHEL/Fedora: tail -200 /var/log/secure | grep "Failed"
+        tail -200 /var/log/auth.log | grep "Failed"   # (1)!
         ```
+
+        1. On RHEL/Fedora, the file is `/var/log/secure` instead: `tail -200 /var/log/secure | grep "Failed"`.
 
         You'll see lines like:
         ```

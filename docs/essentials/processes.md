@@ -79,22 +79,20 @@ Every process on the system descends from PID 1 — `systemd` (or `init` on olde
 ### The Essential ps Invocations
 
 ``` bash title="Common ps Usage"
-# The classic: every process, full details
-ps aux
-
-# Every process in a tree view (shows parent/child relationships)
-ps auxf
-
-# Processes owned by a specific user
-ps -u www-data
-
-# Processes for the current terminal only
-ps
-
-# Specific process by name
-ps aux | grep nginx
-pgrep -la nginx    # cleaner alternative
+ps aux                  # (1)!
+ps auxf                 # (2)!
+ps -u www-data          # (3)!
+ps                      # (4)!
+ps aux | grep nginx     # (5)!
+pgrep -la nginx         # (6)!
 ```
+
+1. The classic: every process, full details.
+2. Tree view — shows parent/child relationships.
+3. Processes owned by a specific user.
+4. Processes for the current terminal only.
+5. Find a specific process by name.
+6. Cleaner alternative — lists matching PIDs with their command line, no `grep` needed.
 
 ### Reading ps aux Output
 
@@ -152,39 +150,50 @@ The `STAT` column tells you what the process is doing:
 ### top — Always Available
 
 ``` bash title="Using top"
-top         # launches the live process monitor
-top -u jsmith   # filter to one user's processes
-top -p 1234     # monitor a specific PID
+top             # (1)!
+top -u jsmith   # (2)!
+top -p 1234     # (3)!
 ```
+
+1. Launches the live process monitor.
+2. Filter to one user's processes.
+3. Monitor a specific PID.
 
 **Inside top:**
 
 ``` bash title="top Keyboard Shortcuts"
-q       # quit
-k       # kill a process (prompts for PID and signal)
-r       # renice (change priority)
-M       # sort by memory usage
-P       # sort by CPU usage (default)
-1       # show individual CPU cores
-u       # filter by user
-f       # manage display fields
+q       # (1)!
+k       # (2)!
+r       # (3)!
+M       # (4)!
+P       # (5)!
+1       # (6)!
+u       # (7)!
+f       # (8)!
 ```
+
+1. Quit.
+2. Kill a process (prompts for PID and signal).
+3. Renice (change priority).
+4. Sort by memory usage.
+5. Sort by CPU usage (default).
+6. Show individual CPU cores.
+7. Filter by user.
+8. Manage display fields.
 
 **Reading the top header:**
 
 ``` bash title="top Header Fields"
-top - 14:23:15 up 47 days, 3:12,  2 users,  load average: 0.15, 0.10, 0.08
-# uptime and load averages (1min, 5min, 15min)
-
-Tasks: 187 total,   1 running, 185 sleeping,   0 stopped,   1 zombie
-# process states at a glance
-
-%Cpu(s):  5.2 us,  1.3 sy,  0.0 ni, 92.8 id,  0.7 wa,  0.0 hi,  0.0 si,  0.0 st
-# CPU breakdown: user, system, idle, wait (io), etc.
-
+top - 14:23:15 up 47 days, 3:12,  2 users,  load average: 0.15, 0.10, 0.08        # (1)!
+Tasks: 187 total,   1 running, 185 sleeping,   0 stopped,   1 zombie              # (2)!
+%Cpu(s):  5.2 us,  1.3 sy,  0.0 ni, 92.8 id,  0.7 wa,  0.0 hi,  0.0 si,  0.0 st   # (3)!
 MiB Mem :  15826.1 total,  8234.5 free,  4127.9 used,  3463.7 buff/cache
 MiB Swap:   2048.0 total,  2048.0 free,     0.0 used.  10834.6 avail Mem
 ```
+
+1. Uptime and load averages (1-, 5-, 15-minute).
+2. Process states at a glance.
+3. CPU breakdown: user, system, idle, wait (I/O), etc.
 
 **`wa` (wait)** above 5-10% indicates an I/O bottleneck. **`us` (user)** high means application code is consuming CPU. **`sy` (system)** high means kernel activity — often disk or network.
 
@@ -197,26 +206,28 @@ MiB Swap:   2048.0 total,  2048.0 free,     0.0 used.  10834.6 avail Mem
 ## Finding Processes
 
 ``` bash title="Finding Specific Processes"
-# By name — returns PIDs only
-pgrep nginx
+pgrep nginx                # (1)!
 # 445
 # 446
 
-# By name with command details
-pgrep -la nginx
+pgrep -la nginx            # (2)!
 # 445 nginx: master process /usr/sbin/nginx -g daemon off;
 # 446 nginx: worker process
 
-# By user
-pgrep -u www-data
+pgrep -u www-data          # (3)!
 
-# By name using ps
-ps aux | grep "[n]ginx"    # bracket trick prevents grep from matching itself
+ps aux | grep "[n]ginx"    # (4)!
 
-# Find PID of process listening on a port
-ss -tlnp | grep ":8080"
-lsof -i :8080              # if lsof is installed
+ss -tlnp | grep ":8080"    # (5)!
+lsof -i :8080              # (6)!
 ```
+
+1. By name — returns PIDs only.
+2. By name, with command details.
+3. By user.
+4. By name using `ps`. The bracket trick (`[n]ginx`) stops `grep` from matching its own process.
+5. Find the PID of whatever is listening on a port.
+6. Same idea with `lsof`, if it's installed.
 
 ---
 
@@ -225,18 +236,25 @@ lsof -i :8080              # if lsof is installed
 **Signals** are messages you send to a process to tell it to do something — stop, restart, reload configuration, or terminate.
 
 ``` bash title="Sending Signals"
-# Send a signal by PID
-kill PID              # default: SIGTERM (15) — polite stop
-kill -9 PID           # SIGKILL — forceful, cannot be ignored
-kill -1 PID           # SIGHUP — reload configuration
-kill -STOP PID        # pause the process
-kill -CONT PID        # resume a paused process
+kill PID              # (1)!
+kill -9 PID           # (2)!
+kill -1 PID           # (3)!
+kill -STOP PID        # (4)!
+kill -CONT PID        # (5)!
 
-# Send signal by name
-killall nginx         # send SIGTERM to all processes named nginx
-pkill -u jsmith       # send SIGTERM to all of jsmith's processes
-pkill -9 -u jsmith    # forcefully kill all of jsmith's processes
+killall nginx         # (6)!
+pkill -u jsmith       # (7)!
+pkill -9 -u jsmith    # (8)!
 ```
+
+1. Default: SIGTERM (15) — a polite request to stop.
+2. SIGKILL — forceful, cannot be caught or ignored.
+3. SIGHUP — reload configuration.
+4. Pause the process (SIGSTOP).
+5. Resume a paused process (SIGCONT).
+6. SIGTERM to every process named `nginx`.
+7. SIGTERM to all of jsmith's processes.
+8. Forcefully kill all of jsmith's processes.
 
 ### The Essential Signals
 
@@ -269,16 +287,18 @@ pkill -9 -u jsmith    # forcefully kill all of jsmith's processes
 Many services use SIGHUP to reload their configuration without restarting:
 
 ``` bash title="Reload Config Without Restart"
-# Find the process PID
-pgrep nginx
+pgrep nginx        # (1)!
 # 445
 
-# Send SIGHUP to reload config
-kill -HUP 445
-# or equivalently:
-kill -1 445
-nginx -s reload   # nginx-specific wrapper for the same thing
+kill -HUP 445      # (2)!
+kill -1 445        # (3)!
+nginx -s reload    # (4)!
 ```
+
+1. Find the process PID.
+2. Send SIGHUP to reload the config without restarting.
+3. Equivalently, by signal number.
+4. nginx-specific wrapper for the same thing.
 
 For services managed by systemd, `systemctl reload servicename` is the preferred approach — it handles the signal and verifies the reload succeeded.
 
@@ -289,44 +309,42 @@ For services managed by systemd, `systemctl reload servicename` is the preferred
 When you run a command, it runs in the foreground by default — your terminal is blocked until it finishes. Job control lets you manage multiple commands in one terminal session.
 
 ``` bash title="Job Control"
-# Run a command in the background immediately
-long-running-command &
+long-running-command &     # (1)!
 # [1] 1234        ← job number and PID
 
-# Pause a running command and put it in background
-# (while it's running, press Ctrl+Z)
-^Z
+^Z                         # (2)!
 # [1]+  Stopped    long-running-command
 
-# Resume in background
-bg %1
+bg %1                      # (3)!
+fg %1                      # (4)!
 
-# Resume in foreground
-fg %1
-
-# List current jobs
-jobs
+jobs                       # (5)!
 # [1]-  Running    long-running-command &
 # [2]+  Stopped    another-command
 
-# Kill a job by job number
-kill %1
+kill %1                    # (6)!
 ```
+
+1. Run a command in the background immediately.
+2. Pause a running command and move it to the background — press `Ctrl+Z` while it's running.
+3. Resume job 1 in the background.
+4. Resume job 1 in the foreground.
+5. List current jobs.
+6. Kill a job by its job number.
 
 ### nohup — Survive Logout
 
 By default, background jobs receive SIGHUP when you log out, killing them. `nohup` prevents this:
 
 ``` bash title="Using nohup"
-nohup ./long-script.sh &
-# Sends output to nohup.out by default
-
-nohup ./long-script.sh > /var/log/myscript.log 2>&1 &
-# Better: explicit output file
-
-# Check it's still running after logout
-pgrep -la long-script
+nohup ./long-script.sh &                                  # (1)!
+nohup ./long-script.sh > /var/log/myscript.log 2>&1 &     # (2)!
+pgrep -la long-script                                     # (3)!
 ```
+
+1. Sends output to `nohup.out` by default.
+2. Better: send output to an explicit log file.
+3. Check it's still running after you log out.
 
 For long-running tasks, consider `tmux` or `screen` for persistent terminal sessions — they're more flexible than `nohup`.
 
@@ -339,96 +357,84 @@ For long-running tasks, consider `tmux` or `screen` for persistent terminal sess
     The server feels sluggish. Find what's consuming resources.
 
     ``` bash title="Resource Investigation"
-    # Quick snapshot: who's consuming CPU?
-    ps aux --sort=-%cpu | head -10
-
-    # Who's consuming memory?
-    ps aux --sort=-%mem | head -10
-
-    # Live view sorted by CPU
-    top   # then press P to sort by CPU
-
-    # Check load average context
-    uptime
+    ps aux --sort=-%cpu | head -10   # (1)!
+    ps aux --sort=-%mem | head -10   # (2)!
+    top                              # (3)!
+    uptime                           # (4)!
     # load average: 8.45, 7.23, 6.12  ← high on a 4-core system
-
-    # If load is high but CPU isn't, check disk wait
-    top   # look for high 'wa' in CPU line
-
-    # What's doing disk I/O?
-    iotop   # if installed
+    top                              # (5)!
+    iotop                            # (6)!
     # or: ps aux | awk '$8=="D"'   ← processes in disk wait
     ```
+
+    1. Quick snapshot — who's consuming CPU?
+    2. Who's consuming memory?
+    3. Live view; press `P` to sort by CPU.
+    4. Check load-average context.
+    5. If load is high but CPU isn't, look for a high `wa` (I/O wait) in the CPU line.
+    6. What's doing disk I/O? (`iotop` if installed.)
 
 === "Kill a Hung Process"
 
     An application is hung and won't respond to normal shutdown.
 
     ``` bash title="Kill a Hung Process"
-    # Find the PID
-    pgrep -la myapp
+    pgrep -la myapp        # (1)!
     # 1234 myapp --config /etc/myapp/config.yml
-
-    # Try graceful termination first
-    kill 1234
-    # wait 10 seconds...
-
-    # Check if it's gone
-    ps -p 1234
-    # if still there:
-
-    # Force kill
-    kill -9 1234
-
-    # Verify it's gone
-    ps -p 1234
-    # should show nothing
+    kill 1234              # (2)!
+    ps -p 1234             # (3)!
+    kill -9 1234           # (4)!
+    ps -p 1234             # (5)!
     ```
+
+    1. Find the PID.
+    2. Try graceful termination first, then wait ~10 seconds.
+    3. Check if it's gone. If it's still there, escalate.
+    4. Force kill.
+    5. Verify it's gone — this should show nothing.
 
 === "Check What a Process Is Doing"
 
     You see a process consuming resources but don't know what it's doing.
 
     ``` bash title="Process Investigation"
-    # What files does it have open?
-    lsof -p 1234
-
-    # What network connections does it have?
-    lsof -p 1234 -i
-
-    # What files does it have open (via /proc)
-    ls -la /proc/1234/fd/
-
-    # What command started it?
-    cat /proc/1234/cmdline | tr '\0' ' '
-
-    # What environment variables does it have?
-    cat /proc/1234/environ | tr '\0' '\n'
-
-    # What's its current working directory?
-    ls -la /proc/1234/cwd
+    lsof -p 1234                              # (1)!
+    lsof -p 1234 -i                           # (2)!
+    ls -la /proc/1234/fd/                     # (3)!
+    cat /proc/1234/cmdline | tr '\0' ' '      # (4)!
+    cat /proc/1234/environ | tr '\0' '\n'     # (5)!
+    ls -la /proc/1234/cwd                     # (6)!
     ```
+
+    1. What files does it have open?
+    2. What network connections does it have?
+    3. The same open files, via `/proc`.
+    4. What command started it?
+    5. What environment variables does it have?
+    6. What's its current working directory?
 
 === "Long-Running Job: Run and Detach"
 
     You need to run a script that takes hours and you need to log out.
 
     ``` bash title="Long-Running Jobs"
-    # Option 1: nohup (simple)
-    nohup ./backup-script.sh > /var/log/backup.log 2>&1 &
-    echo $!    # print the PID to track it
-    disown     # detach from current shell (so logout doesn't signal it)
+    nohup ./backup-script.sh > /var/log/backup.log 2>&1 &   # (1)!
+    echo $!                                                 # (2)!
+    disown                                                  # (3)!
 
-    # Option 2: tmux (better — you can reattach)
-    tmux new-session -s backup
-    # run your script inside tmux
-    # then Ctrl+B, D to detach
+    tmux new-session -s backup                              # (4)!
+    # run your script inside tmux, then Ctrl+B, D to detach
     # later: tmux attach -t backup
 
-    # Check if your background job is still running
-    pgrep -la backup-script
+    pgrep -la backup-script                                 # (5)!
     tail -f /var/log/backup.log
     ```
+
+    1. Option 1 — `nohup` (simple): run detached, logging to a file.
+    2. Print the PID so you can track it.
+    3. Detach from the current shell so logging out doesn't signal it.
+    4. Option 2 — `tmux` (better; you can reattach later).
+    5. Check whether your background job is still running.
 
 ---
 
@@ -483,37 +489,34 @@ For long-running tasks, consider `tmux` or `screen` for persistent terminal sess
 
     ??? tip "Solution"
         ``` bash title="Resource Consumer Investigation"
-        # Most CPU (--sort uses ps column names)
-        ps aux --sort=-%cpu | head -3
-
-        # Most memory
-        ps aux --sort=-%mem | head -3
-
-        # Or combined: show PID, user, CPU%, MEM%, command
-        ps aux --sort=-%cpu | awk 'NR<=6 {printf "%-10s %-8s %-6s %-6s %s\n", $1, $2, $3, $4, $11}'
+        ps aux --sort=-%cpu | head -3   # (1)!
+        ps aux --sort=-%mem | head -3   # (2)!
+        ps aux --sort=-%cpu | awk 'NR<=6 {printf "%-10s %-8s %-6s %-6s %s\n", $1, $2, $3, $4, $11}'   # (3)!
         ```
+
+        1. Most CPU — `--sort` uses `ps` column names.
+        2. Most memory.
+        3. Or combined — show PID, user, CPU%, MEM%, and command.
 
 ??? question "Exercise 2: Gracefully Stop and Verify"
     Find the nginx master process PID, send it SIGTERM, wait, and verify it stopped.
 
     ??? tip "Solution"
         ``` bash title="Stop nginx Gracefully"
-        # Find the master process PID
-        pgrep -la nginx | grep master
+        pgrep -la nginx | grep master   # (1)!
         # 445 nginx: master process /usr/sbin/nginx
-
-        # Send SIGTERM
-        kill 445
-
-        # Wait a moment, then verify
-        sleep 3
-        ps -p 445
-        # If it shows nothing, the process is gone
-
-        # Or check via pgrep
-        pgrep nginx
+        kill 445                        # (2)!
+        sleep 3                         # (3)!
+        ps -p 445                       # (4)!
+        pgrep nginx                     # (5)!
         # No output = no nginx processes running
         ```
+
+        1. Find the master process PID.
+        2. Send SIGTERM.
+        3. Wait a moment...
+        4. ...then verify — if it shows nothing, the process is gone.
+        5. Or check via `pgrep` — no output means no nginx processes running.
 
         Note: In production, use `systemctl stop nginx` rather than killing directly — systemd handles the signal, verifies shutdown, and updates the service state.
 
@@ -522,31 +525,25 @@ For long-running tasks, consider `tmux` or `screen` for persistent terminal sess
 
     ??? tip "Solution"
         ``` bash title="Job Control Practice"
-        # Start in background
-        sleep 300 &
+        sleep 300 &                          # (1)!
         # [1] 2345
-
-        # Verify it's running
-        jobs
+        jobs                                 # (2)!
         # [1]+  Running    sleep 300 &
-
-        ps -p 2345
-        # Shows the sleep process
-
-        # Pause it
-        kill -STOP 2345
-
-        # Check state (should show T = stopped)
-        ps -p 2345 -o pid,stat,command
-
-        # Kill it
-        kill 2345
-        # Or kill %1 using job number
-
-        # Verify it's gone
-        jobs
+        ps -p 2345                           # (3)!
+        kill -STOP 2345                      # (4)!
+        ps -p 2345 -o pid,stat,command       # (5)!
+        kill 2345                            # (6)!
+        jobs                                 # (7)!
         # (empty)
         ```
+
+        1. Start in the background.
+        2. Verify it's running.
+        3. Confirm via `ps` — shows the sleep process.
+        4. Pause it.
+        5. Check state — should show `T` (stopped).
+        6. Kill it (or `kill %1` using the job number).
+        7. Verify it's gone.
 
 ---
 

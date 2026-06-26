@@ -39,10 +39,14 @@ The regular expression syntax in `grep -E` is the same regex you use in Python, 
 3. A rich set of flags for controlling what and how it matches
 
 ``` bash title="grep Basics"
-grep "error" /var/log/syslog           # search a file
-journalctl | grep "Failed"             # filter a stream
-grep -r "database_host" /etc/myapp/   # search recursively
+grep "error" /var/log/syslog          # (1)!
+journalctl | grep "Failed"            # (2)!
+grep -r "database_host" /etc/myapp/   # (3)!
 ```
+
+1. Search a file.
+2. Filter a stream.
+3. Search recursively.
 
 ---
 
@@ -55,35 +59,52 @@ grep -r "database_host" /etc/myapp/   # search recursively
     ---
 
     ``` bash title="What to Match"
-    grep -i "error" logfile         # case-insensitive (-i)
-    grep -v "debug" logfile         # invert — exclude matching lines (-v)
-    grep -w "fail" logfile          # whole word only (-w, won't match "failure")
-    grep -F "literal.string" file   # treat pattern as literal, not regex (-F)
-    grep -E "pattern1|pattern2" file  # extended regex — OR matching (-E)
+    grep -i "error" logfile           # (1)!
+    grep -v "debug" logfile           # (2)!
+    grep -w "fail" logfile            # (3)!
+    grep -F "literal.string" file     # (4)!
+    grep -E "pattern1|pattern2" file  # (5)!
     ```
+
+    1. Case-insensitive (`-i`).
+    2. Invert — exclude matching lines (`-v`).
+    3. Whole word only (`-w`) — won't match "failure".
+    4. Treat the pattern as literal, not regex (`-F`).
+    5. Extended regex — OR matching (`-E`).
 
 -   :material-format-list-numbered: **Output Format**
 
     ---
 
     ``` bash title="Controlling Output"
-    grep -n "error" logfile         # show line numbers (-n)
-    grep -c "error" logfile         # count of matching lines (-c)
-    grep -l "error" /var/log/*.log  # show only filenames (-l)
-    grep -L "error" /etc/*.conf     # files that do NOT match (-L)
-    grep -o "pattern" logfile       # print only the matched part (-o)
-    grep -h "error" /var/log/*.log  # suppress filename in output (-h)
+    grep -n "error" logfile         # (1)!
+    grep -c "error" logfile         # (2)!
+    grep -l "error" /var/log/*.log  # (3)!
+    grep -L "error" /etc/*.conf     # (4)!
+    grep -o "pattern" logfile       # (5)!
+    grep -h "error" /var/log/*.log  # (6)!
     ```
+
+    1. Show line numbers (`-n`).
+    2. Count of matching lines (`-c`).
+    3. Show only filenames (`-l`).
+    4. Files that do **not** match (`-L`).
+    5. Print only the matched part (`-o`).
+    6. Suppress the filename in output (`-h`).
 
 -   :material-text-search: **Context**
 
     ---
 
     ``` bash title="Show Surrounding Lines"
-    grep -A 3 "error" logfile      # 3 lines After match (-A)
-    grep -B 3 "error" logfile      # 3 lines Before match (-B)
-    grep -C 3 "error" logfile      # 3 lines on both sides (-C, Context)
+    grep -A 3 "error" logfile      # (1)!
+    grep -B 3 "error" logfile      # (2)!
+    grep -C 3 "error" logfile      # (3)!
     ```
+
+    1. 3 lines **after** the match (`-A`).
+    2. 3 lines **before** the match (`-B`).
+    3. 3 lines on **both** sides (`-C`, context).
 
     **Key insight:** Context flags are essential for log analysis. An error line without context is often meaningless — you need to see what happened before and after.
 
@@ -92,12 +113,18 @@ grep -r "database_host" /etc/myapp/   # search recursively
     ---
 
     ``` bash title="Search Directories"
-    grep -r "pattern" /etc/         # search all files recursively (-r)
-    grep -rl "pattern" /etc/        # filenames only, recursive (-rl)
-    grep -ri "pattern" /etc/        # recursive + case-insensitive (-ri)
-    grep -r "pattern" --include="*.conf" /etc/   # limit to .conf files
-    grep -r "pattern" --exclude="*.log" /var/    # skip log files
+    grep -r "pattern" /etc/                      # (1)!
+    grep -rl "pattern" /etc/                     # (2)!
+    grep -ri "pattern" /etc/                     # (3)!
+    grep -r "pattern" --include="*.conf" /etc/   # (4)!
+    grep -r "pattern" --exclude="*.log" /var/    # (5)!
     ```
+
+    1. Search all files recursively (`-r`).
+    2. Filenames only, recursive (`-rl`).
+    3. Recursive + case-insensitive (`-ri`).
+    4. Limit to `.conf` files.
+    5. Skip log files.
 
 </div>
 
@@ -110,61 +137,84 @@ grep -r "database_host" /etc/myapp/   # search recursively
 ### Anchors and Wildcards
 
 ``` bash title="Anchors"
-grep "^error" logfile       # lines STARTING with "error"
-grep "error$" logfile       # lines ENDING with "error"
-grep "^$" logfile           # empty lines
-grep "^#" /etc/nginx.conf   # comment lines only
-grep -v "^#\|^$" /etc/nginx.conf   # exclude comments and blank lines
+grep "^error" logfile               # (1)!
+grep "error$" logfile               # (2)!
+grep "^$" logfile                   # (3)!
+grep "^#" /etc/nginx.conf           # (4)!
+grep -v "^#\|^$" /etc/nginx.conf    # (5)!
 ```
 
+1. Lines **starting** with "error".
+2. Lines **ending** with "error".
+3. Empty lines.
+4. Comment lines only.
+5. Exclude comments and blank lines.
+
 ``` bash title="Wildcards"
-grep "err.r" logfile        # . matches any single character
-grep "err.*log" logfile     # .* matches any sequence of characters
-grep "colou\?r" logfile     # \? makes previous char optional (BRE: matches "color" and "colour")
-grep -E "colou?r" logfile   # ERE equivalent (no backslash needed)
+grep "err.r" logfile        # (1)!
+grep "err.*log" logfile     # (2)!
+grep "colou\?r" logfile     # (3)!
+grep -E "colou?r" logfile   # (4)!
 ```
+
+1. `.` matches any single character.
+2. `.*` matches any sequence of characters.
+3. `\?` makes the previous character optional (BRE) — matches "color" and "colour".
+4. ERE equivalent — no backslash needed.
 
 ### Character Classes
 
 ``` bash title="Character Classes"
-grep "[0-9]" logfile           # any digit
-grep "[a-zA-Z]" logfile        # any letter
-grep "[[:digit:]]" logfile     # POSIX class: any digit
-grep "[[:alpha:]]" logfile     # POSIX class: any letter
-grep "[[:space:]]" logfile     # POSIX class: whitespace
-grep "[^0-9]" logfile          # ^ inside [] means NOT — any non-digit
+grep "[0-9]" logfile           # (1)!
+grep "[a-zA-Z]" logfile        # (2)!
+grep "[[:digit:]]" logfile     # (3)!
+grep "[[:alpha:]]" logfile     # (4)!
+grep "[[:space:]]" logfile     # (5)!
+grep "[^0-9]" logfile          # (6)!
 ```
+
+1. Any digit.
+2. Any letter.
+3. POSIX class: any digit.
+4. POSIX class: any letter.
+5. POSIX class: whitespace.
+6. `^` inside `[]` means NOT — any non-digit.
 
 ### Extended Regex: Quantifiers and Alternation
 
 With `-E`, you get cleaner syntax and more quantifiers:
 
 ``` bash title="Extended Regex (-E)"
-# Alternation: match either pattern
-grep -E "error|warning|critical" logfile
-
-# Quantifiers
-grep -E "err+" logfile      # + = one or more of previous
-grep -E "err?" logfile      # ? = zero or one of previous
-grep -E "err{2}" logfile    # {n} = exactly n repetitions
-grep -E "err{2,4}" logfile  # {n,m} = between n and m repetitions
-
-# Grouping
-grep -E "(ERROR|error): (disk|memory)" logfile    # group and alternate
-grep -E "^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" logfile  # (1)!
+grep -E "error|warning|critical" logfile                          # (1)!
+grep -E "err+" logfile                                            # (2)!
+grep -E "err?" logfile                                            # (3)!
+grep -E "err{2}" logfile                                          # (4)!
+grep -E "err{2,4}" logfile                                        # (5)!
+grep -E "(ERROR|error): (disk|memory)" logfile                    # (6)!
+grep -E "^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" logfile  # (7)!
 ```
 
-1. This matches lines starting with an IPv4 address pattern: 1-3 digits, dot, 1-3 digits, dot, 1-3 digits, dot, 1-3 digits. Not a perfect IP validator, but useful for extracting IP lines from logs.
+1. Alternation — match any of these patterns.
+2. `+` = one or more of the previous character.
+3. `?` = zero or one of the previous character.
+4. `{n}` = exactly n repetitions.
+5. `{n,m}` = between n and m repetitions.
+6. Group and alternate.
+7. Matches lines starting with an IPv4 address pattern: 1–3 digits then a dot, four times. Not a perfect IP validator, but useful for extracting IP lines from logs.
 
 ### Fixed String Mode (-F)
 
 When your search pattern contains regex special characters (`.`, `*`, `[`, `(`, etc.) that you want to treat literally, use `-F`:
 
 ``` bash title="Literal String Search"
-grep -F "2.5.0.1" /etc/hosts           # searches for literal "2.5.0.1" (not regex)
-grep -F "user[admin]" config.txt        # literal brackets, not a character class
-grep -F "price: $9.99" catalog.txt     # literal $ and .
+grep -F "2.5.0.1" /etc/hosts          # (1)!
+grep -F "user[admin]" config.txt      # (2)!
+grep -F "price: $9.99" catalog.txt    # (3)!
 ```
+
+1. Searches for the literal `2.5.0.1`, not a regex — the dots are treated literally.
+2. Literal brackets, not a character class.
+3. Literal `$` and `.`.
 
 Without `-F`, `grep "2.5.0.1"` would match "250001" (the dots match any character). Use `-F` when searching for version strings, IP addresses, file paths, or any literal text.
 
@@ -175,64 +225,52 @@ Without `-F`, `grep "2.5.0.1"` would match "250001" (the dots match any characte
 ### Log Analysis Patterns
 
 ``` bash title="Production Log Investigation"
-# Find errors from the last hour (with context)
-journalctl --since "1 hour ago" | grep -i "error\|fail\|critical" -A 2
-
-# Count errors by type
-grep -oE "(ERROR|WARNING|CRITICAL)" /var/log/myapp/app.log | sort | uniq -c | sort -nr
-
-# Find lines matching multiple patterns (must match all)
-grep "user=jsmith" auth.log | grep "FAILED"
-
-# Find specific HTTP status codes in access log
-grep -E " (4[0-9]{2}|5[0-9]{2}) " /var/log/nginx/access.log
-
-# Find the last occurrence of a pattern
-grep "Restart" /var/log/syslog | tail -1
-
-# Show context around an error for diagnosis
-grep -B 5 -A 10 "OutOfMemoryError" /var/log/myapp/app.log
+journalctl --since "1 hour ago" | grep -i "error\|fail\|critical" -A 2                     # (1)!
+grep -oE "(ERROR|WARNING|CRITICAL)" /var/log/myapp/app.log | sort | uniq -c | sort -nr     # (2)!
+grep "user=jsmith" auth.log | grep "FAILED"                                                # (3)!
+grep -E " (4[0-9]{2}|5[0-9]{2}) " /var/log/nginx/access.log                                # (4)!
+grep "Restart" /var/log/syslog | tail -1                                                   # (5)!
+grep -B 5 -A 10 "OutOfMemoryError" /var/log/myapp/app.log                                   # (6)!
 ```
+
+1. Find errors from the last hour, with 2 lines of trailing context.
+2. Count errors by type, most frequent first.
+3. Find lines matching multiple patterns (must match all).
+4. Find specific HTTP status codes (4xx/5xx) in the access log.
+5. Find the last occurrence of a pattern.
+6. Show context around an error for diagnosis.
 
 ### Configuration File Analysis
 
 ``` bash title="Working with Config Files"
-# Show effective config (exclude comments and blank lines)
-grep -v "^#\|^$" /etc/ssh/sshd_config
-
-# Check if a specific setting is enabled
-grep -w "PermitRootLogin" /etc/ssh/sshd_config
-
-# Find which config files reference a hostname
-grep -rl "db-prod-01" /etc/
-
-# Find all uncommented listen directives
-grep -v "^#" /etc/nginx/nginx.conf | grep -i "listen"
-
-# Check for a setting across multiple config files
-grep -r "ssl_certificate" /etc/nginx/
+grep -v "^#\|^$" /etc/ssh/sshd_config                   # (1)!
+grep -w "PermitRootLogin" /etc/ssh/sshd_config          # (2)!
+grep -rl "db-prod-01" /etc/                             # (3)!
+grep -v "^#" /etc/nginx/nginx.conf | grep -i "listen"   # (4)!
+grep -r "ssl_certificate" /etc/nginx/                   # (5)!
 ```
+
+1. Show the effective config — exclude comments and blank lines.
+2. Check if a specific setting is enabled (`-w` matches whole words).
+3. Find which config files reference a hostname.
+4. Find all uncommented `listen` directives.
+5. Check for a setting across multiple config files.
 
 ### Process and System Filtering
 
 ``` bash title="Filtering System Output"
-# Find a specific process
-ps aux | grep "[n]ginx"        # (1)!
-
-# Filter df output to real filesystems only
-df -h | grep -v "tmpfs\|devtmpfs\|udev"
-
-# Find services in a specific state
-systemctl list-units | grep "failed"
-
-# Check which ports are listening
-ss -tlnp | grep "LISTEN"
-
-# Find users with login shells
-grep -v "nologin\|/bin/false" /etc/passwd | cut -d: -f1
+ps aux | grep "[n]ginx"                                  # (1)!
+df -h | grep -v "tmpfs\|devtmpfs\|udev"                  # (2)!
+systemctl list-units | grep "failed"                     # (3)!
+ss -tlnp | grep "LISTEN"                                 # (4)!
+grep -v "nologin\|/bin/false" /etc/passwd | cut -d: -f1  # (5)!
 ```
 
-1. The bracket trick `[n]ginx` matches "nginx" but the `grep` process itself shows up in `ps` as `[n]ginx`, which doesn't match its own pattern. This prevents `grep` from including itself in the results — a common solution to the "grep shows itself" problem.
+1. The bracket trick `[n]ginx` matches "nginx" but not the `grep` process itself — `grep` shows up in `ps` as `[n]ginx`, which doesn't match its own pattern. A common solution to the "grep shows itself" problem.
+2. Filter `df` output to real filesystems only.
+3. Find services in a specific (failed) state.
+4. Check which ports are listening.
+5. Find users with real login shells.
 
 ---
 

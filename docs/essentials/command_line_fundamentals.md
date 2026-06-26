@@ -44,19 +44,27 @@ ls -lh /var/log
 Most commands offer two forms for every option: a compact single-character form (prefixed with `-`) and a descriptive word form (prefixed with `--`). They do the same thing.
 
 ``` bash title="Short and Long Options Are Equivalent"
-ls -l           # short form
-ls --format=long  # long form (same result)
+ls -l                               # (1)!
+ls --format=long                    # (2)!
 
-grep -r 'error' /var/log    # short form
-grep --recursive 'error' /var/log  # long form (same result)
+grep -r 'error' /var/log            # (3)!
+grep --recursive 'error' /var/log   # (4)!
 ```
+
+1. Short form.
+2. Long form — same result.
+3. Short form.
+4. Long form — same result.
 
 **Short options can be combined.** Long options cannot.
 
 ``` bash title="Combining Short Options"
-ls -l -h -t         # works, but verbose
-ls -lht             # same thing — combined short options
+ls -l -h -t         # (1)!
+ls -lht             # (2)!
 ```
+
+1. Works, but verbose.
+2. Same thing — combined short options.
 
 **When to use which:**
 
@@ -68,10 +76,14 @@ ls -lht             # same thing — combined short options
 Arguments are the targets: files, directories, patterns, or other input. Some commands require them; most accept them.
 
 ``` bash title="Commands With and Without Arguments"
-ls              # lists current directory (no argument = default)
-ls /etc         # lists /etc (explicit argument)
-ls /etc /var    # multiple arguments — lists both
+ls              # (1)!
+ls /etc         # (2)!
+ls /etc /var    # (3)!
 ```
+
+1. Lists the current directory — no argument means default.
+2. Lists `/etc` — an explicit argument.
+3. Multiple arguments — lists both.
 
 !!! warning "Order Matters"
     Options typically come before arguments. Some commands are strict about this. When in doubt, follow the pattern `command [options] [arguments]`.
@@ -138,21 +150,22 @@ This is where the real gap between beginners and professionals lives. These feat
     **Why it matters:** Often you want to re-run the last command slightly modified, or pass the last argument to a new command. History expansion does this in 2-3 keystrokes.
 
     ``` bash title="History Expansion Shortcuts"
-    # !! — repeat the entire last command
     cat /etc/nginx/nginx.conf
-    sudo !!
+    sudo !!                          # (1)!
     # → sudo cat /etc/nginx/nginx.conf
 
-    # !$ — last argument of the previous command
     mkdir /opt/myapp/config
-    cd !$
+    cd !$                            # (2)!
     # → cd /opt/myapp/config
 
-    # !^ — first argument of the previous command
     diff /etc/hosts /etc/hosts.bak
-    cp !^
+    cp !^                            # (3)!
     # → cp /etc/hosts
     ```
+
+    1. `!!` repeats the entire last command — here, re-running it with `sudo` prepended.
+    2. `!$` is the last argument of the previous command.
+    3. `!^` is the first argument of the previous command.
 
     **Key insight:** `sudo !!` is one of the most useful patterns in Linux — you run a command, realize you needed `sudo`, and just prepend it.
 
@@ -163,18 +176,25 @@ This is where the real gap between beginners and professionals lives. These feat
     **Why it matters:** You've typed a long command and need to fix something in the middle. These shortcuts let you navigate and edit without reaching for the mouse.
 
     ``` bash title="Cursor Shortcuts"
-    # Navigation
-    Ctrl+A    # jump to beginning of line
-    Ctrl+E    # jump to end of line
-    Alt+B     # jump back one word
-    Alt+F     # jump forward one word
+    Ctrl+A    # (1)!
+    Ctrl+E    # (2)!
+    Alt+B     # (3)!
+    Alt+F     # (4)!
 
-    # Editing
-    Ctrl+W    # delete word before cursor
-    Ctrl+K    # delete from cursor to end of line
-    Ctrl+U    # delete entire line
-    Ctrl+L    # clear the screen (same as 'clear')
+    Ctrl+W    # (5)!
+    Ctrl+K    # (6)!
+    Ctrl+U    # (7)!
+    Ctrl+L    # (8)!
     ```
+
+    1. Jump to the beginning of the line.
+    2. Jump to the end of the line.
+    3. Jump back one word.
+    4. Jump forward one word.
+    5. Delete the word before the cursor.
+    6. Delete from the cursor to the end of the line.
+    7. Delete the entire line.
+    8. Clear the screen (same as `clear`).
 
     **Key insight:** `Ctrl+W` is especially useful — it deletes the last word, letting you fix a path or argument without retyping the whole command.
 
@@ -187,37 +207,44 @@ This is where the real gap between beginners and professionals lives. These feat
 History search covers most cases, but knowing the other ways to work with history rounds out your toolkit.
 
 ``` bash title="History Navigation"
-# Arrow keys — scroll through history one command at a time
-↑    # previous command
-↓    # next command
+↑                       # (1)!
+↓                       # (2)!
 
-# The 'history' command — view your command history
-history
+history                 # (3)!
 # 1001  ls -lh /var/log
 # 1002  cat /etc/nginx/nginx.conf
 # 1003  sudo systemctl restart nginx
 # 1004  history
 
-# Run a specific command from history by number
-!1003
+!1003                   # (4)!
 # → sudo systemctl restart nginx
 
-# Search history with grep
-history | grep docker
+history | grep docker   # (5)!
 # 987  docker ps
 # 991  docker logs myapp
 # 995  docker compose up -d
 ```
 
+1. Previous command — the arrow keys scroll through history one command at a time.
+2. Next command.
+3. View your full command history.
+4. Re-run a specific command from history by its number.
+5. Search history for matching commands.
+
 ??? tip "Persist History Across Sessions"
     By default, Bash only keeps a limited history and loses it between terminal sessions. Add these to your `~/.bashrc` to fix that:
 
     ``` bash title="Better History Settings (~/.bashrc)"
-    export HISTSIZE=10000        # keep 10,000 commands in memory
-    export HISTFILESIZE=20000    # keep 20,000 commands on disk
-    export HISTCONTROL=ignoredups:erasedups  # no duplicate entries
-    shopt -s histappend         # append instead of overwriting
+    export HISTSIZE=10000                     # (1)!
+    export HISTFILESIZE=20000                 # (2)!
+    export HISTCONTROL=ignoredups:erasedups   # (3)!
+    shopt -s histappend                       # (4)!
     ```
+
+    1. Keep 10,000 commands in memory.
+    2. Keep 20,000 commands on disk.
+    3. No duplicate entries.
+    4. Append instead of overwriting.
 
     After editing, run `source ~/.bashrc` to apply.
 
@@ -250,9 +277,10 @@ You don't usually check `$?` directly in interactive sessions — but it's what 
     **Runs the second command regardless of whether the first succeeded.**
 
     ``` bash title="Semicolon: Sequential Execution"
-    apt update ; apt upgrade
-    # runs apt upgrade even if apt update fails
+    apt update ; apt upgrade   # (1)!
     ```
+
+    1. Runs `apt upgrade` even if `apt update` fails.
 
     Use when the second command doesn't depend on the first.
 
@@ -261,13 +289,12 @@ You don't usually check `$?` directly in interactive sessions — but it's what 
     **Runs the second command only if the first succeeded (exit code 0).**
 
     ``` bash title="AND: Conditional Execution"
-    mkdir /opt/myapp && cd /opt/myapp
-    # only cd if mkdir succeeded
-    # protects you from cd-ing to a directory that doesn't exist
-
-    git pull && ./deploy.sh
-    # only deploy if the pull succeeded
+    mkdir /opt/myapp && cd /opt/myapp   # (1)!
+    git pull && ./deploy.sh             # (2)!
     ```
+
+    1. Only `cd` if `mkdir` succeeded — protects you from cd-ing into a directory that doesn't exist.
+    2. Only deploy if the pull succeeded.
 
     This is the pattern you'll see most in production scripts. It's defensive — if something fails early, the rest doesn't run.
 
@@ -276,11 +303,12 @@ You don't usually check `$?` directly in interactive sessions — but it's what 
     **Runs the second command only if the first failed.**
 
     ``` bash title="OR: Fallback Execution"
-    command_that_might_fail || echo "Something went wrong"
-    # prints the message only if the command failed
+    command_that_might_fail || echo "Something went wrong"   # (1)!
 
     grep -q 'nginx' /etc/hosts || echo "nginx not found in hosts"
     ```
+
+    1. Prints the message only if the command failed.
 
     Use for fallbacks, error messages, or default behavior.
 
@@ -289,13 +317,12 @@ You don't usually check `$?` directly in interactive sessions — but it's what 
 These operators compose naturally:
 
 ``` bash title="Combining Chains in Practice"
-# Create a directory, move into it, and initialize a git repo
-# — stops if any step fails
-mkdir /opt/myproject && cd /opt/myproject && git init
-
-# Back up a config file, then edit it safely
-cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak && vim /etc/nginx/nginx.conf
+mkdir /opt/myproject && cd /opt/myproject && git init                              # (1)!
+cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak && vim /etc/nginx/nginx.conf    # (2)!
 ```
+
+1. Create a directory, move into it, and initialize a git repo — `&&` stops the chain if any step fails.
+2. Back up a config file, then edit it — the edit only runs if the backup succeeded.
 
 !!! tip "Chain or Script?"
     If you find yourself writing the same chain more than twice, turn it into a shell script. But start with chains — they're fast to prototype and easy to reason about.
@@ -358,13 +385,11 @@ cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak && vim /etc/nginx/nginx.conf
     You typed a long command but the path at the beginning is wrong.
 
     ``` bash title="Fixing a Typo Mid-Command"
-    # You typed:
-    tail -f /var/lgo/nginx/access.log
+    tail -f /var/lgo/nginx/access.log   # (1)!
     #              ^^^
-    # Ctrl+A moves to the start of the line
-    # Alt+F skips forward word by word
-    # Ctrl+W deletes /var/lgo/ and you retype /var/log/
     ```
+
+    1. You typed `/var/lgo/` by mistake. `Ctrl+A` jumps to the start of the line, `Alt+F` skips forward word by word, and `Ctrl+W` deletes `/var/lgo/` so you can retype `/var/log/`.
 
     **Pattern:** `Ctrl+A` to jump to start, `Alt+F` to hop over words, `Ctrl+W` to delete and retype the bad part.
 
@@ -420,13 +445,14 @@ cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak && vim /etc/nginx/nginx.conf
 
     ??? tip "Solution"
         ``` bash title="Tab Completion Navigation"
-        cd /var/log/   # type 'cd /var/l' then Tab to complete
-
-        ls             # list what's here
-
+        cd /var/log/        # (1)!
+        ls                  # (2)!
         systemctl stat<TAB>
         # → systemctl status
         ```
+
+        1. Type `cd /var/l` then Tab to complete.
+        2. List what's here.
 
         If Tab didn't complete `systemctl stat`, press Tab twice to see if there are multiple completions.
 
@@ -444,10 +470,11 @@ cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak && vim /etc/nginx/nginx.conf
         # Press Ctrl+R, type 'var/log' — you'll see the ls command
         # Press Enter to run it
 
-        cd !$
-        # !$ = last argument of previous command = /var/log/
+        cd !$       # (1)!
         # → cd /var/log/
         ```
+
+        1. `!$` = the last argument of the previous command = `/var/log/`.
 
 ??? question "Exercise 3: Chaining Practice"
     Write a single chained command that:

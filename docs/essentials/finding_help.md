@@ -63,9 +63,12 @@ graph TD
     **Key insight:** `--help` output is designed to be scanned, not read top-to-bottom. Look for the flag you need and move on. For commands where `--help` doesn't work, try `-h`.
 
     ``` bash title="When --help is Too Long"
-    find --help | grep "\-name"     # filter for the flag you need
-    find --help | less              # page through it
+    find --help | grep "\-name"     # (1)!
+    find --help | less              # (2)!
     ```
+
+    1. filter for the flag you need.
+    2. page through it.
 
 -   :material-information: **whatis — One-Line Summaries**
 
@@ -96,9 +99,12 @@ graph TD
     ``` bash title="Reading Man Pages"
     man find
     man chmod
-    man 5 passwd    # section 5: the /etc/passwd file format
-    man hier        # the filesystem hierarchy standard
+    man 5 passwd    # (1)!
+    man hier        # (2)!
     ```
+
+    1. section 5: the `/etc/passwd` file format.
+    2. the filesystem hierarchy standard.
 
     **Key insight:** Most people open a man page and feel overwhelmed. The next section covers how to read them efficiently without drowning in text.
 
@@ -128,8 +134,10 @@ graph TD
 
     # On Ubuntu/Debian
     apt install tldr
-    tldr --update   # download the page cache
+    tldr --update   # (1)!
     ```
+
+    1. download the page cache.
 
     **Key insight:** `tldr` is excellent for commands you use occasionally and can never quite remember the exact syntax for. It's faster than man pages for practical lookups.
 
@@ -213,10 +221,14 @@ Man pages are divided into numbered sections. The same name can appear in multip
 | 8 | System administration (`mount`, `iptables`, `useradd`) |
 
 ``` bash title="Specifying Man Page Sections"
-man passwd        # defaults to section 1: the passwd command
-man 5 passwd      # section 5: the /etc/passwd file format
-man 8 useradd     # section 8: the useradd system administration command
+man passwd        # (1)!
+man 5 passwd      # (2)!
+man 8 useradd     # (3)!
 ```
+
+1. defaults to section 1: the `passwd` command.
+2. section 5: the `/etc/passwd` file format.
+3. section 8: the `useradd` system administration command.
 
 When you see a reference like `passwd(5)` in documentation, that means section 5 of the man page for `passwd`.
 
@@ -241,8 +253,10 @@ apropos "network interface"
 `man -k` and `apropos` are identical — they search man page descriptions by keyword. The output is `command (section) — description`.
 
 ``` bash title="Full-Text Search Across All Man Pages"
-man -K "TCP_NODELAY"    # capital -K: searches full text (slow but comprehensive)
+man -K "TCP_NODELAY"    # (1)!
 ```
+
+1. capital `-K`: searches full text (slow but comprehensive).
 
 `-K` (capital) searches the full text of every man page. It's slow, but useful when you know a specific term and want to find which commands or files use it.
 
@@ -253,10 +267,14 @@ man -K "TCP_NODELAY"    # capital -K: searches full text (slow but comprehensive
 Some GNU utilities (like `bash`, `gawk`, `grep`) have `info` pages in addition to man pages. Info pages are often more detailed and better organized for linear reading:
 
 ``` bash title="Using info Pages"
-info bash       # the full Bash reference manual
-info grep       # grep's info documentation
-info coreutils  # documentation for ls, cp, mv, and other coreutils
+info bash       # (1)!
+info grep       # (2)!
+info coreutils  # (3)!
 ```
+
+1. the full Bash reference manual.
+2. grep's info documentation.
+3. documentation for `ls`, `cp`, `mv`, and other coreutils.
 
 Info uses its own navigation: `n` for next node, `p` for previous, `u` for up a level, `q` to quit. It's more like a book than a reference page.
 
@@ -345,9 +363,12 @@ Sometimes the man page doesn't have an example for your exact situation, or you'
         The flags for extracting a `.tar.gz` file:
 
         ``` bash title="tar Extract"
-        tar -xzf archive.tar.gz         # extract gzip-compressed tar
-        tar -xzf archive.tar.gz -C /dest/  # extract to specific directory
+        tar -xzf archive.tar.gz         # (1)!
+        tar -xzf archive.tar.gz -C /dest/  # (2)!
         ```
+
+        1. extract gzip-compressed tar.
+        2. extract to specific directory.
 
         `-x` = extract, `-z` = gunzip, `-f` = filename follows
 
@@ -376,14 +397,17 @@ Sometimes the man page doesn't have an example for your exact situation, or you'
 
     ??? tip "Solution"
         ``` bash title="Opening a Specific Man Page Section"
-        man crontab      # section 1: the crontab command
-        man 5 crontab    # section 5: the crontab file format
+        man crontab      # (1)!
+        man 5 crontab    # (2)!
 
         # Check which sections exist
         whatis crontab
         # crontab (1)  - maintain crontab files for individual users
         # crontab (5)  - tables for driving cron
         ```
+
+        1. section 1: the crontab command.
+        2. section 5: the crontab file format.
 
 ---
 

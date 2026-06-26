@@ -351,12 +351,13 @@ Now that you know how to explore safely, try these hands-on exercises:
 
     ??? tip "Answer"
         ``` bash title="Explore /var/log" linenums="1"
-        # List everything with details
-        ls -la /var/log
+        ls -la /var/log   # (1)!
 
-        # Show directory tree (if tree is installed)
-        tree /var/log -L 2
+        tree /var/log -L 2   # (2)!
         ```
+
+        1. List everything with details.
+        2. Show directory tree (if `tree` is installed).
 
         **What to notice:**
         - Directory vs file (first column: `d` = directory, `-` = file)
@@ -374,12 +375,13 @@ Now that you know how to explore safely, try these hands-on exercises:
 
     ??? tip "Answer"
         ``` bash title="View Recent System Logs" linenums="1"
-        # See the last 20 lines
-        tail -n 20 /var/log/syslog
+        tail -n 20 /var/log/syslog   # (1)!
 
-        # Follow in real-time (press Ctrl+C to stop)
-        tail -f /var/log/syslog
+        tail -f /var/log/syslog   # (2)!
         ```
+
+        1. See the last 20 lines.
+        2. Follow in real-time (press `Ctrl+C` to stop).
 
         **What to notice:**
         - Timestamps on each log line
@@ -397,18 +399,19 @@ Now that you know how to explore safely, try these hands-on exercises:
 
     ??? tip "Answer"
         ``` bash title="Explore Your Home" linenums="1"
-        # Go to your home directory
-        cd ~
+        cd ~   # (1)!
 
-        # List everything including hidden files
-        ls -la
+        ls -la   # (2)!
 
-        # View directory tree
-        tree -L 1
+        tree -L 1   # (3)!
 
-        # Browse your bash config (read-only, safe)
-        less .bashrc
+        less .bashrc   # (4)!
         ```
+
+        1. Go to your home directory.
+        2. List everything including hidden files.
+        3. View directory tree.
+        4. Browse your bash config (read-only, safe).
 
         **What to notice:**
         - Hidden files start with `.` (like `.bashrc`, `.profile`)
