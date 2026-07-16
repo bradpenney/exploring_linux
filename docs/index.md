@@ -86,9 +86,23 @@ For IT professionals who need to own Linux. Five categories — work through the
 
 ---
 
-## ⚡ Efficiency *(Coming soon)*
+## ⚡ Efficiency
 
-The daily-use tools that separate professionals who get things done: systemd for service management, `sed` for text transformation, package management, and networking basics.
+The daily-use tools that separate professionals who get things done. Live now, with more topics landing over time.
+
+<div class="grid cards" markdown>
+
+-   :material-cube-outline: **System**
+
+    ---
+
+    What actually isolates a process — namespaces and cgroups — plus how Linux breaks root apart into fine-grained capabilities.
+
+    [:octicons-arrow-right-24: Namespaces & cgroups](efficiency/namespaces_cgroups.md)
+
+</div>
+
+More Efficiency topics — systemd, `sed`, package management, networking basics — are still on the way.
 
 ## 🎯 Mastery *(Coming soon)*
 
