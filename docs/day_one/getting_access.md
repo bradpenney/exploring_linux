@@ -396,6 +396,20 @@ ls
 
         If `.ssh` exists, it may contain `authorized_keys` (public keys allowed to log in as you), `known_hosts` (servers you've connected to), and `config` (connection shortcuts). If you're on a fresh account, it may be empty or absent — it gets created when you first use key-based auth.
 
+## What's Next?
+
+You're in. You've got a Linux terminal in front of you. Now what?
+
+Head to **[First 60 Seconds: Orientation](orientation.md)** to learn what to do immediately after logging in—checking who you are, what server you're on, and what resources are available.
+
+The next articles in Day One will also cover:
+
+- **[Understanding Your Permissions](permissions.md)** - Know what you're allowed to do on the server
+- **[Safe Exploration](safe_exploration.md)** - How to look around without breaking things
+- **[Reading Logs Like a Pro](reading_logs.md)** - Using `tail`, `grep`, and `journalctl` to understand what the system is telling you
+
+For now, try the Practice Problems above to build familiarity with your new Linux environment.
+
 ---
 
 ## Further Reading
@@ -414,20 +428,4 @@ ls
 
 - [Orientation](orientation.md) - What to do immediately after you've connected
 - [Understanding Your Permissions](permissions.md) - Know what you're allowed to do on the server
-
----
-
-## What's Next?
-
-You're in. You've got a Linux terminal in front of you. Now what?
-
-Head to **[First 60 Seconds: Orientation](orientation.md)** to learn what to do immediately after logging in—checking who you are, what server you're on, and what resources are available.
-
-The next articles in Day One will also cover:
-
-- **[Understanding Your Permissions](permissions.md)** - Know what you're allowed to do on the server
-- **[Safe Exploration](safe_exploration.md)** - How to look around without breaking things
-- **[Reading Logs Like a Pro](reading_logs.md)** - Using `tail`, `grep`, and `journalctl` to understand what the system is telling you
-
-For now, try the Practice Problems above to build familiarity with your new Linux environment.
 

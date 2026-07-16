@@ -414,6 +414,17 @@ Watch for a few minutes. No errors? The fix probably worked.
 2. `curl` — HTTP endpoints
 3. `nc -zv` — Port connectivity
 
+## What's Next?
+
+You've learned what to do. Now let's cover what NOT to do. Head to [The "Don't Do This" Guide](safety_guide.md) for production safety rules that will keep you out of trouble.
+
+!!! tip "Write Down Your Findings"
+    When someone asks you to check something, report back with specifics:
+
+    > "Nginx is running (PID 1234, up for 5 days). It's listening on port 80 and 443. The last error in the logs was 2 hours ago and looks like a client timeout, not a server issue."
+
+    Much better than "Yeah, it's fine."
+
 ---
 
 ## Further Reading
@@ -436,14 +447,3 @@ Watch for a few minutes. No errors? The fix probably worked.
 
 - [Reading Logs](reading_logs.md) — In-depth guide to log analysis; covers everything in the Tailing Logs section above and much more
 - [Safe Exploration](safe_exploration.md) — Reminder of which commands are safe to run on production without permission
-
-## What's Next?
-
-You've learned what to do. Now let's cover what NOT to do. Head to [The "Don't Do This" Guide](safety_guide.md) for production safety rules that will keep you out of trouble.
-
-!!! tip "Write Down Your Findings"
-    When someone asks you to check something, report back with specifics:
-
-    > "Nginx is running (PID 1234, up for 5 days). It's listening on port 80 and 443. The last error in the logs was 2 hours ago and looks like a client timeout, not a server issue."
-
-    Much better than "Yeah, it's fine."

@@ -564,6 +564,12 @@ find / -name "*.conf" 2>/dev/null | wc -l   # (2)!
 - **Build pipelines incrementally** — add one stage at a time, verify output, then extend
 - **Core toolkit:** `grep`, `sort`, `uniq -c`, `wc -l`, `head`, `tail`, `awk`, `tee`
 
+## What's Next?
+
+Pipes flow data between commands, and the most common thing you'll do with that data is search it. `grep` is the workhorse of Linux text processing — and it deserves its own deep dive.
+
+Head to **[grep](grep.md)** to learn regular expressions, recursive searching, context flags, and the patterns that turn `grep` from a simple filter into a powerful investigation tool.
+
 ---
 
 ## Further Reading
@@ -587,10 +593,3 @@ find / -name "*.conf" 2>/dev/null | wc -l   # (2)!
 - [GNU Coreutils Manual](https://www.gnu.org/software/coreutils/manual/) — sort, uniq, wc, tee, head, tail
 - [GNU Bash Manual: Redirections](https://www.gnu.org/software/bash/manual/bash.html#Redirections) — complete redirect reference
 
----
-
-## What's Next?
-
-Pipes flow data between commands, and the most common thing you'll do with that data is search it. `grep` is the workhorse of Linux text processing — and it deserves its own deep dive.
-
-Head to **[grep](grep.md)** to learn regular expressions, recursive searching, context flags, and the patterns that turn `grep` from a simple filter into a powerful investigation tool.

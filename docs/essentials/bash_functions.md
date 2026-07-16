@@ -344,6 +344,10 @@ When this pattern grows to multiple sourced libraries shared across repos, that'
 - `main "$@"` at the bottom of a script: the only line that runs directly, everything else is a definition
 - Shared functions go in a library file, loaded with `source "$(dirname "$0")/lib.sh"`
 
+## What's Next?
+
+You've covered the complete Bash scripting foundation: scripts, variables, arguments, conditionals, loops, and functions. The Efficiency tier builds on these with patterns for production-grade scripts — `set -euo pipefail`, `getopts`, signal handling, and structured logging.
+
 ---
 
 ## Further Reading
@@ -368,8 +372,3 @@ When this pattern grows to multiple sourced libraries shared across repos, that'
 
 - [My Bash Script Is Getting Out of Hand](https://python.bradpenney.io/day_one/wrapping_bash/) — When functions, sourced libraries, and argument handling outgrow Bash: the migration path to Python with proper module structure
 
----
-
-## What's Next?
-
-You've covered the complete Bash scripting foundation: scripts, variables, arguments, conditionals, loops, and functions. The Efficiency tier builds on these with patterns for production-grade scripts — `set -euo pipefail`, `getopts`, signal handling, and structured logging — coming soon.

@@ -277,6 +277,10 @@ sshprod
 
     This applies to all SSH connections. The server will keep your connection alive.
 
+## What's Next?
+
+Now that you can connect efficiently, learn about navigating the filesystem and finding files in the next Level 1 articles.
+
 ---
 
 ## Further Reading
@@ -287,8 +291,3 @@ sshprod
 - [tmux cheat sheet](https://tmuxcheatsheet.com/) - Quick reference for tmux commands
 - [SSH Academy - Config File](https://www.ssh.com/academy/ssh/config) - Comprehensive SSH config guide
 
----
-
-## What's Next?
-
-Now that you can connect efficiently, learn about navigating the filesystem and finding files in the next Level 1 articles.

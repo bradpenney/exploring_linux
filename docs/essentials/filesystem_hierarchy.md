@@ -546,6 +546,12 @@ The Linux filesystem is organized by purpose, not by application:
 
 When something isn't working: check `/etc/` for misconfiguration, `/var/log/` for error messages. When you can't find a binary: `which` it or check `/usr/bin/`, `/usr/sbin/`, `/usr/local/bin/`, and `/opt/`. When disk is full: `du -sh /var/*` is your first move.
 
+## What's Next?
+
+You know where things live. Now you need to find specific things efficiently — when you know *what* you're looking for but not the exact path.
+
+Head to **[Finding Files](finding_files.md)** to learn `find`, `locate`, and `which` — and the practical patterns for locating any file, config, log, or binary on a system you've never touched before.
+
 ---
 
 ## Further Reading
@@ -569,10 +575,3 @@ When something isn't working: check `/etc/` for misconfiguration, `/var/log/` fo
 - [Debian Policy Manual: Filesystem](https://www.debian.org/doc/debian-policy/ch-opersys.html) — Debian's filesystem conventions
 - [The Linux Documentation Project](https://tldp.org/) — HOWTOs and guides
 
----
-
-## What's Next?
-
-You know where things live. Now you need to find specific things efficiently — when you know *what* you're looking for but not the exact path.
-
-Head to **[Finding Files](finding_files.md)** to learn `find`, `locate`, and `which` — and the practical patterns for locating any file, config, log, or binary on a system you've never touched before.

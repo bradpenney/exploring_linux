@@ -78,7 +78,12 @@ plugins:
       glob:
         # New structure — all drafts
         - "day_one/first_tasks.md"
-        - "efficiency/*"
+        # Efficiency: namespaces_cgroups.md + capabilities.md are PUBLISHED;
+        # the rest of the tier is still draft, excluded individually.
+        - "efficiency/bash_scripting_basics.md"
+        - "efficiency/sed.md"
+        - "efficiency/shell_shortcuts.md"
+        - "efficiency/systemd.md"
         - "mastery/*"
         # Old pre-overhaul directories — pending migration or deletion
         - "administering_linux/*"
@@ -190,7 +195,12 @@ nav:
           - Loops: essentials/bash_loops.md
           - Functions: essentials/bash_functions.md
 
-  # ⚡ Efficiency — Daily-use tools for working Linux professionals
+  - ⚡ Efficiency:
+      - System:
+          - "Namespaces and cgroups: How Linux Isolates a Process": efficiency/namespaces_cgroups.md
+          - "Linux Capabilities: Breaking Up Root": efficiency/capabilities.md
+
+  # ⚡ Efficiency — remaining planned articles (still draft, excluded)
   # - ⚡ Efficiency:
   #     - The Command Line:
   #         - Overview: efficiency/command_line_overview.md

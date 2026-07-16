@@ -477,6 +477,12 @@ This is a best practice in scripts. For interactive use, the simple pipe is usua
 - **Acting on results:** `-exec command {} \;` for one-at-a-time, `-exec command {} +` for batch, `| xargs` for piping
 - **Silence permission errors** with `2>/dev/null` — you'll use this constantly
 
+## What's Next?
+
+You can now find any file on the system. The next skill is knowing how to get help when you encounter a command you've never seen before.
+
+Head to **[Finding Help](finding_help.md)** to learn how to read man pages effectively, use `--help` flags, find information online, and extract what you need from documentation without reading every word.
+
 ---
 
 ## Further Reading
@@ -499,10 +505,3 @@ This is a best practice in scripts. For interactive use, the simple pipe is usua
 - [Red Hat: Finding Files](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/configuring_basic_system_settings/assembly_finding-files_configuring-basic-system-settings) — RHEL guide to find and locate
 - [The Linux Documentation Project](https://tldp.org/) — Linux HOWTOs and guides
 
----
-
-## What's Next?
-
-You can now find any file on the system. The next skill is knowing how to get help when you encounter a command you've never seen before.
-
-Head to **[Finding Help](finding_help.md)** to learn how to read man pages effectively, use `--help` flags, find information online, and extract what you need from documentation without reading every word.

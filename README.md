@@ -6,6 +6,23 @@ A subsection of [BradPenney.io](https://bradpenney.io), this site teaches practi
 
 **Live Site:** https://linux.bradpenney.io
 
+## Where This Fits in the bradpenney.io Network
+
+Linux is the foundation layer — every other site assumes the reader can operate a Linux shell,
+and several sites build directly on kernel mechanisms taught here:
+
+- **[containers.bradpenney.io](https://containers.bradpenney.io)** — namespaces, cgroups, and
+  capabilities taught here as general Linux kernel mechanisms are exactly what a container
+  *is*, one layer up. This site explains the primitives; that one explains the container.
+- **[k8s.bradpenney.io](https://k8s.bradpenney.io)** — every Kubernetes node is a Linux machine
+  underneath, and `kubectl` itself runs from a Linux (or WSL) shell.
+- **[python.bradpenney.io](https://python.bradpenney.io)** — the automation scripts taught there
+  run on the Linux systems taught here.
+- **[bradpenney.io](https://bradpenney.io)** — the hub all of these link out from.
+
+The short version: this is where the terminal competence every other site assumes actually gets
+built.
+
 ## Structure
 
 The site uses a progressive learning structure:

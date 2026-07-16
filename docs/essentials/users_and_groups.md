@@ -508,6 +508,12 @@ su - myapp                      # (6)!
 - **Service accounts** run applications in isolation — each service gets its own UID with minimum required permissions
 - **Locking vs deleting** — `usermod -L` disables login without deleting; use this first when offboarding, delete later after review
 
+## What's Next?
+
+You can manage who exists on the system and what groups they belong to. The next essential skill is connecting commands together — using pipes and redirection to build powerful one-liners that process data without writing a single script.
+
+Head to **[Pipes and Redirection](pipes_and_redirection.md)** to learn how to chain commands into data pipelines, redirect output to files, and combine these patterns into the kind of one-liners that every sysadmin uses daily.
+
 ---
 
 ## Further Reading
@@ -532,10 +538,3 @@ su - myapp                      # (6)!
 - [Red Hat: Managing Users and Groups](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/configuring_basic_system_settings/managing-users-and-groups_configuring-basic-system-settings) — RHEL administration guide
 - [Ubuntu: User Management](https://ubuntu.com/server/docs/security-users) — Ubuntu server user management
 
----
-
-## What's Next?
-
-You can manage who exists on the system and what groups they belong to. The next essential skill is connecting commands together — using pipes and redirection to build powerful one-liners that process data without writing a single script.
-
-Head to **[Pipes and Redirection](pipes_and_redirection.md)** to learn how to chain commands into data pipelines, redirect output to files, and combine these patterns into the kind of one-liners that every sysadmin uses daily.

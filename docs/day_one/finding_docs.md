@@ -485,6 +485,10 @@ grep -r "keyword" /etc/servicename/
 | Git history | `git log`, `git blame` | What changed, when, and who decided it |
 | Config files | `ls /etc/svc/`, `grep -r "key" /etc/svc/` | How the service is actually configured |
 
+## What's Next?
+
+You know how to understand an unfamiliar server without leaving the terminal. Before you start making changes, read [The "Don't Do This" Guide](safety_guide.md) — the production safety rules that will keep you out of trouble.
+
 ---
 
 ## Further Reading
@@ -507,8 +511,3 @@ grep -r "keyword" /etc/servicename/
 - [Orientation](orientation.md) — Identifying what's running and what resources the server has
 - [Reading Logs](reading_logs.md) — Once you understand what's running, logs tell you how it's behaving
 
----
-
-## What's Next?
-
-You know how to understand an unfamiliar server without leaving the terminal. Before you start making changes, read [The "Don't Do This" Guide](safety_guide.md) — the production safety rules that will keep you out of trouble.

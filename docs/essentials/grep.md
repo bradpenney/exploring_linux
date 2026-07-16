@@ -464,6 +464,12 @@ grep -v "nologin\|/bin/false" /etc/passwd | cut -d: -f1  # (5)!
 - **Config trick:** `grep -v "^#\|^$"` removes comments and blank lines — use constantly
 - **Process trick:** `[p]attern` in brackets prevents grep from matching itself
 
+## What's Next?
+
+You can search text. Now you need to understand what's *running* on the system — which processes exist, what resources they consume, and how to manage them.
+
+Head to **[Processes](processes.md)** to learn how Linux manages running programs: process IDs, signals, process states, and the commands every sysadmin uses to investigate and control what's happening on a system.
+
 ---
 
 ## Further Reading
@@ -486,10 +492,3 @@ grep -v "nologin\|/bin/false" /etc/passwd | cut -d: -f1  # (5)!
 - [Red Hat: grep Command Examples](https://www.redhat.com/sysadmin/find-text-files-using-grep) — RHEL-specific grep guide
 - [Arch Wiki: grep](https://wiki.archlinux.org/title/grep) — concise grep reference with examples
 
----
-
-## What's Next?
-
-You can search text. Now you need to understand what's *running* on the system — which processes exist, what resources they consume, and how to manage them.
-
-Head to **[Processes](processes.md)** to learn how Linux manages running programs: process IDs, signals, process states, and the commands every sysadmin uses to investigate and control what's happening on a system.

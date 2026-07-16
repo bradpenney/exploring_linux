@@ -421,6 +421,12 @@ Sometimes the man page doesn't have an example for your exact situation, or you'
 - **Man sections** — `man 5 passwd` accesses file formats; `man 8 useradd` accesses admin commands
 - **Arch Wiki** — the best Linux documentation on the internet for any distribution
 
+## What's Next?
+
+You can find any command, look it up efficiently, and get unstuck fast. Now it's time to understand the structure that underlies everything else in Linux: file permissions.
+
+Head to **[File Permissions](file_permissions.md)** to learn how Linux controls who can read, write, and execute files — and how to manage permissions confidently without locking yourself (or your team) out.
+
 ---
 
 ## Further Reading
@@ -444,10 +450,3 @@ Sometimes the man page doesn't have an example for your exact situation, or you'
 - [Red Hat RHEL Documentation](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/) — RHEL system administration guides
 - [Ubuntu Server Documentation](https://ubuntu.com/server/docs) — Ubuntu-specific server guides
 
----
-
-## What's Next?
-
-You can find any command, look it up efficiently, and get unstuck fast. Now it's time to understand the structure that underlies everything else in Linux: file permissions.
-
-Head to **[File Permissions](file_permissions.md)** to learn how Linux controls who can read, write, and execute files — and how to manage permissions confidently without locking yourself (or your team) out.

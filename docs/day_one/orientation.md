@@ -371,6 +371,15 @@ Your first 60 seconds should answer:
 5. **How's it doing?** → `uptime`, `top`
 6. **Who else is here?** → `w`
 
+## What's Next?
+
+Now that you know where you are and what you're working with, it's time to understand what you're actually allowed to do on this server. Head to **[Understanding Your Permissions](permissions.md)** to learn about your access level and how to use `sudo` safely.
+
+Once you've worked through **[Safe Exploration](safe_exploration.md)**, continue to **[Reading Logs Like a Pro](reading_logs.md)** to learn how to diagnose problems on production systems.
+
+!!! tip "Make It a Habit"
+    Run these orientation commands every time you log into a new server. It takes 30 seconds and prevents a lot of confusion later.
+
 ---
 
 ## Further Reading
@@ -397,13 +406,3 @@ Your first 60 seconds should answer:
 - [The Linux Documentation Project](https://tldp.org/) - Guides, HOWTOs, and FAQs
 - [Linux Kernel Documentation](https://www.kernel.org/doc/html/latest/) - Official kernel documentation
 
----
-
-## What's Next?
-
-Now that you know where you are and what you're working with, it's time to understand what you're actually allowed to do on this server. Head to **[Understanding Your Permissions](permissions.md)** to learn about your access level and how to use `sudo` safely.
-
-Once you've worked through **[Safe Exploration](safe_exploration.md)**, continue to **[Reading Logs Like a Pro](reading_logs.md)** to learn how to diagnose problems on production systems.
-
-!!! tip "Make It a Habit"
-    Run these orientation commands every time you log into a new server. It takes 30 seconds and prevents a lot of confusion later.

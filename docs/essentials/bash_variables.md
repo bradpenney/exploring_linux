@@ -279,6 +279,10 @@ log_dir="${LOG_DIR-/var/log/myapp}"   # (2)!
 - `${VAR:-default}` for optional config; `${VAR:?message}` for required variables
 - `export VAR` makes a variable visible to child processes; `readonly VAR` prevents reassignment
 
+## What's Next?
+
+Head to **[Arguments and Exit Codes](bash_arguments.md)** — `$1`, `$@`, `$#`, exit codes, and how to make scripts composable with everything that calls them.
+
 ---
 
 ## Further Reading
@@ -302,8 +306,3 @@ log_dir="${LOG_DIR-/var/log/myapp}"   # (2)!
 
 - [Environment Variables and Secrets](https://python.bradpenney.io/essentials/env_and_secrets/) — Managing `os.environ`, `.env` files, and secrets safely in Python scripts: what the Python side looks like once your config needs grow past `$VAR`
 
----
-
-## What's Next?
-
-Head to **[Arguments and Exit Codes](bash_arguments.md)** — `$1`, `$@`, `$#`, exit codes, and how to make scripts composable with everything that calls them.

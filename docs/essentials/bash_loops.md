@@ -299,6 +299,10 @@ The patterns below draw on commands covered in other Essentials articles — [`g
 - Quote array expansions: `"${array[@]}"` — prevents word splitting on elements with spaces
 - `break` exits the loop; `continue` skips to the next iteration
 
+## What's Next?
+
+Head to **[Functions](bash_functions.md)** — how to group reusable logic, scope variables with `local`, and structure larger scripts with the `main "$@"` pattern.
+
 ---
 
 ## Further Reading
@@ -323,8 +327,3 @@ The patterns below draw on commands covered in other Essentials articles — [`g
 - [What Just Broke?](https://python.bradpenney.io/day_one/parsing_logs/) — When `while IFS= read -r` hits its limit: structured log parsing in Python with pattern matching and output you can actually act on
 - [Run This Everywhere](https://python.bradpenney.io/day_one/run_everywhere/) — When your loop-over-hosts script needs parallelism or structured error handling across the fleet
 
----
-
-## What's Next?
-
-Head to **[Functions](bash_functions.md)** — how to group reusable logic, scope variables with `local`, and structure larger scripts with the `main "$@"` pattern.

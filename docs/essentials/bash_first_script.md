@@ -211,6 +211,10 @@ Where a script lives determines who can run it and how easily:
 - `~/bin/` for personal scripts, `/usr/local/bin/` for system-wide, `/opt/company/bin/` for team tooling
 - Add the directory to `$PATH` so you can call scripts by name from anywhere
 
+## What's Next?
+
+Head to **[Variables and Quoting](bash_variables.md)** — how to declare variables, why quoting prevents catastrophic bugs, and how command substitution captures runtime values.
+
 ---
 
 ## Further Reading
@@ -234,8 +238,3 @@ Where a script lives determines who can run it and how easily:
 
 - [Why Python (Not Just Bash)](https://python.bradpenney.io/day_one/why_python/) — When your script grows into something bigger: the signals that mean Python is the right next step
 
----
-
-## What's Next?
-
-Head to **[Variables and Quoting](bash_variables.md)** — how to declare variables, why quoting prevents catastrophic bugs, and how command substitution captures runtime values.

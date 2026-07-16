@@ -337,6 +337,10 @@ fi
 - Any command works as a condition — its exit code is the test
 - `&&` and `||` combine conditions; `!` inverts them
 
+## What's Next?
+
+Head to **[Loops](bash_loops.md)** — `for` and `while`, iterating over files and command output, and the patterns that make repetition reliable.
+
 ---
 
 ## Further Reading
@@ -359,8 +363,3 @@ fi
 
 - [Is It Still Up?](https://python.bradpenney.io/day_one/health_check/) — When `if [[ ]]` checks grow into full health-check loops with retries and structured failure reporting: the Python approach to service monitoring
 
----
-
-## What's Next?
-
-Head to **[Loops](bash_loops.md)** — `for` and `while`, iterating over files and command output, and the patterns that make repetition reliable.

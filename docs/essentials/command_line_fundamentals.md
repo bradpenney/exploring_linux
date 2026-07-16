@@ -523,6 +523,14 @@ The command line fundamentals every Linux professional owns cold:
 - **Cursor shortcuts:** `Ctrl+A/E` to navigate, `Ctrl+W` to delete a word, `Ctrl+L` to clear
 - **Chaining:** `;` (always), `&&` (on success), `||` (on failure) — the backbone of shell automation
 
+## What's Next?
+
+You've got the fundamentals. Now you need to actually navigate the Linux filesystem — and that means understanding where everything lives.
+
+Head to **[Filesystem Hierarchy](filesystem_hierarchy.md)** to learn the structure every Linux system shares, why `/etc` is for configuration, why `/var` is for variable data, and where to look for logs, binaries, and application files.
+
+Once you understand the layout, **[Finding Files](finding_files.md)** will show you how to locate anything on a system quickly — whether it's a config file, a log, or a binary you're not sure where was installed.
+
 ---
 
 ## Further Reading
@@ -544,12 +552,3 @@ The command line fundamentals every Linux professional owns cold:
 - [GNU Bash Manual](https://www.gnu.org/software/bash/manual/) — the authoritative Bash reference
 - [Red Hat Bash Reference](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/configuring_basic_system_settings/assembly_using-bash_configuring-basic-system-settings) — RHEL-specific shell configuration guide
 
----
-
-## What's Next?
-
-You've got the fundamentals. Now you need to actually navigate the Linux filesystem — and that means understanding where everything lives.
-
-Head to **[Filesystem Hierarchy](filesystem_hierarchy.md)** to learn the structure every Linux system shares, why `/etc` is for configuration, why `/var` is for variable data, and where to look for logs, binaries, and application files.
-
-Once you understand the layout, **[Finding Files](finding_files.md)** will show you how to locate anything on a system quickly — whether it's a config file, a log, or a binary you're not sure where was installed.

@@ -572,6 +572,10 @@ grep -i "error" /var/log/nginx/error.log   # (6)!
 - How often is it happening?
 - What's the pattern?
 
+## What's Next?
+
+You can read logs like a pro. Next: [Finding Documentation](finding_docs.md) — how to understand an unfamiliar server using `man` pages, README files, git history, and what the system itself tells you.
+
 ---
 
 ## Further Reading
@@ -595,7 +599,3 @@ grep -i "error" /var/log/nginx/error.log   # (6)!
 
 - [Orientation](orientation.md) — Covers `hostname` and system identification if you're not sure which server's logs you're looking at
 - [Safe Exploration](safe_exploration.md) — Finding where application logs are stored on an unfamiliar server
-
-## What's Next?
-
-You can read logs like a pro. Next: [Finding Documentation](finding_docs.md) — how to understand an unfamiliar server using `man` pages, README files, git history, and what the system itself tells you.

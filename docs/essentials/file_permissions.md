@@ -530,6 +530,12 @@ chmod 1777 /shared/uploads/      # (2)!
 - **Sticky bit** (`+t` / `1xxx`) — on directories, only owners can delete their own files
 - **Web server pattern:** `chown -R www-data:www-data`, then `find -type d -exec chmod 755`, `find -type f -exec chmod 644`
 
+## What's Next?
+
+Permissions control what files users can access. But managing which users exist and which groups they belong to is a separate skill — and one that directly shapes the permission model across your entire system.
+
+Head to **[Users and Groups](users_and_groups.md)** to learn how to create and manage user accounts, add users to groups, and understand the `/etc/passwd` and `/etc/group` files that underpin Linux's identity system.
+
 ---
 
 ## Further Reading
@@ -556,10 +562,3 @@ chmod 1777 /shared/uploads/      # (2)!
 - [GNU Coreutils: chmod](https://www.gnu.org/software/coreutils/manual/html_node/chmod-invocation.html) — authoritative chmod reference
 - [CIS Benchmarks](https://www.cisecurity.org/cis-benchmarks) — industry security configurations including permission hardening
 
----
-
-## What's Next?
-
-Permissions control what files users can access. But managing which users exist and which groups they belong to is a separate skill — and one that directly shapes the permission model across your entire system.
-
-Head to **[Users and Groups](users_and_groups.md)** to learn how to create and manage user accounts, add users to groups, and understand the `/etc/passwd` and `/etc/group` files that underpin Linux's identity system.

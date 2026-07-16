@@ -447,6 +447,10 @@ Now that you've learned the commands, here's a quick reference for common Day On
 
 See the [cheat sheet above](#day-one-exploration-cheat-sheet) for a full command reference.
 
+## What's Next?
+
+Now that you can explore safely, head to **[Reading Logs Like a Pro](reading_logs.md)** — learning to read logs is the most powerful skill you'll develop for diagnosing problems on production systems.
+
 ---
 
 ## Further Reading
@@ -471,8 +475,3 @@ See the [cheat sheet above](#day-one-exploration-cheat-sheet) for a full command
 
 - [GNU Coreutils Manual](https://www.gnu.org/software/coreutils/manual/) - Official docs for `ls`, `cat`, `head`, `tail`, etc.
 
----
-
-## What's Next?
-
-Now that you can explore safely, head to **[Reading Logs Like a Pro](reading_logs.md)** — learning to read logs is the most powerful skill you'll develop for diagnosing problems on production systems.

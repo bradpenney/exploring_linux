@@ -7,7 +7,7 @@ description: Understand Linux process management — ps, top, kill, signals, pro
 # Processes
 
 !!! tip "Part of Essentials"
-    This article covers interactive process management. For managing services that start at boot and persist across reboots, see the Services with systemd article in the Efficiency track (coming soon).
+    This article covers interactive process management. Services that start at boot and persist across reboots are a different discipline — systemd's job, and a topic of its own.
 
 Something is consuming all the CPU. An application is hung and won't respond. A background job you kicked off is still running and you need to stop it. The server is sluggish and you need to find the culprit in 30 seconds.
 
@@ -558,6 +558,14 @@ For long-running tasks, consider `tmux` or `screen` for persistent terminal sess
 - **SIGHUP (1)** — reload configuration; standard for web servers and daemons
 - **Job control:** `command &` runs in background, `Ctrl+Z` pauses, `fg`/`bg` to move, `nohup` to survive logout
 
+## What's Next?
+
+You've covered four of the five Essentials categories. The commands from the command line, users and access, text pipelines, and process management are now in your toolkit.
+
+The final Essentials category is **Bash Scripting** — where all of those commands become repeatable automation. Start with [Your First Bash Script](bash_first_script.md).
+
+After completing Essentials, the **Efficiency** track covers the daily-use tools that experienced Linux professionals reach for: systemd for service management, `sed` for text transformation, and package management for keeping systems current.
+
 ---
 
 ## Further Reading
@@ -582,12 +590,3 @@ For long-running tasks, consider `tmux` or `screen` for persistent terminal sess
 - [Red Hat: Managing Processes](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/monitoring_and_managing_system_status_and_performance/managing-processes_monitoring-and-managing-system-status-and-performance) — RHEL process management guide
 - [Linux Kernel Documentation: /proc](https://www.kernel.org/doc/html/latest/filesystems/proc.html) — the /proc virtual filesystem
 
----
-
-## What's Next?
-
-You've covered four of the five Essentials categories. The commands from the command line, users and access, text pipelines, and process management are now in your toolkit.
-
-The final Essentials category is **Bash Scripting** — where all of those commands become repeatable automation. Start with [Your First Bash Script](bash_first_script.md).
-
-After completing Essentials, the **Efficiency** track covers the daily-use tools that experienced Linux professionals reach for: systemd for service management, `sed` for text transformation, and package management for keeping systems current.

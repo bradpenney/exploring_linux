@@ -320,6 +320,10 @@ When your interface grows to flag-style arguments — `--environment production`
 - Use `if ! ./script.sh; then` rather than checking `$?` explicitly — cleaner and `$?` can be overwritten
 - Write error messages to stderr: `echo "Error" >&2` — covered in [Pipes and Redirection](pipes_and_redirection.md)
 
+## What's Next?
+
+Head to **[Conditionals](bash_conditionals.md)** — `if/elif/else`, the `[[ ]]` operator, and the tests that drive the logic of every real Bash script.
+
 ---
 
 ## Further Reading
@@ -343,8 +347,3 @@ When your interface grows to flag-style arguments — `--environment production`
 
 - [My Bash Script Is Getting Out of Hand](https://python.bradpenney.io/day_one/wrapping_bash/) — When `$1`/`$@` handling grows unwieldy: migrating argument-heavy scripts to Python with proper parsing and `--help` output
 
----
-
-## What's Next?
-
-Head to **[Conditionals](bash_conditionals.md)** — `if/elif/else`, the `[[ ]]` operator, and the tests that drive the logic of every real Bash script.
