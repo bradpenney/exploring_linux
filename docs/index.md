@@ -100,6 +100,14 @@ The daily-use tools that separate professionals who get things done. Live now, w
 
     [:octicons-arrow-right-24: Namespaces & cgroups](efficiency/namespaces_cgroups.md)
 
+-   :material-memory: **Memory**
+
+    ---
+
+    What actually happens when RAM runs out — swap, `vm.swappiness`, and how the kernel decides which process the OOM killer takes down.
+
+    [:octicons-arrow-right-24: Swap and the OOM Killer](efficiency/memory_swap_oom.md)
+
 </div>
 
 More Efficiency topics — systemd, `sed`, package management, networking basics — are still on the way.
