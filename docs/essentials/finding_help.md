@@ -13,7 +13,7 @@ You're on a server that's behaving unexpectedly. You find a command in a runbook
 
 The engineers who move fastest in Linux don't have better memory. They have a reliable lookup sequence that works offline, on any system, in under 30 seconds. This article gives you that sequence.
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 If you've used PowerShell, you know `Get-Help`. In Windows CMD, it's `command /?`. On Linux, the equivalent is `man`, and it's more powerful — but also more intimidating until you know how to navigate it efficiently.
 

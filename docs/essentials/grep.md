@@ -15,7 +15,7 @@ Learning to use `grep` well isn't about memorizing flags. It's about pattern thi
 
 ---
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 You've used `grep`-equivalent tools without knowing it:
 

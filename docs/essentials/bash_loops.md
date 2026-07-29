@@ -13,7 +13,7 @@ Loops are where scripting shifts from "commands in a file" to actual automation.
 
 ---
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 If you've ever run the same command against a list of servers one at a time, you've already felt the problem loops solve — a loop is that repetition captured in a script. Windows batch files have `FOR /F`, every scripting language has the same concept; Bash just has two forms depending on whether you know the list upfront.
 

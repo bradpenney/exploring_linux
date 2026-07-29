@@ -90,7 +90,7 @@ ls /etc /var    # (3)!
 
 ---
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 If you've used PowerShell, you already know tab completion. If you've used Docker CLI, kubectl, git, or the Python REPL, you've used tab completion there too — because it's built into the terminal and Bash, not the individual tools. Everything in this article applies across all of them.
 

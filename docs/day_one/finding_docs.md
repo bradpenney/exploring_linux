@@ -9,7 +9,7 @@ description: Find documentation on an unfamiliar Linux server — man pages, REA
 !!! tip "Part of Day One"
     This is the sixth article in the [Day One: Getting Started](overview.md) series. You should have already completed [Getting Access](getting_access.md), [Orientation](orientation.md), [Understanding Your Permissions](permissions.md), [Safe Exploration](safe_exploration.md), and [Reading Logs](reading_logs.md).
 
-You've been handed access to a server running an application you've never seen before. You can see it's running. You can see config files in `/etc/`. You can see something deployed in `/opt/`. But you have no idea what it does, how it's structured, or what the team intended.
+Getting handed access to a server running an application nobody's seen before is a common first day. It's running — that much is visible. Config files sit in `/etc/`, something's deployed in `/opt/` — but what it does, how it's structured, or what the team intended is anyone's guess at first.
 
 Before you ask anyone anything — the server itself will tell you most of what you need to know. Linux has extensive documentation built in, and application teams almost always leave breadcrumbs. You just need to know where to look.
 

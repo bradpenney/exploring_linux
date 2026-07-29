@@ -13,7 +13,7 @@ As scripts grow past 20-30 lines, repeated logic becomes a maintenance problem. 
 
 ---
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 If you've ever sourced a setup script (`source ~/.bashrc` or `. ./env-setup.sh`), you've already used a function library — that file defines functions your shell loads and can call by name. Writing your own is the same pattern.
 

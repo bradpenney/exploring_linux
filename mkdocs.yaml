@@ -199,6 +199,7 @@ nav:
       - System:
           - "Namespaces and cgroups: How Linux Isolates a Process": efficiency/namespaces_cgroups.md
           - "Linux Capabilities: Breaking Up Root": efficiency/capabilities.md
+          - "Swap and the OOM Killer": efficiency/memory_swap_oom.md
 
   # ⚡ Efficiency — remaining planned articles (still draft, excluded)
   # - ⚡ Efficiency:

@@ -13,7 +13,7 @@ A script that only works with hardcoded values isn't a tool — it's a note to y
 
 ---
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 Windows batch files use `%1`, `%2`, `%3` for positional arguments — Bash uses `$1`, `$2`, `$3`. Exit codes are equally universal: every program returns one when it finishes (0 = success, non-zero = failure), and you've seen this whenever an installer aborted mid-way or a build stopped on error.
 

@@ -22,7 +22,7 @@ Get comfortable with that reframing and the rest is detail: which capabilities e
 
 ---
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 If you've run a container with `docker run --cap-add` or `--cap-drop`, you've already tuned a capability set by hand; if you've spotted the `s` in the permission bits of `/usr/bin/passwd`, you've seen the older setuid mechanism capabilities were built to replace. This article is what those flags and that bit are actually manipulating.
 

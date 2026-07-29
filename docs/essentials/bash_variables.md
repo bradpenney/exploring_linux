@@ -13,7 +13,7 @@ description: "Master Bash variables and quoting rules. Learn when to use double 
 
 ---
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 If you've set environment variables in Windows (System Properties → Environment Variables) or seen `%APP_PATH%` in a batch file, the concept is identical — a named value the shell expands on demand. Bash uses `$VAR` instead of `%VAR%`, and `name="value"` with no spaces around `=`; that space is the first thing most people get wrong.
 

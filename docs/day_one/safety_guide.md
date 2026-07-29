@@ -9,7 +9,7 @@ description: Learn what NOT to do on a production Linux server. The rules exist 
 !!! tip "Part of Day One"
     This is the seventh and final article in the [Day One: Getting Started](overview.md) series. Read this before making any changes to a production server.
 
-You've learned what to do on a production server. Now let's talk about what **not** to do.
+Knowing what to do on a production server is only half the job. The other half is what **not** to do.
 
 These aren't hypothetical dangers. Every rule here exists because someone (often a very smart someone) made this mistake and caused an outage. Learn from their pain.
 

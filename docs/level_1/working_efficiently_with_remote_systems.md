@@ -1,6 +1,6 @@
 # Working Efficiently with Remote Systems
 
-You've connected to a few servers. You know the basics. Now let's make your daily workflow smoother.
+Connecting to a few servers and knowing the basics is the starting point. From here, it's about making the daily workflow smoother.
 
 These aren't "must-know" survival skills - these are quality-of-life improvements that save time and frustration when you're working with remote Linux systems regularly.
 

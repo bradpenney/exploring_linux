@@ -15,7 +15,7 @@ That's the Unix philosophy in action: programs that do one thing well, connected
 
 ---
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 If you've used PowerShell, you know pipes — `Get-Process | Where-Object CPU -gt 10 | Sort-Object CPU -Descending`. The Linux version works the same way conceptually, but passes plain text instead of objects. That difference matters: Linux pipelines are more composable (any tool can talk to any other tool), but you work with structured text rather than typed objects.
 

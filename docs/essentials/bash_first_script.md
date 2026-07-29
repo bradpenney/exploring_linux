@@ -9,11 +9,11 @@ description: "Write your first Bash script with confidence. Covers the shebang l
 !!! tip "Part of Essentials — Bash Scripting"
     First in the Essentials Bash series. Assumes you're comfortable with the terminal — if you need a refresher, start with [Command Line Fundamentals](command_line_fundamentals.md). Next up: [Variables and Quoting](bash_variables.md).
 
-You've been running the same sequences of commands manually. A Bash script captures that sequence, makes it repeatable, and lets you hand it to a colleague or a CI pipeline. The gap between "I know the commands" and "I wrote the script" is smaller than it looks.
+Running the same sequence of commands manually, over and over, is a familiar routine. A Bash script captures that sequence, makes it repeatable, and lets it get handed to a colleague or a CI pipeline. The gap between "I know the commands" and "I wrote the script" is smaller than it looks.
 
 ---
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 If you've typed the same sequence of commands more than once, you've already felt the problem a script solves — it's just that sequence saved to a file and made repeatable. If you've used Windows batch files (`.bat`), the concept is identical; Linux just uses different syntax and `bash` is available everywhere by default.
 

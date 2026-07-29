@@ -13,7 +13,7 @@ Every real script makes decisions: does this file exist? Did that command succee
 
 ---
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 The `if/elif/else` structure is the same as every other scripting language. The one mental shift: Bash conditions are exit codes, not booleans. A command that exits 0 is "true"; non-zero is "false." Once that clicks, the rest follows.
 

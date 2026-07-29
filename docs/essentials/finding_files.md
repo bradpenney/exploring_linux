@@ -9,13 +9,13 @@ description: Master Linux file discovery with find, locate, and which — learn 
 !!! tip "Part of Essentials"
     This article assumes familiarity with the [Filesystem Hierarchy](filesystem_hierarchy.md). Knowing where things *should* be makes finding them much faster.
 
-You've just been handed access to a server you've never seen before. There's an application running — you need to find its config file. Or maybe disk space is critically low and you need to find what's eating it. Or a log file rotated and you're not sure where the compressed version ended up.
+An unfamiliar server often comes with an immediate task attached: find an application's config file, find what's eating critically low disk space, or track down where a rotated log file's compressed version ended up.
 
 These are daily situations for sysadmins and DevOps engineers. The difference between 30 seconds and 30 minutes is knowing which tool to reach for.
 
 ---
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 On Windows, you'd use File Explorer's search or the `where` command for executables. In your IDE, it's Ctrl+Shift+F (find in files). Those work on a single machine with a GUI. On Linux servers — often headless, often under load, often in the middle of an incident — you need tools that work fast from the command line and compose into scripts.
 

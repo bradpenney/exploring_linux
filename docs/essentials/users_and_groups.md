@@ -15,7 +15,7 @@ Every one of these situations comes down to user and group management. It's one 
 
 ---
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 If you've worked with Active Directory, the mental model transfers directly. AD has users, security groups, and service accounts — so does Linux. The mechanics are different (command line vs. GUI, local files vs. LDAP) but the concepts are identical:
 
