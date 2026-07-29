@@ -1,13 +1,13 @@
 ---
 date: "2026-04-04 18:47"
 title: Processes in Linux - Managing Running Programs
-description: Understand Linux process management — ps, top, kill, signals, process states, and the tools every sysadmin uses to investigate and control a running system.
+description: Understand Linux process management: ps, top, kill, signals, process states, and the tools every sysadmin uses to investigate and control a running system.
 ---
 
 # Processes
 
 !!! tip "Part of Essentials"
-    This article covers interactive process management. Services that start at boot and persist across reboots are a different discipline — systemd's job, and a topic of its own.
+    This article covers interactive process management. Services that start at boot and persist across reboots are a different discipline: systemd's job, and a topic of its own. It's also a step in the [How Modern Software Really Runs on a CPU](https://bradpenney.io/pathways/cpu-to-cluster) pathway on [bradpenney.io](https://bradpenney.io).
 
 Something is consuming all the CPU. An application is hung and won't respond. A background job you kicked off is still running and you need to stop it. The server is sluggish and you need to find the culprit in 30 seconds.
 
@@ -15,9 +15,9 @@ Every one of these situations requires the same starting point: understanding wh
 
 ---
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
-If you've used Windows, the mapping is direct:
+If you've used Windows, most of this maps directly — Task Manager, `taskkill`, End Task versus End Process Tree. What doesn't map is the gap between the two: Windows gives you two levers (End Task, or the nuclear End Process Tree), where Linux gives you a whole vocabulary of signals instead, covered below.
 
 | Windows | Linux Equivalent |
 |---------|-----------------|
@@ -29,10 +29,6 @@ If you've used Windows, the mapping is direct:
 | `taskkill /F /PID 1234` | `kill -9 1234` |
 | End Task | `kill PID` (SIGTERM) |
 | End Process Tree | `kill -9 PID` (SIGKILL) |
-
-The key difference: Linux gives you far more control. Signals let you tell a process to reload its config without restarting (`kill -HUP`), pause it (`kill -STOP`), or resume it (`kill -CONT`). Windows' "End Task" is a blunt instrument by comparison.
-
-The other difference: on Linux, understanding processes means understanding the process tree. Every process has a parent. When you know PID 1 is `systemd` and all services descend from it, process management starts to make intuitive sense.
 
 ---
 
@@ -68,13 +64,15 @@ graph TD
     style WORKER fill:#2d3748,stroke:#fc8181,stroke-width:2px,color:#fff
 ```
 
-Every process on the system descends from PID 1 — `systemd` (or `init` on older systems). When a parent process exits, its children are re-parented to PID 1.
+Every process on the system descends from PID 1: `systemd` (or `init` on older systems). When a parent process exits, its children are re-parented to PID 1.
+
+That tree is the map. `ps` is how you actually read it.
 
 ---
 
 ## Viewing Processes: ps
 
-`ps` (process status) is the primary tool for inspecting running processes.
+`ps` (process status) is the primary tool for inspecting running processes — a single, deliberate look at exactly what's running right now, not a live feed you have to sit and watch.
 
 ### The Essential ps Invocations
 
@@ -159,27 +157,7 @@ top -p 1234     # (3)!
 2. Filter to one user's processes.
 3. Monitor a specific PID.
 
-**Inside top:**
-
-``` bash title="top Keyboard Shortcuts"
-q       # (1)!
-k       # (2)!
-r       # (3)!
-M       # (4)!
-P       # (5)!
-1       # (6)!
-u       # (7)!
-f       # (8)!
-```
-
-1. Quit.
-2. Kill a process (prompts for PID and signal).
-3. Renice (change priority).
-4. Sort by memory usage.
-5. Sort by CPU usage (default).
-6. Show individual CPU cores.
-7. Filter by user.
-8. Manage display fields.
+The rest of `top`'s controls are worth learning by pressing keys and watching what happens, not by reading a list: press `?` inside `top` for the full legend. Two are worth knowing before you're mid-incident, because they change what you're looking at: `M` sorts by memory, `P` by CPU.
 
 **Reading the top header:**
 
@@ -205,6 +183,8 @@ MiB Swap:   2048.0 total,  2048.0 free,     0.0 used.  10834.6 avail Mem
 
 ## Finding Processes
 
+`top` is good for "what's consuming the most, right now" — a leaderboard. It's the wrong tool the moment you already know *which* process you're after and just need its PID. That's a search problem, not a monitoring one.
+
 ``` bash title="Finding Specific Processes"
 pgrep nginx                # (1)!
 # 445
@@ -216,18 +196,26 @@ pgrep -la nginx            # (2)!
 
 pgrep -u www-data          # (3)!
 
-ps aux | grep "[n]ginx"    # (4)!
+ps aux | grep "[n]ginx"              # (4)!
 
-ss -tlnp | grep ":8080"    # (5)!
-lsof -i :8080              # (6)!
+ps aux | { head -1; grep "[n]ginx"; } # (5)!
+
+ss -tlnp | grep ":8080"    # (6)!
+lsof -i :8080              # (7)!
 ```
 
 1. By name — returns PIDs only.
 2. By name, with command details.
 3. By user.
 4. By name using `ps`. The bracket trick (`[n]ginx`) stops `grep` from matching its own process.
-5. Find the PID of whatever is listening on a port.
-6. Same idea with `lsof`, if it's installed.
+5. Same idea, but keeps the column headers `grep` would otherwise strip out.
+6. Find the PID of whatever is listening on a port.
+7. Same idea with `lsof`, if it's installed.
+
+!!! tip "Never Lose the Header Row Again"
+    `ps aux | grep nginx` finds the process, but strips the one line that tells you which column is which: you're left guessing whether that number is `%CPU` or `%MEM`. The fix is one habit: `ps aux | { head -1; grep "[n]ginx"; }`. `head -1` prints the header, then `grep` keeps reading the *same* piped output right where `head` left off and filters the rest. Same trick works with any command that prints a header row: `docker ps`, `kubectl get pods`, `netstat`.
+
+A PID by itself is just a number. What makes it useful is what you can do to it next.
 
 ---
 
@@ -278,7 +266,7 @@ pkill -9 -u jsmith    # (8)!
     - Child processes are orphaned (reparented to PID 1)
     - Logs may be incomplete
 
-    **Always try SIGTERM first:** `kill PID` — wait 5-10 seconds. If the process doesn't exit, *then* consider `kill -9 PID`.
+    **Always try SIGTERM first:** `kill PID`, then wait 5-10 seconds. If the process doesn't exit, *then* consider `kill -9 PID`.
 
     Legitimate uses for SIGKILL: a process that's genuinely hung and not responding to SIGTERM after a reasonable wait, or when a process is stuck in `D` state (uninterruptible disk wait).
 
@@ -300,7 +288,9 @@ nginx -s reload    # (4)!
 3. Equivalently, by signal number.
 4. nginx-specific wrapper for the same thing.
 
-For services managed by systemd, `systemctl reload servicename` is the preferred approach — it handles the signal and verifies the reload succeeded.
+For services managed by systemd, `systemctl reload servicename` is the preferred approach: it handles the signal and verifies the reload succeeded.
+
+Everything so far has been about controlling processes someone else started (a service, a stuck script, something already running when you got there). The other half of process management is controlling the ones *you* start.
 
 ---
 
@@ -346,7 +336,7 @@ pgrep -la long-script                                     # (3)!
 2. Better: send output to an explicit log file.
 3. Check it's still running after you log out.
 
-For long-running tasks, consider `tmux` or `screen` for persistent terminal sessions — they're more flexible than `nohup`.
+For long-running tasks, consider `tmux` or `screen` for persistent terminal sessions: they're more flexible than `nohup`.
 
 ---
 
@@ -547,6 +537,8 @@ For long-running tasks, consider `tmux` or `screen` for persistent terminal sess
 
 ---
 
+Every scenario above reduces to the same four moves: see what's running (`ps`, `top`), name the one you care about (`pgrep`), talk to it (signals), and decide how it runs relative to your terminal (job control). That's the whole loop — the tools change, the loop doesn't.
+
 ## Quick Recap
 
 - **Every process** has a PID, PPID, owner, and state; all descend from PID 1 (systemd)
@@ -560,11 +552,23 @@ For long-running tasks, consider `tmux` or `screen` for persistent terminal sess
 
 ## What's Next?
 
-You've covered four of the five Essentials categories. The commands from the command line, users and access, text pipelines, and process management are now in your toolkit.
+You've covered four of the five Essentials categories. The commands from the command line, users and access, text pipelines, and process management are now in your toolkit. Where you go next depends on why you're here:
 
-The final Essentials category is **Bash Scripting** — where all of those commands become repeatable automation. Start with [Your First Bash Script](bash_first_script.md).
+<div class="grid cards two-col" markdown>
 
-After completing Essentials, the **Efficiency** track covers the daily-use tools that experienced Linux professionals reach for: systemd for service management, `sed` for text transformation, and package management for keeping systems current.
+-   :material-script-text-outline: **[Your First Bash Script](bash_first_script.md)**
+
+    ---
+
+    Continuing [Linux Essentials](overview.md) — the final category, where all of these commands become repeatable automation.
+
+-   :material-cube-outline: **[Namespaces and cgroups](../efficiency/namespaces_cgroups.md)**
+
+    ---
+
+    Continuing the [How Modern Software Really Runs on a CPU](https://bradpenney.io/pathways/cpu-to-cluster) pathway — the isolation mechanism a container actually relies on.
+
+</div>
 
 ---
 

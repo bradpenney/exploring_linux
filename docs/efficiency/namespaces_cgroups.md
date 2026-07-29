@@ -7,22 +7,22 @@ description: "What the kernel uses to decide what a process can see and how much
 # Namespaces and cgroups
 
 !!! tip "Part of Efficiency"
-    This article goes one layer beneath [Processes](../essentials/processes.md). There you learned how to list and control running programs. Here you learn what the kernel uses to decide what each of those programs is allowed to *see* and *use*: the same two mechanisms that, stacked together, make a container a container.
+    This article goes one layer beneath [Processes](../essentials/processes.md). There you learned how to list and control running programs. Here you learn what the kernel uses to decide what each of those programs is allowed to *see* and *use*: the same two mechanisms that, stacked together, make a container a container. It's also a step in the [How Modern Software Really Runs on a CPU](https://bradpenney.io/pathways/cpu-to-cluster) pathway on [bradpenney.io](https://bradpenney.io).
 
-Put two processes on the same machine. The first runs `ps aux` and sees every other process on the box, every mounted filesystem, every network interface. The second runs the same command and sees four processes, one filesystem, and a network stack with a single interface it doesn't recognise. Same kernel, same hardware, no virtual machine anywhere.
+Put two processes on the same machine. The first runs `ps aux` and sees every other process on the box, every mounted filesystem, every network interface. The second runs the same command and sees four processes, one filesystem, and a network interface it doesn't recognize. Same kernel, same hardware, no virtual machine anywhere.
 
-The difference is two kernel features most people use every day without ever naming: **namespaces** and **cgroups**. Almost everyone meets them second-hand, through Docker or Podman or systemd, and never learns what they actually are. That secondhand knowledge is where fuzzy mental models come from. "A container is a lightweight VM" is the classic one, and it's wrong precisely because it skips these two primitives.
+The difference is two kernel features almost everyone uses without ever naming them: **namespaces** and **cgroups**, usually encountered secondhand through Docker, Podman, or systemd. That secondhand exposure is exactly where "a container is a lightweight VM" comes from: a plausible mental model that's wrong precisely because it skips these two primitives.
 
-Isolation on Linux splits into two independent questions, and the kernel answers them with two different mechanisms:
+Isolation on Linux is two independent questions, answered by two different mechanisms:
 
-- **What can this process see?** — answered by namespaces.
-- **How much can this process consume?** — answered by cgroups.
+- **What can this process see?** Namespaces.
+- **How much can this process consume?** cgroups.
 
-They are genuinely separate. A process can be in its own namespace with no resource limits, or capped by a cgroup while sharing the host's full view of the system. Most of the confusion around "how does isolation work" clears up the moment you stop treating them as one thing. We'll walk each in turn, then see what happens when you combine them.
+A process can sit in its own namespace with no resource limits, or be capped by a cgroup while sharing the host's full view of the system — they don't come bundled. Each gets its own walkthrough below, then what happens once you combine them.
 
 ---
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
 If you've ever run `docker run -m 512m` or set a memory limit on a Kubernetes Pod, you've configured a cgroup without knowing its name; if you've watched a container show its own hostname and private process list, you've watched namespaces at work. This article is the Linux machinery underneath those tools — the same primitives, without the wrapper.
 
@@ -182,6 +182,7 @@ Seeing it this way retires a few persistent myths. A container is not a lightwei
     - **cgroup v1 and v2 are different worlds.** Older material describes v1's multiple separate hierarchies. Almost everything current is v2's single unified hierarchy. Check with `stat -fc %T /sys/fs/cgroup` — `cgroup2fs` means v2.
     - **Namespaces don't imply limits.** A process can be fully namespace-isolated and still consume the whole machine. Visibility and consumption are separate; you need cgroups for the second.
     - **Editing `/sys/fs/cgroup` by hand fights systemd.** systemd owns the hierarchy on modern systems. Use `systemctl set-property` or a drop-in unit so your changes survive and don't get reverted.
+    - **Stopping a container isn't removing it.** `docker stop` ends the process and tears down its namespaces (a namespace only exists while something references it), but the container's writable layer and metadata stay on disk — `docker start` resumes right where it left off. `docker rm` is the actual deletion: only then does the writable layer go away, unless a volume was backing it, which survives even that.
 
 ---
 
@@ -240,6 +241,10 @@ Seeing it this way retires a few persistent myths. A container is not a lightwei
 ## What's Next
 
 You've covered two of the three isolation primitives: what a process can **see** (namespaces) and how much it can **use** (cgroups). The third is what a process is **allowed to do**: the difference between a container that runs as harmless "root" and one that can compromise the host. Head to **[Linux Capabilities: Breaking Up Root](capabilities.md)** to learn how the kernel splits the single all-powerful root account into around forty independent privileges you can grant one at a time.
+
+To see these two mechanisms applied rather than explained in the abstract: **[What Is a Container, Really?](https://containers.bradpenney.io/day_one/what_is_a_container/)** picks up exactly here.
+
+If you're following the [How Modern Software Really Runs on a CPU](https://bradpenney.io/pathways/cpu-to-cluster) pathway on [bradpenney.io](https://bradpenney.io), the next step is **[Swap and the OOM Killer](memory_swap_oom.md)**: what happens when a cgroup's memory limit isn't enough, and the kernel has to reclaim RAM for real.
 
 ---
 

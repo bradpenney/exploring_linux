@@ -1,23 +1,23 @@
 ---
 date: "2025-08-25 13:01"
 title: File Permissions in Linux - chmod, chown, and umask
-description: Learn to manage Linux file permissions — chmod, chown, umask, SUID, SGID, and sticky bit — the skills every sysadmin and DevOps engineer needs.
+description: "Learn to manage Linux file permissions (chmod, chown, umask, SUID, SGID, and sticky bit): the skills every sysadmin and DevOps engineer needs."
 ---
 
 # File Permissions
 
 !!! tip "Part of Essentials"
-    This article is about *managing* permissions. If you need to understand the permission system — how to read `rwxr-xr-x`, why you get "Permission denied," or what the permission check order is — start with [Understanding Your Permissions](../day_one/permissions.md) in Day One.
+    This article is about *managing* permissions. If you need to understand the permission system (how to read `rwxr-xr-x`, why you get "Permission denied," or what the permission check order is), start with [Understanding Your Permissions](../day_one/permissions.md) in Day One.
 
-You've inherited a web application with broken permissions. Files the web server should read are owned by the wrong user. A deployment script is missing its execute bit. A shared directory is letting users delete each other's work.
+Inheriting a web application with broken permissions is a common first encounter: files the web server should read owned by the wrong user, a deployment script missing its execute bit, a shared directory letting users delete each other's work.
 
-Knowing how to fix these — quickly and correctly — is a core sysadmin skill. This article is about taking action: changing permissions, adjusting ownership, controlling defaults, and understanding the special permission bits that show up in production environments.
+Knowing how to fix these, quickly and correctly, is a core sysadmin skill. This article is about taking action: changing permissions, adjusting ownership, controlling defaults, and understanding the special permission bits that show up in production environments.
 
 ---
 
-## Where You've Seen This
+## Where You Might Have Seen This
 
-If you've administered Windows, you know NTFS permissions: Read, Write, Execute, Modify, Full Control — applied per user or group via the Security tab. Linux permissions are a simplified version of the same model. The concepts map directly:
+If you've administered Windows, the concepts map directly onto NTFS permissions (Read, Write, Execute, Modify, Full Control), just simpler: three entities instead of a dialog full of ACL entries, and `ls -l` shows you the exact permissions as a readable string instead of burying them behind a Security tab.
 
 | Windows | Linux Equivalent |
 |---------|-----------------|
@@ -29,9 +29,7 @@ If you've administered Windows, you know NTFS permissions: Read, Write, Execute,
 | Owner | Owner (`u`) |
 | Everyone | Other (`o`) |
 
-What's different: Linux permissions are simpler (three entities: owner, group, other) and more transparent — `ls -l` shows you the exact permissions as a readable string. What NTFS buries in a dialog, Linux shows you in a `stat` command or an `ls -l`.
-
-SUID and SGID have no clean Windows equivalent — they're Linux-specific elevation mechanisms. We cover them later in this article.
+SUID and SGID have no clean Windows equivalent: they're Linux-specific elevation mechanisms, covered later in this article.
 
 ---
 
@@ -51,6 +49,8 @@ graph LR
     style E fill:#2d3748,stroke:#d69e2e,stroke-width:2px,color:#fff
     style F fill:#2d3748,stroke:#fc8181,stroke-width:2px,color:#fff
 ```
+
+Four tools, four different questions. Start with the one that comes up constantly: changing the permissions themselves.
 
 ---
 
@@ -96,7 +96,7 @@ chmod +x deploy.sh          # (6)!
 5. Combine multiple changes in one command.
 6. Make a script executable — a common pattern, equivalent to `chmod a+x`.
 
-**When to use symbolic:** When you want to add or remove a specific bit without disturbing the rest. `chmod +x` for shell scripts is one of the most common uses — see [Your First Bash Script](bash_first_script.md) for how this fits into the scripting workflow.
+**When to use symbolic:** When you want to add or remove a specific bit without disturbing the rest. `chmod +x` for shell scripts is one of the most common uses. See [Your First Bash Script](bash_first_script.md) for how this fits into the scripting workflow.
 
 ### Octal Notation
 
@@ -172,6 +172,8 @@ chmod -R 755 /var/www/html/
     2. Files get `644` — readable, not executable.
 
     This is the pattern you'll use repeatedly on production web servers.
+
+`chmod` only ever touches the *rwx* bits. It has no opinion on *who* owns the file in the first place — that's a separate question, and a separate command.
 
 ---
 
@@ -329,7 +331,7 @@ chmod 2775 /opt/project      # (2)!
 1. Symbolic.
 2. Octal — the `2` prefix sets SGID.
 
-**When to use SGID on directories:** Any shared team directory where multiple users create files and all team members need to access them. Without SGID, files end up owned by whoever created them with their primary group — causing access headaches.
+**When to use SGID on directories:** Any shared team directory where multiple users create files and all team members need to access them. Without SGID, files end up owned by whoever created them with their primary group, causing access headaches.
 
 ### Sticky Bit
 
