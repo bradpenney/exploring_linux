@@ -36,82 +36,28 @@ Linux runs the infrastructure that matters — the servers, the pipelines, the c
 
 ---
 
-## 📦 Essentials
+## How It's Organized
 
-For IT professionals who need to own Linux. Five categories — work through them in order, or jump to what you need.
+Four tracks past Day One, each with its own overview covering exactly what's inside.
 
 <div class="grid cards two-col" markdown>
 
--   :material-console: **The Command Line**
+-   :material-package-variant: **[Essentials](essentials/overview.md)**
 
     ---
 
-    Tab completion, history, the filesystem layout, finding files, and finding help.
+    The Linux commands and concepts every sysadmin and platform engineer must own — the command line, users & access, text & pipelines, system basics, and Bash scripting.
 
-    [:octicons-arrow-right-24: Overview](essentials/command_line_overview.md)
-
--   :material-account-lock: **Users & Access**
+-   :material-lightning-bolt: **[Efficiency](efficiency/overview.md)**
 
     ---
 
-    The Linux permissions model — chmod, chown, umask, and user and group management.
+    The kernel mechanisms underneath the commands — namespaces, cgroups, and capabilities (the primitives behind every container), plus swap and the OOM killer.
 
-    [:octicons-arrow-right-24: Overview](essentials/users_access_overview.md)
-
--   :material-filter: **Text & Pipelines**
+-   :material-target: **Mastery** *(coming soon)*
 
     ---
 
-    Stdin, stdout, stderr, pipes, redirection, and grep for pattern matching and log analysis.
-
-    [:octicons-arrow-right-24: Overview](essentials/text_pipelines_overview.md)
-
--   :material-monitor: **System**
-
-    ---
-
-    Process inspection, signals, job control, and resource monitoring.
-
-    [:octicons-arrow-right-24: Overview](essentials/system_overview.md)
-
--   :material-file-code: **Bash Scripting**
-
-    ---
-
-    Six articles from first script to reusable functions — the foundation of Linux automation.
-
-    [:octicons-arrow-right-24: Overview](essentials/bash_scripting.md)
+    Production-grade Linux for engineers who own infrastructure: storage and LVM, containers with Podman, system hardening, and performance tuning.
 
 </div>
-
----
-
-## ⚡ Efficiency
-
-The daily-use tools that separate professionals who get things done. Live now, with more topics landing over time.
-
-<div class="grid cards" markdown>
-
--   :material-cube-outline: **System**
-
-    ---
-
-    What actually isolates a process — namespaces and cgroups — plus how Linux breaks root apart into fine-grained capabilities.
-
-    [:octicons-arrow-right-24: Namespaces & cgroups](efficiency/namespaces_cgroups.md)
-
--   :material-memory: **Memory**
-
-    ---
-
-    What actually happens when RAM runs out — swap, `vm.swappiness`, and how the kernel decides which process the OOM killer takes down.
-
-    [:octicons-arrow-right-24: Swap and the OOM Killer](efficiency/memory_swap_oom.md)
-
-</div>
-
-More Efficiency topics — systemd, `sed`, package management, networking basics — are still on the way.
-
-## 🎯 Mastery *(Coming soon)*
-
-Production-grade Linux for engineers who own infrastructure: storage and LVM, containers, system hardening, and performance tuning.

@@ -1,7 +1,7 @@
 ---
 date: "2026-04-04 18:47"
-title: Processes in Linux - Managing Running Programs
-description: Understand Linux process management: ps, top, kill, signals, process states, and the tools every sysadmin uses to investigate and control a running system.
+title: "Linux Process Management Explained: ps, top & kill"
+description: "Understand Linux process management: ps, top, kill, signals, process states, and the tools every sysadmin uses to investigate and control a running system."
 ---
 
 # Processes

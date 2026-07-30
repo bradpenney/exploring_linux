@@ -196,6 +196,7 @@ nav:
           - Functions: essentials/bash_functions.md
 
   - ⚡ Efficiency:
+      - Overview: efficiency/overview.md
       - System:
           - "Namespaces and cgroups: How Linux Isolates a Process": efficiency/namespaces_cgroups.md
           - "Linux Capabilities: Breaking Up Root": efficiency/capabilities.md

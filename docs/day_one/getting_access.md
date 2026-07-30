@@ -1,6 +1,6 @@
 ---
 date: "2026-02-03 21:52"
-title: Getting Access to Linux
+title: "How to Access Linux: SSH and Local VM Setup"
 description: Set up your first Linux environment via SSH or a local VM. Step-by-step guidance to get safely connected and ready to start exploring your new system.
 ---
 

@@ -62,4 +62,4 @@ flowchart LR
 
 ## What's Next
 
-After Essentials, the **Efficiency** track covers the tools that experienced Linux professionals reach for daily: systemd for service management, `sed` for text transformation, and package management. *(Coming soon)*
+After Essentials, the **[Efficiency](../efficiency/overview.md)** track goes underneath the commands — namespaces, cgroups, and the kernel isolation primitives behind every container — with systemd, `sed`, and package management still to come.
