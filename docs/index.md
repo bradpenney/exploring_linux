@@ -61,3 +61,9 @@ Four tracks past Day One, each with its own overview covering exactly what's ins
     Production-grade Linux for engineers who own infrastructure: storage and LVM, containers with Podman, system hardening, and performance tuning.
 
 </div>
+
+## Subscribe by RSS
+
+New articles publish straight to the [RSS feed](https://linux.bradpenney.io/feed_rss_created.xml) — no algorithm, no email required.
+
+<a href="https://iheartrss.com/"><img src="https://iheartrss.com/iheartrss-dark.svg" alt="I ♥ RSS" width="88" height="31"></a>
