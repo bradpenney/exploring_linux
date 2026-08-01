@@ -103,6 +103,7 @@ plugins:
         - "tuning/*"
   - rss:
       match_path: ".*"
+      pretty_print: true
       image: https://linux.bradpenney.io/images/exploring_linux.png
       abstract_chars_count: 160
       length: 20
