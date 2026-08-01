@@ -62,6 +62,15 @@ Four tracks past Day One, each with its own overview covering exactly what's ins
 
 </div>
 
+## Part of the BradPenney.io Network
+
+This site is part of a family of progressive technical learning resources:
+
+- [Exploring Containers](https://containers.bradpenney.io) — namespaces and cgroups, one layer up, packaged into a container
+- [Exploring Kubernetes](https://k8s.bradpenney.io) — the orchestrator that runs on a fleet of Linux hosts
+- [Exploring Python](https://python.bradpenney.io) — automating the systems this site teaches you to administer
+- [Exploring C](https://c.bradpenney.io) — the language the Linux kernel itself is written in
+
 ## Subscribe by RSS
 
 New articles publish straight to the [RSS feed](https://linux.bradpenney.io/feed_rss_created.xml) — no algorithm, no email required.
