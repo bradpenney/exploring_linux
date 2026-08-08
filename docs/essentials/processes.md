@@ -6,8 +6,28 @@ description: "Understand Linux process management: ps, top, kill, signals, proce
 
 # Processes
 
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a pathway:</span> [How Modern Software Really Runs on a CPU](https://bradpenney.io/pathways/cpu-to-cluster){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards" markdown>
+
+    -   :material-chip: __How Modern Software Really Runs on a CPU__ — step 7 of 17
+
+        ---
+
+        ← [How the OS Scheduler Actually Decides](https://cs.bradpenney.io/efficiency/systems/os_scheduler/) · **you are here** · [Namespaces and cgroups](https://linux.bradpenney.io/efficiency/namespaces_cgroups/) →
+
+        [Start the pathway →](https://bradpenney.io/pathways/cpu-to-cluster)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
+
 !!! tip "Part of Essentials"
-    This article covers interactive process management. Services that start at boot and persist across reboots are a different discipline: systemd's job, and a topic of its own. It's also a step in the [How Modern Software Really Runs on a CPU](https://bradpenney.io/pathways/cpu-to-cluster) pathway on [bradpenney.io](https://bradpenney.io).
+    This article covers interactive process management. Services that start at boot and persist across reboots are a different discipline: systemd's job, and a topic of its own.
 
 Something is consuming all the CPU. An application is hung and won't respond. A background job you kicked off is still running and you need to stop it. The server is sluggish and you need to find the culprit in 30 seconds.
 
@@ -203,6 +223,8 @@ ps aux | { head -1; grep "[n]ginx"; } # (5)!
 ss -tlnp | grep ":8080"    # (6)!
 lsof -i :8080              # (7)!
 ```
+
+![Running pgrep to find nginx's PIDs, then pgrep -la to see the full command line for each](../images/terminal/pgrep_nginx.gif)
 
 1. By name — returns PIDs only.
 2. By name, with command details.

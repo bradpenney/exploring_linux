@@ -6,8 +6,36 @@ description: "A process just vanished with no error, no stack trace, no core dum
 
 # Swap and the OOM Killer
 
-!!! tip "Part of Efficiency"
-    This article assumes [Namespaces and cgroups](namespaces_cgroups.md) — cgroups are what make a *container's* memory limit enforceable by the same mechanism this article covers system-wide. It's also a step in the [How Modern Software Really Runs on a CPU](https://bradpenney.io/pathways/cpu-to-cluster) pathway on [bradpenney.io](https://bradpenney.io).
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive and a pathway:</span> [System Isolation](namespaces_cgroups.md){: .pathway-pill } [How Modern Software Really Runs on a CPU](https://bradpenney.io/pathways/cpu-to-cluster){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards two-col" markdown>
+
+    -   :material-layers-triple: __System Isolation__ — step 3 of 3
+
+        ---
+
+        ← [Linux Capabilities: Breaking Up Root](capabilities.md) · **you are here** · *(last step)* →
+
+        [Start the deep dive →](namespaces_cgroups.md)
+
+    -   :material-chip: __How Modern Software Really Runs on a CPU__ — step 9 of 17
+
+        ---
+
+        ← [Namespaces and cgroups](https://linux.bradpenney.io/efficiency/namespaces_cgroups/) · **you are here** · [What Is a Container, Really?](https://containers.bradpenney.io/day_one/what_is_a_container/) →
+
+        [Start the pathway →](https://bradpenney.io/pathways/cpu-to-cluster)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
+
+!!! tip "Prerequisites"
+    This article assumes [Namespaces and cgroups](namespaces_cgroups.md) — cgroups are what make a *container's* memory limit enforceable by the same mechanism this article covers system-wide.
 
 A service just disappeared. No stack trace, no exception, no core dump. The process list simply doesn't have it anymore, and the application logs end mid-sentence. Before you assume a crash, run one command:
 
@@ -18,6 +46,8 @@ dmesg -T | grep -i "killed process"
 ```text title="What You'll See"
 [Fri Jul 24 03:12:07 2026] Out of memory: Killed process 18422 (java) total-vm:4812336kB, anon-rss:3980112kB, oom_score_adj:0
 ```
+
+![Running dmesg -T piped into grep to find the kernel's OOM-kill log line](../images/terminal/oom_kill.gif)
 
 That's not a crash. That's the kernel, on purpose, deciding your process had to die so something else (often the kernel itself) could keep running.
 

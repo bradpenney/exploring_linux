@@ -6,8 +6,25 @@ description: "Master Bash loops for automation. Covers for loops over lists and 
 
 # Loops
 
-!!! tip "Part of Essentials — Bash Scripting"
-    Fifth in the Essentials Bash series. Assumes you understand [Conditionals](bash_conditionals.md). Next up: [Functions](bash_functions.md).
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive:</span> [Bash Scripting](bash_first_script.md){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards" markdown>
+
+    -   :material-script-text: __Bash Scripting__ — step 5 of 6
+
+        ---
+
+        ← [Conditionals](bash_conditionals.md) · **you are here** · [Functions](bash_functions.md) →
+
+        [Start the deep dive →](bash_first_script.md)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
 
 Loops are where scripting shifts from "commands in a file" to actual automation. Instead of running a command once, you run it against every server in a list, every log file in a directory, or every line of output from another command.
 
@@ -18,6 +35,17 @@ Loops are where scripting shifts from "commands in a file" to actual automation.
 If you've ever run the same command against a list of servers one at a time, you've already felt the problem loops solve — a loop is that repetition captured in a script. Windows batch files have `FOR /F`, every scripting language has the same concept; Bash just has two forms depending on whether you know the list upfront.
 
 ---
+
+```mermaid
+flowchart TD
+    Q{"Do you know the full<br/>list before looping?"}
+    Q -->|"Yes — an array, a glob,<br/>a range"| F["for loop"]
+    Q -->|"No — reading a stream,<br/>waiting on a condition"| W["while loop"]
+
+    style Q fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style F fill:#2f855a,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style W fill:#2f855a,stroke:#cbd5e0,stroke-width:2px,color:#fff
+```
 
 ## The for Loop
 

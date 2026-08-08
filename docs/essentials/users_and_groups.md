@@ -6,8 +6,28 @@ description: Master Linux user and group management — useradd, usermod, groupa
 
 # Users and Groups
 
-!!! tip "Part of Essentials"
-    This article covers managing users and groups. For understanding your own access level — checking your groups, `sudo -l`, and why you get "Permission denied" — see [Understanding Your Permissions](../day_one/permissions.md) in Day One.
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive:</span> [Users & Access](file_permissions.md){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards" markdown>
+
+    -   :material-account-key: __Users & Access__ — step 2 of 2
+
+        ---
+
+        ← [File Permissions](file_permissions.md) · **you are here** · *(last step)* →
+
+        [Start the deep dive →](file_permissions.md)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
+
+!!! tip "Prerequisites"
+    For understanding your own access level — checking your groups, `sudo -l`, and why you get "Permission denied" — see [Understanding Your Permissions](../day_one/permissions.md) in Day One.
 
 New team member starting Monday. They need access to the database logs but not the application secrets. The monitoring service needs to run as its own user so a compromise doesn't give an attacker root. The DevOps team needs a shared directory where everyone can write but only their own files.
 
@@ -146,7 +166,6 @@ passwd jsmith                                                      # (4)!
 | `-G group1,group2` | Set supplementary groups |
 | `-r` | Create a system account (UID in system range) |
 | `-d /custom/home` | Set custom home directory |
-
 
 ### Modifying Users
 

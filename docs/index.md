@@ -62,6 +62,18 @@ Four tracks past Day One, each with its own overview covering exactly what's ins
 
 </div>
 
+## Deep Dives
+
+<div class="grid cards" markdown>
+
+-   :material-map-marker-path: **[Deep Dives](https://bradpenney.io/deep-dives#linux)**
+
+    ---
+
+    Ordered article series that stay inside this site, start to finish — The Command Line, Text & Pipelines, Users & Access, Bash Scripting, and System Isolation.
+
+</div>
+
 ## Part of the BradPenney.io Network
 
 This site is part of a family of progressive technical learning resources:

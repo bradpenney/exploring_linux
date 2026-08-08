@@ -6,7 +6,27 @@ description: "Root isn't one switch — it's around forty distinct privileges. C
 
 # Linux Capabilities
 
-!!! tip "Part of Efficiency"
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive:</span> [System Isolation](namespaces_cgroups.md){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards" markdown>
+
+    -   :material-layers-triple: __System Isolation__ — step 2 of 3
+
+        ---
+
+        ← [Namespaces and cgroups: How Linux Isolates a Process](namespaces_cgroups.md) · **you are here** · [Swap and the OOM Killer](memory_swap_oom.md) →
+
+        [Start the deep dive →](namespaces_cgroups.md)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
+
+!!! tip "Prerequisites"
     This article builds on [File Permissions](../essentials/file_permissions.md) and [Users and Groups](../essentials/users_and_groups.md). Those cover the classic Unix model: an owner, a group, and the special power of UID 0. Here you learn how the kernel took that all-or-nothing "root can do anything" and broke it into pieces you can hand out individually.
 
 Why does a web server need to run as root just to listen on port 80? It doesn't parse requests as root, doesn't touch other users' files, doesn't need the run of the machine. It needs exactly one thing: permission to bind a port below 1024. Yet the traditional answer is to hand it *complete* control of the system, because historically there was no smaller unit of privilege to give.

@@ -6,8 +6,33 @@ description: Master grep for Linux — regular expressions, recursive search, co
 
 # grep
 
-!!! tip "Part of Essentials"
-    This article covers `grep` in depth. It assumes you're comfortable with [pipes and redirection](pipes_and_redirection.md) — `grep` lives almost entirely inside pipelines.
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive and a pathway:</span> [Text & Pipelines](pipes_and_redirection.md){: .pathway-pill } [Debugging With Nothing But a Terminal](https://bradpenney.io/pathways/nothing-but-a-terminal){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards two-col" markdown>
+
+    -   :material-pipe: __Text & Pipelines__ — step 2 of 2
+
+        ---
+
+        ← [Pipes and Redirection](pipes_and_redirection.md) · **you are here** · *(last step)* →
+
+        [Start the deep dive →](pipes_and_redirection.md)
+
+    -   :material-console: __Debugging With Nothing But a Terminal__ — step 4 of 20
+
+        ---
+
+        ← [Pipes and Redirection](https://linux.bradpenney.io/essentials/pipes_and_redirection/) · **you are here** · [Regular Expressions for SREs](https://tools.bradpenney.io/essentials/regex_for_sres/) →
+
+        [Start the pathway →](https://bradpenney.io/pathways/nothing-but-a-terminal)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
 
 Every production incident eventually comes down to the same question: *what does the log say?* And in Linux, the answer almost always involves `grep`. Whether you're searching a single file, recursively hunting through a config directory, or filtering live log output from `journalctl`, `grep` is the tool that cuts through the noise.
 
@@ -47,6 +72,22 @@ grep -r "database_host" /etc/myapp/   # (3)!
 1. Search a file.
 2. Filter a stream.
 3. Search recursively.
+
+![Running grep "error" against a syslog file, printing only the two matching lines](../images/terminal/grep_basics.gif)
+
+That second one — filtering a stream — is what makes `grep` compose with everything else on this page. It sits in the middle of a pipeline as easily as at the start:
+
+``` mermaid
+graph LR
+    Source["cat access.log"] -->|pipe| Grep["grep '500'"]
+    Grep -->|pipe| Awk["awk '{print $1}'"]
+    Awk -->|pipe| Sort["sort | uniq -c"]
+
+    style Source fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Grep fill:#d69e2e,stroke:#cbd5e0,stroke-width:2px,color:#000
+    style Awk fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Sort fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+```
 
 ---
 
@@ -469,6 +510,8 @@ grep -v "nologin\|/bin/false" /etc/passwd | cut -d: -f1  # (5)!
 You can search text. Now you need to understand what's *running* on the system — which processes exist, what resources they consume, and how to manage them.
 
 Head to **[Processes](processes.md)** to learn how Linux manages running programs: process IDs, signals, process states, and the commands every sysadmin uses to investigate and control what's happening on a system.
+
+If you're following the [Debugging With Nothing But a Terminal](https://bradpenney.io/pathways/nothing-but-a-terminal) pathway, the next step is **[Regular Expressions for SREs](https://tools.bradpenney.io/essentials/regex_for_sres/)** — the six characters that solve most log-searching problems, and why some of them can take down a production system.
 
 ---
 

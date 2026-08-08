@@ -6,7 +6,35 @@ description: Master Linux pipes and redirection — combine commands into powerf
 
 # Pipes and Redirection
 
-!!! tip "Part of Essentials"
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive and a pathway:</span> [Text & Pipelines](pipes_and_redirection.md){: .pathway-pill } [Debugging With Nothing But a Terminal](https://bradpenney.io/pathways/nothing-but-a-terminal){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards two-col" markdown>
+
+    -   :material-pipe: __Text & Pipelines__ — step 1 of 2
+
+        ---
+
+        ← *(first step)* · **you are here** · [grep](grep.md) →
+
+        [Start the deep dive →](pipes_and_redirection.md)
+
+    -   :material-console: __Debugging With Nothing But a Terminal__ — step 3 of 20
+
+        ---
+
+        ← [Terminal Diagnostics](https://tools.bradpenney.io/essentials/terminal_diagnostics/) · **you are here** · [`grep`](https://linux.bradpenney.io/essentials/grep/) →
+
+        [Start the pathway →](https://bradpenney.io/pathways/nothing-but-a-terminal)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
+
+!!! tip "Prerequisites"
     This article assumes you're comfortable with basic commands and [command chaining](command_line_fundamentals.md#command-chaining) (`&&`, `||`). Pipes are related but different — they connect command *output* to command *input*, not just sequence execution.
 
 The most powerful Linux one-liners you'll ever see don't use a single complex command. They use simple commands connected together. `cat access.log | grep "500" | awk '{print $1}' | sort | uniq -c | sort -nr | head -10` — that's ten minutes of investigation distilled to one line, and each part is a simple tool you already know.
@@ -141,6 +169,8 @@ Redirection changes where a stream goes — from the terminal to a file, or from
 
 ### Combining Redirections
 
+Real scripts rarely use just one redirect operator — output, errors, and a live view on screen usually need to be handled together in the same command:
+
 ``` bash title="Multiple Redirections in Practice"
 find /var/log -name "*.log" | tee found-logs.txt    # (1)!
 ./long-running-script.sh > results.txt 2>/dev/null  # (2)!
@@ -155,17 +185,17 @@ find /var/log -name "*.log" | tee found-logs.txt    # (1)!
 
 ### Here Documents and Here Strings
 
-For feeding multi-line input to commands:
+Provisioning scripts often need to drop a complete config file onto a server — an nginx vhost, a systemd unit, a database config — without shipping a separate template alongside the script. A chain of `echo "..." >> file` lines works but is painful to write and edit. A **here document** embeds the whole file inline instead, right in the script that generates it:
 
 ``` bash title="Here Documents"
-cat << EOF > /etc/myapp/config.conf   # (1)!
+cat << EOF > /etc/myapp/config.conf
 [database]
 host = db-prod-01
 port = 5432
 name = myapp_db
 EOF
 
-sudo tee /etc/nginx/sites-available/myapp << EOF   # (2)!
+sudo tee /etc/nginx/sites-available/myapp << EOF
 server {
     listen 80;
     server_name myapp.example.com;
@@ -174,16 +204,17 @@ server {
 EOF
 ```
 
-1. Feed multiple lines to a command — everything up to the `EOF` marker becomes stdin.
-2. Common pattern for generating config files in scripts.
+Everything between `<< EOF` and the matching `EOF` on its own line becomes the command's stdin. The first example writes a config file directly with `cat`; the second pipes the same trick through `sudo tee` — the standard way to write a file that needs elevated permissions from inside a script, since `sudo cat << EOF > file` doesn't work (the redirect runs as your user, not root).
+
+For a single line instead of a whole file, `echo "text" | command` works but spins up an extra process just to hand off one string. A **here string** (`<<<`) skips that process — most useful for piping a variable's value straight into a command that only reads from stdin:
 
 ``` bash title="Here String (<<<)"
 grep "pattern" <<< "string to search in"   # (1)!
-base64 <<< "encode this text"               # (2)!
+base64 <<< "$TOKEN"                         # (2)!
 ```
 
-1. Feed a single string to stdin.
-2. Practical use — feed a variable to a command that expects stdin.
+1. Feed a single string straight to stdin — no file, no multi-line `EOF` block needed for one line.
+2. The most common real use: feed a variable's value to a command that only reads from stdin, `base64` here, but the same trick works for anything.
 
 ---
 
@@ -219,17 +250,28 @@ cat /var/log/nginx/access.log | grep " 500 " | awk '{print $1}' | sort | uniq -c
 6. Sort by count, most first.
 7. Show only the top 10.
 
+![Filtering an access log for 500 errors, then extracting, sorting, and counting the offending IP addresses](../images/terminal/pipeline_500s.gif)
+
 This is how investigation pipelines get built — one stage at a time, checking the output at each step.
 
 ### The Essential Pipeline Tools
 
-These commands exist primarily to work within pipelines:
+These commands exist primarily to work within pipelines. Several of them look interchangeable at a glance — the table below is the fast way to pick the right one before the cards go into detail on each:
 
-<div class="grid cards" markdown>
+| You need to... | Reach for |
+|:----------------|:----------|
+| Keep only lines matching a pattern | `grep` |
+| Discard lines matching a pattern | `grep -v` |
+| Put lines in order | `sort` |
+| Collapse duplicates, or count them | `sort \| uniq -c` |
+| Pull out a column, simple fixed delimiter, no logic | `cut` |
+| Pull out or transform a column with any real logic | `awk` |
+| Find-and-replace text in a stream | `sed` |
+| Count lines, words, or bytes | `wc` |
+| Save to a file *and* keep piping | `tee` |
+| See only the first or last N lines | `head` / `tail` |
 
--   :material-filter: **grep — Filter Lines**
-
-    ---
+=== ":material-filter: grep — Filter Lines"
 
     Filter a stream to only lines matching a pattern. Covered in depth in the [grep article](grep.md).
 
@@ -241,9 +283,7 @@ These commands exist primarily to work within pipelines:
 
     1. Exclude service accounts.
 
--   :material-sort: **sort — Sort Lines**
-
-    ---
+=== ":material-sort: sort — Sort Lines"
 
     Sort lines alphabetically or numerically.
 
@@ -259,9 +299,7 @@ These commands exist primarily to work within pipelines:
     3. Numeric sort.
     4. Sort and remove duplicates.
 
--   :material-counter: **uniq — Remove Duplicates / Count**
-
-    ---
+=== ":material-counter: uniq — Remove Duplicates / Count"
 
     Remove consecutive duplicate lines, or count their occurrences. Works best after `sort`.
 
@@ -275,9 +313,7 @@ These commands exist primarily to work within pipelines:
     2. Count occurrences.
     3. Only lines that appear more than once.
 
--   :material-calculator: **wc — Count**
-
-    ---
+=== ":material-calculator: wc — Count"
 
     Count lines, words, or characters.
 
@@ -291,15 +327,11 @@ These commands exist primarily to work within pipelines:
     2. How many 404 errors?
     3. How many bytes?
 
-</div>
+The four tools above filter, sort, dedupe, and count. Five more round out the toolkit — for reshaping, rewriting, and duplicating a stream, rather than narrowing it down:
 
-<div class="grid cards" markdown>
+=== ":material-table: awk — Extract Fields"
 
--   :material-table: **awk — Extract Fields**
-
-    ---
-
-    Extract specific columns from structured text. The most powerful field processor in the pipeline toolkit.
+    Extract specific columns from structured text, with the power to filter, compute, or reformat as it goes. Reach for `awk` over `cut` the moment you need more than plain column selection.
 
     ``` bash title="awk in Pipelines"
     ps aux | awk '{print $1, $2}'                # (1)!
@@ -311,11 +343,23 @@ These commands exist primarily to work within pipelines:
     2. Filesystem and usage %.
     3. Username and UID.
 
--   :material-scissors-cutting: **cut — Extract Columns**
+=== ":material-find-replace: sed — Find and Replace"
 
-    ---
+    Rewrite text in a stream: substitute, delete, or print specific lines, without opening a file in an editor.
 
-    Extract specific columns or character positions from fixed-format output.
+    ``` bash title="sed in Pipelines"
+    cat nginx.conf | sed 's/8080/9090/'   # (1)!
+    journalctl | sed -n '10,20p'          # (2)!
+    cat access.log | sed '/^#/d'          # (3)!
+    ```
+
+    1. Replace the first `8080` with `9090` on each line.
+    2. Print only lines 10 through 20 — `-n` suppresses default output, `p` prints the match.
+    3. Delete lines starting with `#` (comments).
+
+=== ":material-scissors-cutting: cut — Extract Columns"
+
+    Extract specific columns or character positions from fixed-format output — simpler and faster than `awk` when the delimiter is consistent and you don't need any logic beyond selection.
 
     ``` bash title="cut in Pipelines"
     cat /etc/passwd | cut -d: -f1     # (1)!
@@ -327,9 +371,7 @@ These commands exist primarily to work within pipelines:
     2. Username and UID.
     3. First 10 characters of each line.
 
--   :material-magnify: **tee — Split Output**
-
-    ---
+=== ":material-magnify: tee — Split Output"
 
     Write to a file AND pass through to the next pipe. Essential when you want to save intermediate results.
 
@@ -341,9 +383,7 @@ These commands exist primarily to work within pipelines:
     1. Saves the file list AND prints the count.
     2. Saves everything to `output.txt`, passes only errors downstream.
 
--   :material-arrow-up-down: **head / tail — Limit Output**
-
-    ---
+=== ":material-arrow-up-down: head / tail — Limit Output"
 
     Take only the first or last N lines. Ubiquitous at the end of pipelines.
 
@@ -357,7 +397,8 @@ These commands exist primarily to work within pipelines:
     2. 10 most recently modified logs.
     3. Last 100 lines.
 
-</div>
+!!! tip "awk and sed Are Their Own Languages"
+    Everything shown for `awk` and `sed` above is the pipeline-scale slice — one-liners that solve one problem inline. Both are actually complete, standalone scripting languages: `awk` has variables, functions, and control flow built around a "pattern → action" model, and `sed` has its own addressing and command syntax for editing files in scripts (`-i` for in-place edits, branching, hold space). Whole books exist on each — *sed & awk* (Dougherty & Robbins) and *The AWK Programming Language* (Aho, Kernighan, Weinberger) — because both go far deeper than "extract a column" or "swap a string." Reach for that depth once a one-liner stops being enough.
 
 ### stderr in Pipelines
 
@@ -382,6 +423,8 @@ find / -name "*.conf" 2>/dev/null | wc -l   # (2)!
 ---
 
 ## Real-World Pipeline Patterns
+
+Individually, each tool above does one small thing. Chained together during a real incident, they answer specific questions fast — four of the most common ones:
 
 === "Log Analysis"
 
@@ -494,6 +537,7 @@ find / -name "*.conf" 2>/dev/null | wc -l   # (2)!
 | `head -N` | Keep first N lines |
 | `tail -N` | Keep last N lines |
 | `awk '{print $N}'` | Extract Nth field |
+| `sed 's/x/y/'` | Find and replace text |
 | `cut -d: -f1` | Extract field by delimiter |
 | `tee file.txt` | Write to file and pass through |
 
@@ -552,6 +596,8 @@ find / -name "*.conf" 2>/dev/null | wc -l   # (2)!
 
         1. Or do it in one pipeline — `tee` saves the results while `wc -l` counts them.
 
+That ten-minute investigation from the opening — `cat | grep | awk | sort | uniq -c | sort -nr | head` — is nothing more than the two ideas in this article, chained: redirection controls where a stream starts or ends, and pipes control what happens to it in between. Once both are second nature, you stop looking up pipeline recipes and start building the one you need on the spot.
+
 ---
 
 ## Quick Recap
@@ -562,13 +608,15 @@ find / -name "*.conf" 2>/dev/null | wc -l   # (2)!
 - **`2>&1`** — merge stderr into stdout; essential when capturing all output to a file
 - **`|`** pipes only stdout — to include stderr, add `2>&1` before the pipe
 - **Build pipelines incrementally** — add one stage at a time, verify output, then extend
-- **Core toolkit:** `grep`, `sort`, `uniq -c`, `wc -l`, `head`, `tail`, `awk`, `tee`
+- **Core toolkit:** `grep`, `sort`, `uniq -c`, `wc -l`, `head`, `tail`, `awk`, `sed`, `cut`, `tee`
 
 ## What's Next?
 
 Pipes flow data between commands, and the most common thing you'll do with that data is search it. `grep` is the workhorse of Linux text processing — and it deserves its own deep dive.
 
 Head to **[grep](grep.md)** to learn regular expressions, recursive searching, context flags, and the patterns that turn `grep` from a simple filter into a powerful investigation tool.
+
+If you're following the [Debugging With Nothing But a Terminal](https://bradpenney.io/pathways/nothing-but-a-terminal) pathway, that's the same next step.
 
 ---
 

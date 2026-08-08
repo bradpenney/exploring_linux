@@ -6,8 +6,25 @@ description: "Master Bash variables and quoting rules. Learn when to use double 
 
 # Variables and Quoting
 
-!!! tip "Part of Essentials — Bash Scripting"
-    Second in the Essentials Bash series. Assumes you've read [Your First Bash Script](bash_first_script.md) and are comfortable with basic script structure. Next up: [Arguments and Exit Codes](bash_arguments.md).
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive:</span> [Bash Scripting](bash_first_script.md){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards" markdown>
+
+    -   :material-script-text: __Bash Scripting__ — step 2 of 6
+
+        ---
+
+        ← [Your First Bash Script](bash_first_script.md) · **you are here** · [Arguments and Exit Codes](bash_arguments.md) →
+
+        [Start the deep dive →](bash_first_script.md)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
 
 `rm -rf $target/` works fine in testing. Set `$target` to an empty string in production — even accidentally — and it becomes `rm -rf /`. That's an unquoted variable bug. Quoting is how you prevent a script from doing something catastrophic with unexpected input. This article covers the rules once, so they stick.
 
@@ -90,6 +107,18 @@ logger "${log_message}"  # (2)!
 ## Where Variables Come From
 
 In any running script, variables arrive from three sources. Knowing the source is the fastest way to debug a variable that isn't what you expect.
+
+```mermaid
+flowchart LR
+    A["Your script<br/>declared with name=value"] --> S["Variables visible<br/>inside this script"]
+    B["The environment<br/>$HOME, $USER, exported vars"] --> S
+    C["Bash itself<br/>$0, $$, $?"] --> S
+
+    style A fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style B fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style C fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style S fill:#2f855a,stroke:#cbd5e0,stroke-width:2px,color:#fff
+```
 
 **1. Your script** — Variables you declare yourself. Use these for any value you compute, configure, or reference more than once:
 

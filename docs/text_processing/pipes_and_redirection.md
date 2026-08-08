@@ -68,7 +68,7 @@ A **Pipe (`|`)** takes the STDOUT of the command on the left and feeds it into t
 | **`>`** | Redirect Output (Overwrite). |
 | **`>>`** | Redirect Output (Append). |
 | **`<`** | Redirect Input. |
-| **`|`** | Send output of one command to input of another. |
+| **<code>&#124;</code>** | Send output of one command to input of another. |
 
 ---
 

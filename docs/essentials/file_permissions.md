@@ -6,7 +6,27 @@ description: "Learn to manage Linux file permissions (chmod, chown, umask, SUID,
 
 # File Permissions
 
-!!! tip "Part of Essentials"
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive:</span> [Users & Access](file_permissions.md){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards" markdown>
+
+    -   :material-account-key: __Users & Access__ — step 1 of 2
+
+        ---
+
+        ← *(first step)* · **you are here** · [Users and Groups](users_and_groups.md) →
+
+        [Start the deep dive →](file_permissions.md)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
+
+!!! tip "Prerequisites"
     This article is about *managing* permissions. If you need to understand the permission system (how to read `rwxr-xr-x`, why you get "Permission denied," or what the permission check order is), start with [Understanding Your Permissions](../day_one/permissions.md) in Day One.
 
 Inheriting a web application with broken permissions is a common first encounter: files the web server should read owned by the wrong user, a deployment script missing its execute bit, a shared directory letting users delete each other's work.

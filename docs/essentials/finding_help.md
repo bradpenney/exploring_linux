@@ -6,8 +6,28 @@ description: Learn to find help in Linux fast — man pages, --help flags, tldr,
 
 # Finding Help
 
-!!! tip "Part of Essentials"
-    This article covers how to learn and look up commands. If you're trying to find documentation about a *specific system* you've been handed (configs, logs, git history), see [Finding Documentation](../day_one/finding_docs.md) in Day One.
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive:</span> [The Command Line](command_line_fundamentals.md){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards" markdown>
+
+    -   :material-console-line: __The Command Line__ — step 4 of 4
+
+        ---
+
+        ← [Finding Files](finding_files.md) · **you are here** · *(last step)* →
+
+        [Start the deep dive →](command_line_fundamentals.md)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
+
+!!! tip "Prerequisites"
+    If you're trying to find documentation about a *specific system* you've been handed (configs, logs, git history), see [Finding Documentation](../day_one/finding_docs.md) in Day One.
 
 You're on a server that's behaving unexpectedly. You find a command in a runbook that you've never used before — or you know the command but can't remember which flag does what you need. You could open a browser and search, but you're SSH'd into a server with no GUI, or the internet connection is locked down, or you're just faster when you don't leave the terminal.
 

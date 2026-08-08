@@ -6,8 +6,25 @@ description: "Organise Bash scripts with functions. Learn to define, call, and s
 
 # Functions
 
-!!! tip "Part of Essentials — Bash Scripting"
-    Sixth and final article in the Essentials Bash series. Assumes you understand [Loops](bash_loops.md). The next step is the Efficiency tier, which covers production-grade patterns like `set -euo pipefail`, signal handling, and structured logging.
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive:</span> [Bash Scripting](bash_first_script.md){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards" markdown>
+
+    -   :material-script-text: __Bash Scripting__ — step 6 of 6
+
+        ---
+
+        ← [Loops](bash_loops.md) · **you are here** · *(last step)* →
+
+        [Start the deep dive →](bash_first_script.md)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
 
 As scripts grow past 20-30 lines, repeated logic becomes a maintenance problem. A check you run in three places has to be updated in three places. Functions solve this: write the logic once, call it from anywhere, and give it a name that makes the script self-documenting.
 
@@ -77,6 +94,24 @@ echo "${counter}"               # (4)!
 ## Return Values
 
 Bash functions return exit codes (integers 0–255), not values. How you get data back to the caller depends on what you need to return:
+
+```mermaid
+flowchart TD
+    Q["What does the caller need back?"] --> A["Just pass/fail"]
+    Q --> B["A single string or number"]
+    Q --> C["Multiple values at once"]
+    A --> A2["Exit code —<br/>works directly with if"]
+    B --> B2["echo, captured with $(...)"]
+    C --> C2["Global variables —<br/>document the coupling"]
+
+    style Q fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style A fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style B fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style C fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style A2 fill:#2f855a,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style B2 fill:#2f855a,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style C2 fill:#2f855a,stroke:#cbd5e0,stroke-width:2px,color:#fff
+```
 
 === "Exit Code"
 

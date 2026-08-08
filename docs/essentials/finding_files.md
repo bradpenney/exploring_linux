@@ -6,8 +6,25 @@ description: Master Linux file discovery with find, locate, and which — learn 
 
 # Finding Files
 
-!!! tip "Part of Essentials"
-    This article assumes familiarity with the [Filesystem Hierarchy](filesystem_hierarchy.md). Knowing where things *should* be makes finding them much faster.
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive:</span> [The Command Line](command_line_fundamentals.md){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards" markdown>
+
+    -   :material-console-line: __The Command Line__ — step 3 of 4
+
+        ---
+
+        ← [Filesystem Hierarchy](filesystem_hierarchy.md) · **you are here** · [Finding Help](finding_help.md) →
+
+        [Start the deep dive →](command_line_fundamentals.md)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
 
 An unfamiliar server often comes with an immediate task attached: find an application's config file, find what's eating critically low disk space, or track down where a rotated log file's compressed version ended up.
 

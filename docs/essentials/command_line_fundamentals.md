@@ -6,8 +6,28 @@ description: Master Linux command syntax, tab completion, history tricks, and co
 
 # Command Line Fundamentals
 
-!!! tip "Part of Essentials"
-    This is the first article in the Essentials series — the foundation every Linux professional must own cold. It assumes basic CLI familiarity (you've opened a terminal, run commands before, know what a path is).
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive:</span> [The Command Line](command_line_fundamentals.md){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards" markdown>
+
+    -   :material-console-line: __The Command Line__ — step 1 of 4
+
+        ---
+
+        ← *(first step)* · **you are here** · [Filesystem Hierarchy](filesystem_hierarchy.md) →
+
+        [Start the deep dive →](command_line_fundamentals.md)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
+
+!!! tip "Prerequisites"
+    Assumes basic CLI familiarity — you've opened a terminal, run commands before, and know what a path is.
 
 If you've worked with Windows CMD or PowerShell, you already understand the concept: type a command, get output. What's different on Linux isn't the concept — it's that the shell is far more capable, and the productivity gap between someone who knows the shell's built-in tools and someone who doesn't is enormous.
 

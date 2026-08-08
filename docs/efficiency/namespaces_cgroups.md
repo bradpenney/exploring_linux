@@ -6,8 +6,36 @@ description: "What the kernel uses to decide what a process can see and how much
 
 # Namespaces and cgroups
 
-!!! tip "Part of Efficiency"
-    This article goes one layer beneath [Processes](../essentials/processes.md). There you learned how to list and control running programs. Here you learn what the kernel uses to decide what each of those programs is allowed to *see* and *use*: the same two mechanisms that, stacked together, make a container a container. It's also a step in the [How Modern Software Really Runs on a CPU](https://bradpenney.io/pathways/cpu-to-cluster) pathway on [bradpenney.io](https://bradpenney.io).
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive and a pathway:</span> [System Isolation](namespaces_cgroups.md){: .pathway-pill } [How Modern Software Really Runs on a CPU](https://bradpenney.io/pathways/cpu-to-cluster){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards two-col" markdown>
+
+    -   :material-layers-triple: __System Isolation__ — step 1 of 3
+
+        ---
+
+        ← *(first step)* · **you are here** · [Linux Capabilities: Breaking Up Root](capabilities.md) →
+
+        [Start the deep dive →](namespaces_cgroups.md)
+
+    -   :material-chip: __How Modern Software Really Runs on a CPU__ — step 8 of 17
+
+        ---
+
+        ← [Linux Processes](https://linux.bradpenney.io/essentials/processes/) · **you are here** · [Where Your Memory Actually Goes: Swap and the OOM Killer](https://linux.bradpenney.io/efficiency/memory_swap_oom/) →
+
+        [Start the pathway →](https://bradpenney.io/pathways/cpu-to-cluster)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
+
+!!! tip "Prerequisites"
+    This article goes one layer beneath [Processes](../essentials/processes.md). There you learned how to list and control running programs. Here you learn what the kernel uses to decide what each of those programs is allowed to *see* and *use*: the same two mechanisms that, stacked together, make a container a container.
 
 Put two processes on the same machine. The first runs `ps aux` and sees every other process on the box, every mounted filesystem, every network interface. The second runs the same command and sees four processes, one filesystem, and a network interface it doesn't recognize. Same kernel, same hardware, no virtual machine anywhere.
 
@@ -56,6 +84,8 @@ ls -l /proc/self/ns/    # (1)!
 ```
 
 1. Output: one symlink per namespace type, each pointing at an inode like `net:[4026531840]`. Two processes with the *same* inode number share that namespace; different numbers mean they're isolated from each other on that axis.
+
+![Running ls -l /proc/self/ns/ to list this process's namespace membership, one symlink per namespace type](../images/terminal/proc_ns.gif)
 
 The `lsns` command reads the same information for the whole system and groups it:
 

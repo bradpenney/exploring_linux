@@ -6,8 +6,28 @@ description: "Write your first Bash script with confidence. Covers the shebang l
 
 # Your First Bash Script
 
-!!! tip "Part of Essentials — Bash Scripting"
-    First in the Essentials Bash series. Assumes you're comfortable with the terminal — if you need a refresher, start with [Command Line Fundamentals](command_line_fundamentals.md). Next up: [Variables and Quoting](bash_variables.md).
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive:</span> [Bash Scripting](bash_first_script.md){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards" markdown>
+
+    -   :material-script-text: __Bash Scripting__ — step 1 of 6
+
+        ---
+
+        ← *(first step)* · **you are here** · [Variables and Quoting](bash_variables.md) →
+
+        [Start the deep dive →](bash_first_script.md)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
+
+!!! tip "Prerequisites"
+    If you need a refresher on the terminal, start with [Command Line Fundamentals](command_line_fundamentals.md).
 
 Running the same sequence of commands manually, over and over, is a familiar routine. A Bash script captures that sequence, makes it repeatable, and lets it get handed to a colleague or a CI pipeline. The gap between "I know the commands" and "I wrote the script" is smaller than it looks.
 
@@ -108,6 +128,20 @@ This works even without `chmod +x`. Useful for quick tests, but the executable b
 ## Where to Store Scripts
 
 Where a script lives determines who can run it and how easily:
+
+```mermaid
+flowchart TD
+    S["A finished script"] --> Q{"Who needs to run it?"}
+    Q -->|"Just you"| P["~/bin/<br/>add to your own PATH"]
+    Q -->|"Every user on this box"| SW["/usr/local/bin/<br/>survives package updates"]
+    Q -->|"Your whole team"| T["/opt/company/bin/<br/>added to PATH via /etc/profile.d/"]
+
+    style S fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style Q fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style P fill:#2f855a,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style SW fill:#2f855a,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style T fill:#2f855a,stroke:#cbd5e0,stroke-width:2px,color:#fff
+```
 
 === "Personal Scripts"
 

@@ -6,8 +6,25 @@ description: "Write Bash conditionals that work reliably. Covers if/elif/else, t
 
 # Conditionals
 
-!!! tip "Part of Essentials — Bash Scripting"
-    Fourth in the Essentials Bash series. Assumes you understand [Arguments and Exit Codes](bash_arguments.md). Next up: [Loops](bash_loops.md).
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive:</span> [Bash Scripting](bash_first_script.md){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards" markdown>
+
+    -   :material-script-text: __Bash Scripting__ — step 4 of 6
+
+        ---
+
+        ← [Arguments and Exit Codes](bash_arguments.md) · **you are here** · [Loops](bash_loops.md) →
+
+        [Start the deep dive →](bash_first_script.md)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
 
 Every real script makes decisions: does this file exist? Did that command succeed? Is this variable set? Bash conditionals are the logic layer that turns a list of commands into a real program.
 
@@ -234,6 +251,26 @@ fi
 
     1. Check for empty before checking the value — an empty variable would pass most value checks silently.
     2. Allowlist validation — reject anything not explicitly permitted.
+
+```mermaid
+flowchart TD
+    A["Script starts"] --> B{"Required vars set?"}
+    B -->|"No"| X1["exit 1"]
+    B -->|"Yes"| C{"Required tools installed?"}
+    C -->|"No"| X2["exit 1"]
+    C -->|"Yes"| D{"Connection works?"}
+    D -->|"No"| X3["exit 1"]
+    D -->|"Yes"| E["Main work runs"]
+
+    style A fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style B fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style C fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style D fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style X1 fill:#c53030,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style X2 fill:#c53030,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style X3 fill:#c53030,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style E fill:#2f855a,stroke:#cbd5e0,stroke-width:2px,color:#fff
+```
 
 === "Preflight Checks"
 

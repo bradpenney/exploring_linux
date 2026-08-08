@@ -6,8 +6,25 @@ description: "Handle script arguments and exit codes in Bash. Learn $1, $@, $#, 
 
 # Arguments and Exit Codes
 
-!!! tip "Part of Essentials — Bash Scripting"
-    Third in the Essentials Bash series. Assumes you understand [Variables and Quoting](bash_variables.md). Next up: [Conditionals](bash_conditionals.md).
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive:</span> [Bash Scripting](bash_first_script.md){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards" markdown>
+
+    -   :material-script-text: __Bash Scripting__ — step 3 of 6
+
+        ---
+
+        ← [Variables and Quoting](bash_variables.md) · **you are here** · [Conditionals](bash_conditionals.md) →
+
+        [Start the deep dive →](bash_first_script.md)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
 
 A script that only works with hardcoded values isn't a tool — it's a note to yourself. Arguments make scripts reusable. Exit codes make them composable: they let calling scripts, cron jobs, and monitoring systems know whether your script succeeded.
 
@@ -18,6 +35,18 @@ A script that only works with hardcoded values isn't a tool — it's a note to y
 Windows batch files use `%1`, `%2`, `%3` for positional arguments — Bash uses `$1`, `$2`, `$3`. Exit codes are equally universal: every program returns one when it finishes (0 = success, non-zero = failure), and you've seen this whenever an installer aborted mid-way or a build stopped on error.
 
 ---
+
+```mermaid
+flowchart LR
+    C["Caller<br/>./deploy.sh production 1.4.2"] -->|"$0, $1, $2, $#, $@"| S["Your script runs"]
+    S -->|"exit 0"| OK["Caller sees success<br/>$? -eq 0"]
+    S -->|"exit 1+"| ERR["Caller sees failure<br/>$? -ne 0"]
+
+    style C fill:#2d3748,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style S fill:#1a202c,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style OK fill:#2f855a,stroke:#cbd5e0,stroke-width:2px,color:#fff
+    style ERR fill:#c53030,stroke:#cbd5e0,stroke-width:2px,color:#fff
+```
 
 ## Positional Arguments
 

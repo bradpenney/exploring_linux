@@ -6,8 +6,25 @@ description: "Understand the Linux filesystem hierarchy: where configuration, lo
 
 # Linux Filesystem Hierarchy
 
-!!! tip "Part of Essentials"
-    This article assumes you're comfortable navigating the command line. If you haven't already, read [Command Line Fundamentals](command_line_fundamentals.md) first.
+<!-- PATHWAY_ROADMAP:START -->
+<div class="pathway-pills" markdown>
+:material-map-marker-path: <span class="pathway-pills__label">Part of a deep dive:</span> [The Command Line](command_line_fundamentals.md){: .pathway-pill }
+</div>
+
+??? abstract ":material-map-legend: Consult the map"
+
+    <div class="grid cards" markdown>
+
+    -   :material-console-line: __The Command Line__ — step 2 of 4
+
+        ---
+
+        ← [Command Line Fundamentals](command_line_fundamentals.md) · **you are here** · [Finding Files](finding_files.md) →
+
+        [Start the deep dive →](command_line_fundamentals.md)
+
+    </div>
+<!-- PATHWAY_ROADMAP:END -->
 
 Inherit a new server. SSH in. Where's the config file? Where are the logs? Where did the team install that custom application?
 
