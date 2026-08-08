@@ -26,8 +26,7 @@ description: "Understand Linux process management: ps, top, kill, signals, proce
     </div>
 <!-- PATHWAY_ROADMAP:END -->
 
-!!! tip "Part of Essentials"
-    This article covers interactive process management. Services that start at boot and persist across reboots are a different discipline: systemd's job, and a topic of its own.
+This article covers interactive process management — services that start at boot and persist across reboots are a different discipline: systemd's job, and a topic of its own.
 
 Something is consuming all the CPU. An application is hung and won't respond. A background job you kicked off is still running and you need to stop it. The server is sluggish and you need to find the culprit in 30 seconds.
 
